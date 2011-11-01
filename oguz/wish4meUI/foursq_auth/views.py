@@ -9,13 +9,14 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response
 from django.core.urlresolvers import reverse
 from django.contrib.auth import logout
+from django.conf import settings
 
 CLIENT_ID = '1OVOPIR5HS5XEXJYNB4B1QNCPLFLIVULYCGHT3BFSNCG5HMR'
 CLIENT_SECRET = 'JKYYZB5FIDQEHIE3MB4VZARVWWTEZTN1ICOAK1IPFBCHSSQH'
 
 request_token_url = 'https://foursquare.com/oauth2/authenticate'
 access_token_url = 'https://foursquare.com/oauth2/access_token'
-redirect_url = 'http://127.0.0.1:8000/foursq_auth/callback'
+redirect_url = settings.BASE_URL + '/foursq_auth/callback'
 
 def main(request):
     return render_to_response('foursq_auth/login.html')
