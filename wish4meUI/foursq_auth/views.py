@@ -9,13 +9,16 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response
 from django.core.urlresolvers import reverse
 from django.contrib.auth import logout
+from django.conf import settings
+from django.contrib.auth.models import User
+from django.contrib.auth import authenticate, login
 
 CLIENT_ID = '1OVOPIR5HS5XEXJYNB4B1QNCPLFLIVULYCGHT3BFSNCG5HMR'
 CLIENT_SECRET = 'JKYYZB5FIDQEHIE3MB4VZARVWWTEZTN1ICOAK1IPFBCHSSQH'
 
 request_token_url = 'https://foursquare.com/oauth2/authenticate'
 access_token_url = 'https://foursquare.com/oauth2/access_token'
-redirect_url = 'http://127.0.0.1:8000/foursq_auth/callback'
+redirect_url = settings.BASE_URL + '/foursq_auth/callback'
 
 def main(request):
     return render_to_response('foursq_auth/login.html')
@@ -72,7 +75,24 @@ def done( request ):
     response = urllib2.urlopen(full_url)
     response = response.read()
     user = json.loads(response)['response']['user']
-    name = user['firstName']
+    name = " ".join([user['firstName'], user['']])
+    contact = user['contact']
+    email = contact['email']
+    obj, created = User.objects.get_or_create(email, email)
+    if not created:
+        # create the user with the username and email as his/her email
+        passwd = User.objects.make_random_password()
+        obj.set_password(passwd)
+        obj.save()
+    user_obj = User.objects.get(email=email)
+    user = authenticate(username=email, password=user_obj.password)
+    if user is not None:
+        if user.is_active:
+              login(request, user)
+              # show the page with the user's name to show they've logged in
+              return render_to_response('foursq_auth/done.html', {'name':name})
+        else:
+            return render_to_response('errors/disabled_account.html', {'name', name})
+    else:
+        return render_to_response('errors/invalid_login', {'name', name})
 
-    # show the page with the user's name to show they've logged in
-    return render_to_response('foursq_auth/done.html', {'name':name})
