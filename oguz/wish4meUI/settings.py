@@ -5,9 +5,8 @@ import os
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
-BASE_URL = "http://127.0.0.1:8000"
-
 PROJECT_PATH = os.path.dirname(os.path.abspath(__file__))
+BASE_URL = 'http://127.0.0.1:8000'
 
 ADMINS = (
     ('Oguz Yarimtepe', 'oguzyarimtepe@gmail.com'),
@@ -96,13 +95,9 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.sites',
     'django.contrib.messages',
-    'foursq',
+    'foursq_auth',
     # Uncomment the next line to enable the admin:
     # 'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
 )
-
-#id section for social network communication
-FOURSQ_CLIENT_ID = '1OVOPIR5HS5XEXJYNB4B1QNCPLFLIVULYCGHT3BFSNCG5HMR'
-FOURSQ_CLIENT_SECRET = 'JKYYZB5FIDQEHIE3MB4VZARVWWTEZTN1ICOAK1IPFBCHSSQH'
