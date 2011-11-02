@@ -9,6 +9,7 @@ PROJECT_PATH = os.path.dirname(os.path.abspath(__file__))
 
 ADMINS = (
     ('Oguz Yarimtepe', 'oguzyarimtepe@gmail.com'),
+    ('Mesutcan Kurt', 'mesutcank@gmail.com'),
 )
 
 MANAGERS = ADMINS
@@ -95,8 +96,13 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.messages',
     'foursq_auth',
+    'facebook',
     # Uncomment the next line to enable the admin:
-    # 'django.contrib.admin',
+    'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
 )
+
+FACEBOOK_APP_ID = "255768354473895"
+FACEBOOK_APP_SECRET = "b8f0ef66e6e88951311ea2e70dccf4fa"
+FACEBOOK_SCOPE = 'email,publish_stream'
