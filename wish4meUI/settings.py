@@ -95,7 +95,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.sites',
     'django.contrib.messages',
-    'foursq_auth',
+    'foursq',
     # Uncomment the next line to enable the admin:
     # 'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
@@ -109,6 +109,7 @@ FACEBOOK_SCOPE = 'email,publish_stream'
 AUTH_PROFILE_MODULE = 'facebook.FacebookProfile'
 
 AUTHENTICATION_BACKENDS = (
+    'foursq.fakeauth.FakeAuthBackend',
     'facebook.backend.FacebookBackend',
     'django.contrib.auth.backends.ModelBackend',
 )
