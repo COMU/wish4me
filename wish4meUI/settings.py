@@ -6,10 +6,10 @@ DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
 PROJECT_PATH = os.path.dirname(os.path.abspath(__file__))
+BASE_URL = 'http://127.0.0.1:8000'
 
 ADMINS = (
     ('Oguz Yarimtepe', 'oguzyarimtepe@gmail.com'),
-    ('Mesutcan Kurt', 'mesutcank@gmail.com'),
 )
 
 MANAGERS = ADMINS
@@ -96,9 +96,8 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.messages',
     'foursq_auth',
-    'facebook',
     # Uncomment the next line to enable the admin:
-    'django.contrib.admin',
+    # 'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
 )
@@ -113,3 +112,7 @@ AUTHENTICATION_BACKENDS = (
     'facebook.backend.FacebookBackend',
     'django.contrib.auth.backends.ModelBackend',
 )
+
+#required client id and secret
+FOURSQ_CLIENT_ID = '1OVOPIR5HS5XEXJYNB4B1QNCPLFLIVULYCGHT3BFSNCG5HMR'
+FOURSQ_CLIENT_SECRET = 'JKYYZB5FIDQEHIE3MB4VZARVWWTEZTN1ICOAK1IPFBCHSSQH'

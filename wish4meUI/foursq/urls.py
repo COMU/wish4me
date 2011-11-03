@@ -1,7 +1,7 @@
 from django.conf.urls.defaults import *
-from foursq_auth.views import *
+from foursq.views import *
 
-urlpatterns = patterns('foursq_auth.views',
+urlpatterns = patterns('foursq.views',
     # main page redirects to start or login
     url(r'^$', view=main, name='main_view'),
     # receive OAuth token from 4sq
