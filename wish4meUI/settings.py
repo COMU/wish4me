@@ -106,3 +106,10 @@ INSTALLED_APPS = (
 FACEBOOK_APP_ID = "255768354473895"
 FACEBOOK_APP_SECRET = "b8f0ef66e6e88951311ea2e70dccf4fa"
 FACEBOOK_SCOPE = 'email,publish_stream'
+
+AUTH_PROFILE_MODULE = 'facebook.FacebookProfile'
+
+AUTHENTICATION_BACKENDS = (
+    'facebook.backend.FacebookBackend',
+    'django.contrib.auth.backends.ModelBackend',
+)

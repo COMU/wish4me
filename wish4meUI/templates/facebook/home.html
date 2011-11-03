@@ -4,6 +4,18 @@
     </head>
     <body>
         <h1>Facebook login? </h1>
+        {{ user }}
+        {% if user.is_authenticated %}
+        <h2>{{ user }} olarak giriş yaptınız.</h2>
+        <a href="/facebook/logout">Çıkış</a>
+        <hr />
+        <h2>Kullanıcı bilgileri:</h2>
+        <img src="http://graph.facebook.com/{{ user.get_profile.facebook_id }}/picture" /><br />
+        <pre>{{ facebook_profile|pprint }}</pre>
+        {% else %}
         <a href="/facebook/login">Facebook ile giriş yapın</a>
+        {% endif %}
+        <hr />
+        <a href="/admin">Yönetici paneli</a>
     </body>
 </html>

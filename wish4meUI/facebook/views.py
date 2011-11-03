@@ -6,29 +6,16 @@ from django.conf import settings
 from django.contrib.auth import login as auth_login
 from django.contrib.auth import authenticate
 from django.http import HttpResponseRedirect
-
-def facebook_auth(token=None, request=None):
-    args = {
-        'client_id': settings.FACEBOOK_APP_ID,
-        'client_secret': settings.FACEBOOK_APP_SECRET,
-        'redirect_uri': request.build_absolute_uri('/facebook/authentication_callback'),
-        'code': token,
-    }
-    target = urllib.urlopen('https://graph.facebook.com/oauth/access_token?' + urllib.urlencode(args)).read()
-    response = cgi.parse_qs(target)
-    access_token = response['access_token'][-1]
-
-    fb_profile = urllib.urlopen('https://graph.facebook.com/me?access_token=%s' % access_token)
-    fb_profile = json.load(fb_profile)
-
-    return fb_profile
+from django.db import models
+from django.contrib.auth.models import User
+from django.db import IntegrityError
 
 def authentication_callback(request):
     code = request.GET.get('code')
-    user = facebook_auth(token=code, request=request)
-    print "hede"
+    user = authenticate(token=code, request=request)
+    print user
     auth_login(request, user)
-    return HttpResponseRedirect('/')
+    return HttpResponseRedirect('/facebook/')
 
 def login(request):
     args = {
@@ -40,6 +27,10 @@ def login(request):
 
 
 def home(request):
-    facebook_profile = ""
-    print "hello"
-    return render_to_response('facebook/home.html')
+    try:
+        facebook_profile = request.user.get_profile().get_facebook_profile()
+    except:
+        facebook_profile = ""
+    return render_to_response('facebook/home.html',
+                              { 'facebook_profile': facebook_profile },
+                              context_instance=RequestContext(request))
