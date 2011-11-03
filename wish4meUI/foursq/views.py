@@ -38,7 +38,7 @@ def unauth(request):
     # clear any tokens and logout
     request.session.clear()
     logout(request)
-    return HttpResponseRedirect(reverse('main'))
+    return HttpResponseRedirect(reverse('main_view'))
 
 def callback(request):
    # get the code returned from foursquare
