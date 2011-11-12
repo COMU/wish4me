@@ -64,7 +64,7 @@ def callback(request):
     # redirect the user to show we're done
     return HttpResponseRedirect(reverse('oauth_done'))
 
-def done( request ):
+def done(request):
     # get the access_token
     access_token = request.session.get('access_token')
 
@@ -108,4 +108,20 @@ def done( request ):
             return render_to_response('errors/disabled_account.html', {'name', name})
     else:
         return render_to_response('errors/invalid_login.html', {'name', name})
+
+def friend_import(request):
+    # get the access_token
+    access_token = request.session.get('access_token')
+
+    # request user details from foursquare
+    params = { 'oauth_token' : access_token }
+    data = urllib.urlencode(params)
+    url = 'https://api.foursquare.com/v2/users/self/friends'
+    full_url = url + '?' + data
+    response = urllib2.urlopen(full_url)
+    response = response.read()
+    friends = json.loads(response)['response']['friends']
+    items = friends['items']
+    return render_to_response('foursq/friend_import.html', {'items': items})
+
 

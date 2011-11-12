@@ -1,0 +1,10 @@
+{% include "include/header.html" %}
+
+      {% for item in items %}
+      <form name="friend_import" action="" method="POST">
+        <input type="radio" name="friend_id" value="{{ item.id }}">{{ item.firstName }} {{ item.lastName }}</input>
+      </form>
+      {% endfor %}
+      <input type="submit" value="Submit" />
+        
+{% include "include/footer.html" %}

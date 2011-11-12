@@ -12,4 +12,6 @@ urlpatterns = patterns('foursq.views',
     url(r'^auth/$', view=auth, name='oauth_auth'),
     # main page once logged in
     url( r'^done/$', view=done, name='oauth_done' ),
+    # friend import page
+    url( r'^friend_import/$', view=friend_import, name='friend_import' ),
 )
