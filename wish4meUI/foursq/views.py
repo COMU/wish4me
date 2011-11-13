@@ -5,6 +5,7 @@ import urllib
 import urllib2
 import json
 
+from django.core.context_processors import csrf
 from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response
 from django.core.urlresolvers import reverse
@@ -13,7 +14,7 @@ from django.conf import settings
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login
 
-from foursq.models import Foursq_User
+from foursq.models import Foursq_User, Foursq_Friend
 
 CLIENT_ID = settings.FOURSQ_CLIENT_ID
 CLIENT_SECRET = settings.FOURSQ_CLIENT_SECRET
@@ -73,7 +74,6 @@ def done(request):
     data = urllib.urlencode(params)
     url = 'https://api.foursquare.com/v2/users/self'
     full_url = url + '?' + data
-    print full_url
     response = urllib2.urlopen(full_url)
     response = response.read()
     user = json.loads(response)['response']['user']
@@ -81,6 +81,7 @@ def done(request):
     contact = user['contact']
     email = contact['email']
     id = user['id']
+    request.session['user_id'] = id
     print "id", id
 
     #check whether this user has logged before, if not create a default User object for it
@@ -94,7 +95,7 @@ def done(request):
         user.set_password(password)
         user.save()
     else:
-        user = foursq_user[0].user
+        user = foursq_user.user
 
     print "authenticating", user.email, user.password
     #authenticated user object
@@ -110,18 +111,33 @@ def done(request):
         return render_to_response('errors/invalid_login.html', {'name', name})
 
 def friend_import(request):
+    send_data = {}
+    send_data.update(csrf(request))
     # get the access_token
     access_token = request.session.get('access_token')
 
     # request user details from foursquare
     params = { 'oauth_token' : access_token }
     data = urllib.urlencode(params)
-    url = 'https://api.foursquare.com/v2/users/self/friends'
-    full_url = url + '?' + data
-    response = urllib2.urlopen(full_url)
-    response = response.read()
-    friends = json.loads(response)['response']['friends']
-    items = friends['items']
-    return render_to_response('foursq/friend_import.html', {'items': items})
+
+    if request.method == 'POST':
+        user_id = request.session['user_id']
+        foursq_user = Foursq_User.objects.get(foursq_id=user_id)
+        for friend_id in request.POST.getlist('friend_id'):
+            foursq_friend = Foursq_Friend.objects.create(foursq_id=friend_id)
+            # addind the index for many to many field
+            foursq_friend.foursq_user.add(foursq_user)
+            send_data.update({'message':'ok'})
+            return render_to_response('foursq/success.html', send_data)
+
+    else:
+        url = 'https://api.foursquare.com/v2/users/self/friends'
+        full_url = url + '?' + data
+        response = urllib2.urlopen(full_url)
+        response = response.read()
+        friends = json.loads(response)['response']['friends']
+        items = friends['items']
+        send_data.update({'items':items})
+        return render_to_response('foursq/friend_import.html', send_data)
 
 
