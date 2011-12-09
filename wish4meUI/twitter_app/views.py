@@ -23,7 +23,7 @@ CONNECTION = httplib.HTTPSConnection(SERVER)
 
 def main(request):
     if request.session.has_key('access_token'):
-        return HttpResponseRedirect(reverse('twitter_oauth_friend_list'))
+        return HttpResponseRedirect(reverse('twitter_oauth_user_details'))
     else:
         return render_to_response('twitter_app/base.html')
 
@@ -53,6 +53,23 @@ def return_(request):
     response = HttpResponseRedirect(reverse('twitter_oauth_friend_list'))
     request.session['access_token'] = access_token.to_string()
     return response
+
+def userDetails(request):
+    access_token = request.session.get('access_token', None)
+    if not access_token:
+        return HttpResponse("You need an access token!")
+    token = oauth.OAuthToken.from_string(access_token)   
+    
+    # Check if the token works on Twitter
+    auth = is_authenticated(CONSUMER, CONNECTION, token)
+    if auth:
+        # Load the credidentials from Twitter into JSON
+        creds = simplejson.loads(auth)
+        screenName = creds.get('name', creds['screen_name']) # Get the name
+        name = creds.get('name', creds['name']) # Get the name
+	userID = creds.get('ID', creds['id']) # Get the user ID
+	userDetails = { 'screenName' : screenName, 'name' : name, 'ID' : userID }
+	return render_to_response('twitter_app/user.html', {'user': userDetails})
 
 def friend_list(request):
     users = []

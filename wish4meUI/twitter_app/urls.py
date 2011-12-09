@@ -15,6 +15,10 @@ urlpatterns = patterns('twitter_app.views',
         view=return_,
         name='twitter_oauth_return'),
   
+    url(r'^user/$',
+        view=userDetails,
+        name='twitter_oauth_user_details'),
+    
     url(r'^list/$',
         view=friend_list,
         name='twitter_oauth_friend_list'),

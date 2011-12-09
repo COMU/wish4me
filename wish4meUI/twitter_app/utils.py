@@ -19,6 +19,7 @@ CONSUMER_SECRET = 'xILVEUYPJke0bWTJKTCZbXyIzB6js0PLk5n4WTWs'
 # We use this URL to check if Twitters oAuth worked
 TWITTER_CHECK_AUTH = 'https://twitter.com/account/verify_credentials.json'
 #TWITTER_FRIENDS = 'https://twitter.com/statuses/friends.json'
+TWITTER_USER='https://api.twitter.com/1/users/show.json?screen_name=TwitterAPI'
 TWITTER_FRIENDS = 'https://api.twitter.com/1/friends/ids.json?screen_name=twitterapi'
 TWITTER_FRIEND_DETAILS = 'https://api.twitter.com/1/users/lookup.json?screen_name=twitterapi'
 
@@ -77,6 +78,13 @@ def is_authenticated(consumer, connection, access_token):
     if 'screen_name' in json:
         return json
     return False
+
+
+def get_user_details(consumer, connection, access_token, users):
+    """Get user details on Twitter"""
+    oauth_request = request_oauth_resource(consumer, TWITTER_FRIEND_DETAILS, access_token, {'user_id': users})
+    json = fetch_response(oauth_request, connection)
+    return json
 
 def get_friend_details(consumer, connection, access_token, users):
     """Get friends details on Twitter"""
