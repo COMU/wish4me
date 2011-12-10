@@ -11,6 +11,7 @@ urlpatterns = patterns('',
     (r'^foursq_auth/', include('wish4meUI.foursq.urls')),
     (r'^twitter/', include('wish4meUI.twitter_app.urls')),
     (r'^facebook/', include('wish4meUI.facebook.urls')),
+    (r'^google/', include('wish4meUI.google.urls')),
 
     # Uncomment the admin/doc line below to enable admin documentation:
     # (r'^admin/doc/', include('django.contrib.admindocs.urls')),

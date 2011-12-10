@@ -96,6 +96,8 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.messages',
     'foursq',
+    'django_openid_auth',
+    'google',
     # Uncomment the next line to enable the admin:
     'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
@@ -111,9 +113,16 @@ AUTH_PROFILE_MODULE = 'facebook.FacebookProfile'
 AUTHENTICATION_BACKENDS = (
     'foursq.fakeauth.FakeAuthBackend',
     'facebook.backend.FacebookBackend',
+    'google.auth.GoogleBackend',
     'django.contrib.auth.backends.ModelBackend',
 )
 
 #required client id and secret
 FOURSQ_CLIENT_ID = '1OVOPIR5HS5XEXJYNB4B1QNCPLFLIVULYCGHT3BFSNCG5HMR'
 FOURSQ_CLIENT_SECRET = 'JKYYZB5FIDQEHIE3MB4VZARVWWTEZTN1ICOAK1IPFBCHSSQH'
+
+#Google OpenID login settings
+LOGIN_URL = '/google/login/'
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_URL = '/google/logout/'
+OPENID_SSO_SERVER_URL = 'https://www.google.com/accounts/o8/id'
