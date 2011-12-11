@@ -17,6 +17,7 @@ from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
 from twitter_app.utils import *
 from userprofile.models import *
+from userprofile.views import userLogin
 
 CONSUMER = oauth.OAuthConsumer(CONSUMER_KEY, CONSUMER_SECRET)
 CONNECTION = httplib.HTTPSConnection(SERVER)
@@ -29,11 +30,11 @@ def main(request):
         return render_to_response('twitter_app/base.html')
 
 def unauth(request):
-	response = HttpResponseRedirect(reverse('twitter_oauth_main'))
-	del request.session['access_token']
-	del request.session['unauthed_token']
-	#request.session.clear()
-	return response
+    response = HttpResponseRedirect(reverse('twitter_oauth_main'))
+    del request.session['access_token']
+    del request.session['unauthed_token']
+    #request.session.clear()
+    return response
 
 def auth(request):
     "/auth/"
@@ -44,40 +45,31 @@ def auth(request):
     return response
 
 def return_(request):
-	"/return/"
-	unauthed_token = request.session.get('unauthed_token', None)
-	if not unauthed_token:
-		return HttpResponse("No un-authed token cookie")
-	token = oauth.OAuthToken.from_string(unauthed_token)   
-	if token.key != request.GET.get('oauth_token', 'no-token'):
-		return HttpResponse("Something went wrong! Tokens do not match")
-	verifier = request.GET.get('oauth_verifier')
-	access_token = exchange_request_token_for_access_token(CONSUMER, token, params={'oauth_verifier':verifier})
-	response = HttpResponseRedirect(reverse('twitter_oauth_user_details'))
-	request.session['access_token'] = access_token.to_string()
+    "/return/"
+    unauthed_token = request.session.get('unauthed_token', None)
+    if not unauthed_token:
+        return HttpResponse("No un-authed token cookie")
+    token = oauth.OAuthToken.from_string(unauthed_token)   
+    if token.key != request.GET.get('oauth_token', 'no-token'):
+        return HttpResponse("Something went wrong! Tokens do not match")
+    verifier = request.GET.get('oauth_verifier')
+    access_token = exchange_request_token_for_access_token(CONSUMER, token, params={'oauth_verifier':verifier})
+    response = HttpResponseRedirect(reverse('twitter_oauth_user_details'))
+    request.session['access_token'] = access_token.to_string()
 
-	#it seems, authorization request does not return any data about user.
-	#we request data via verify_credentials because it is easiest.
-	access_token = request.session.get('access_token', None)
-	token = oauth.OAuthToken.from_string(access_token)   
-	auth = is_authenticated(CONSUMER, CONNECTION, token)
-	
-	if auth:
-		creds = simplejson.loads(auth)
-		userID = creds.get('ID', creds['id'])
-		userName = creds.get('screenName', creds['screen_name'])
-		try:
-			userProfile = UserProfile.objects.get(TwitterID = userID)
-			print 'The user exists'
-			userProfile.TwitterToken = access_token
-			userProfile.save()
-		except:
-			print 'The user not exists'
-			newUser = User.objects.create_user(userName, settings.DEFAULT_EMAIL, settings.DEFAULT_PASSWORD)
-			newUser.save()
-			userProfile = UserProfile(user = newUser, TwitterID = userID, TwitterToken = access_token)
-			userProfile.save()
-	return response
+    #it seems, authorization request does not return any data about user.
+    #we request data via verify_credentials because it is easiest.
+    access_token = request.session.get('access_token', None)
+    token = oauth.OAuthToken.from_string(access_token)   
+    auth = is_authenticated(CONSUMER, CONNECTION, token)
+    
+    if auth:
+        creds = simplejson.loads(auth)
+        userID = creds.get('ID', creds['id'])
+        userName = creds.get('screenName', creds['screen_name'])
+
+        userLogin(request, 'twitter', userID, userName)
+    return response
 
 def userDetails(request):
     access_token = request.session.get('access_token', None)
@@ -92,9 +84,9 @@ def userDetails(request):
         creds = simplejson.loads(auth)
         screenName = creds.get('name', creds['screen_name']) # Get the name
         name = creds.get('name', creds['name']) # Get the name
-	userID = creds.get('ID', creds['id']) # Get the user ID
-	userDetails = { 'screenName' : screenName, 'name' : name, 'ID' : userID }
-	return render_to_response('twitter_app/user.html', {'user': userDetails})
+    userID = creds.get('ID', creds['id']) # Get the user ID
+    userDetails = { 'screenName' : screenName, 'name' : name, 'ID' : userID }
+    return render_to_response('twitter_app/user.html', {'user': userDetails})
 
 def friend_list(request):
     users = []
@@ -124,13 +116,9 @@ def friend_list(request):
             
             # if the result is '[]', we've reached the end of the users friends
             if friends == '[]': break
-           
-	    #get details for given list of friend IDs
-
-	    friendDetails = get_friend_details(CONSUMER, CONNECTION, token, friends)
- 
-            # Load into JSON
-            json = simplejson.loads(friendDetails)
-
-            users.append(json)
+        #get details for given list of friend IDs
+        friendDetails = get_friend_details(CONSUMER, CONNECTION, token, friends)
+        # Load into JSON
+        json = simplejson.loads(friendDetails)
+        users.append(json)
     return render_to_response('twitter_app/list.html', {'users': users})
