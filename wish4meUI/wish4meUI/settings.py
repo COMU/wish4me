@@ -98,8 +98,10 @@ INSTALLED_APPS = (
     'foursq',
     'twitter_app',
     'userprofile',
+    'django_openid_auth',
+    'google',
     # Uncomment the next line to enable the admin:
-    # 'django.contrib.admin',
+    'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
 )
@@ -113,6 +115,7 @@ AUTH_PROFILE_MODULE = 'facebook.FacebookProfile'
 AUTHENTICATION_BACKENDS = (
     'foursq.fakeauth.FakeAuthBackend',
     'facebook.backend.FacebookBackend',
+    'google.auth.GoogleBackend',
     'django.contrib.auth.backends.ModelBackend',
 )
 
@@ -123,3 +126,9 @@ FOURSQ_CLIENT_SECRET = 'JKYYZB5FIDQEHIE3MB4VZARVWWTEZTN1ICOAK1IPFBCHSSQH'
 #there must be a password and e-mail for user registration, so these are used by default
 DEFAULT_PASSWORD = 'b90f83f387b20a704b65d1dbf94736a9b8864507'
 DEFAULT_EMAIL = 'default@wish4me.com'
+
+#Google OpenID login settings
+LOGIN_URL = '/google/login/'
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_URL = '/google/logout/'
+OPENID_SSO_SERVER_URL = 'https://www.google.com/accounts/o8/id'
