@@ -96,6 +96,8 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.messages',
     'foursq',
+    'twitter_app',
+    'userprofile',
     # Uncomment the next line to enable the admin:
     # 'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
@@ -117,3 +119,7 @@ AUTHENTICATION_BACKENDS = (
 #required client id and secret
 FOURSQ_CLIENT_ID = '1OVOPIR5HS5XEXJYNB4B1QNCPLFLIVULYCGHT3BFSNCG5HMR'
 FOURSQ_CLIENT_SECRET = 'JKYYZB5FIDQEHIE3MB4VZARVWWTEZTN1ICOAK1IPFBCHSSQH'
+
+#there must be a password and e-mail for user registration, so these are used by default
+DEFAULT_PASSWORD = 'b90f83f387b20a704b65d1dbf94736a9b8864507'
+DEFAULT_EMAIL = 'default@wish4me.com'
