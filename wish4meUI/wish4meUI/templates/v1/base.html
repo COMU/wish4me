@@ -1,0 +1,51 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <title>Wish4me :: {{ title }} </title>
+  <link rel="stylesheet" type="text/css" href="/static/css/v1/main.css" />
+</head>
+
+<body>
+
+<!-- Begin Wrapper -->
+<div id="wrapper">
+  <!-- Begin Header -->
+  <div id="header">
+    <img src='/static/images/logo.png' />
+  </div>
+  <!-- End Header -->
+
+  <!-- Begin Navigation -->
+  <div id="navigation">
+    This is the Navigation
+  </div>
+  <!-- End Navigation -->
+
+  <!-- Begin Faux Columns -->
+  <div id="faux">
+
+  <!-- Begin Left Column -->
+  <div id="leftcolumn">
+    {% block content %}  {% endblock %}
+    This is left column.
+  </div>
+  <!-- End Left Column -->
+
+  <!-- Begin Right Column -->
+  <div id="rightcolumn">
+    This is right column.
+  </div>
+  <!-- End Right Column -->
+
+</div>
+<!-- End Faux Columns -->
+
+<!-- Begin Footer -->
+<div id="footer"> This is the Footer </div>
+<!-- End Footer -->
+
+</div>
+<!-- End Wrapper -->
+</body>
+</html>
