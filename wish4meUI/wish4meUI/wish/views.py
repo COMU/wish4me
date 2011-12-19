@@ -7,6 +7,10 @@ from django.shortcuts import render_to_response
 from wish4meUI.wish.models import Wish
 
 
+def home(request):
+  return render_to_response("base.html", {})
+
+
 class WishForm(ModelForm):
   class Meta:
     model = Wish

@@ -13,6 +13,7 @@
 body {
  font-family: Arial, Helvetica, sans-serif;
  font-size: 13px;
+ background-color: #F0F1F2;
 }
 #wrapper {
  margin: 0 auto;
@@ -28,15 +29,16 @@ body {
  color: #333;
  width: 902px;
  padding: 10px;
- height: 40px;
+ height: 35px;
  margin: 10px 0px 0px 0px;
  background: #ff9431;
 }
 #navigation {
  color: #333;
- padding: 10px;
+ /*padding: 10px;*/
  margin: 0px 0px 0px 0px;
  background: #ABBEBE;
+  /*border:1px solid #ABBEBE;*/
 }
 #rightcolumn {
  display: inline;

@@ -16,6 +16,7 @@ urlpatterns = patterns('',
     # Uncomment the admin/doc line below to enable admin documentation:
     # (r'^admin/doc/', include('django.contrib.admindocs.urls')),
 
+    (r'^home$', 'wish4meUI.wish.views.home'),
     # Uncomment the next line to enable the admin:
     (r'^admin/', include(admin.site.urls)),
 )
@@ -23,6 +24,6 @@ urlpatterns = patterns('',
 if settings.DEBUG:
     urlpatterns += patterns('',
         (r'^static/(?P<path>.*)$', 'django.views.static.serve',
-        {'document_root': settings.MEDIA_ROOT}),
+         {'document_root': settings.MEDIA_ROOT}),
     )
 
