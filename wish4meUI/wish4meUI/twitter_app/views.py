@@ -20,6 +20,8 @@ from userprofile.models import *
 from userprofile.views import *
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
+from django.template import RequestContext
+
 
 CONSUMER = oauth.OAuthConsumer(CONSUMER_KEY, CONSUMER_SECRET)
 CONNECTION = httplib.HTTPSConnection(SERVER)
@@ -88,6 +90,10 @@ def twitterUserDetails(request):
     userDetails = { 'userName' : userName,}
     return userDetails
 
+def render_response(req, *args, **kwargs):
+    kwargs['context_instance'] = RequestContext(req)
+    return render_to_response(*args, **kwargs)
+
 @login_required
 def userDetails(request):
     access_token = request.session.get('access_token', None)
@@ -104,7 +110,11 @@ def userDetails(request):
         name = creds.get('name', creds['name']) # Get the name
     userID = creds.get('ID', creds['id']) # Get the user ID
     userDetails = { 'screenName' : screenName, 'name' : name, 'ID' : userID }
-    return render_to_response('twitter_app/user.html', {'user': userDetails})
+    if request.user.is_authenticated:
+	print "yes"
+    else:
+        print "no"
+    return render_to_response('twitter_app/user.html', {'user': userDetails}, context_instance=RequestContext(request))
 
 def friend_list(request):
     users = []

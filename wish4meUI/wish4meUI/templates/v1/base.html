@@ -102,13 +102,15 @@ eiusmod tempor incididunt ut labore et dolore magna aliqua.
           </div>
         </li>
         <li class="mega">
-          <a href="#">Login</a>
-          <div>
+          {% if not user.is_authenticated %}
+            <a href="#">Login</a>
+            <div>
               <a href="/twitter/auth/">login via Twitter</a><br \>
               <a href="adsd">login via Foursquare</a><br \>
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
-eiusmod tempor incididunt ut labore et dolore magna aliqua.
-          </div>
+            </div>
+          {% else %}
+            <a href="#">log out</a>
+          {% endif %}
         </li>
       </ul>
   </div>
