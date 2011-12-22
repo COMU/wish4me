@@ -39,3 +39,6 @@ def userLogin(request, loginFrom, loginID):
 		print "Your account has been disabled!"
 	else:
 	    print "Your username and password were incorrect."	
+
+
+	return userProfile
