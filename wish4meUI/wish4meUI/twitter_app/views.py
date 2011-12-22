@@ -18,6 +18,8 @@ from django.contrib.auth.models import User
 from twitter_app.utils import *
 from userprofile.models import *
 from userprofile.views import *
+from django.contrib.auth import logout
+from django.contrib.auth.decorators import login_required
 
 CONSUMER = oauth.OAuthConsumer(CONSUMER_KEY, CONSUMER_SECRET)
 CONNECTION = httplib.HTTPSConnection(SERVER)
@@ -33,6 +35,7 @@ def unauth(request):
     response = HttpResponseRedirect(reverse('twitter_oauth_main'))
     del request.session['access_token']
     del request.session['unauthed_token']
+    logout(request)
     #request.session.clear()
     return response
 
@@ -85,7 +88,7 @@ def twitterUserDetails(request):
     userDetails = { 'userName' : userName, 'elma' : "elmaaa" ,}
     return userDetails
 
-
+@login_required
 def userDetails(request):
     access_token = request.session.get('access_token', None)
     if not access_token:
