@@ -1,9 +1,15 @@
-from django.contrib.auth.models import User
 from userprofile.models import *
+from django.contrib.auth.models import User
 from django.http import *
+from twitter_app.views import *
 
+def getUserDetails(request, loginFrom):
+    from twitter_app.views import twitterUserDetails
+    if loginFrom == 'twitter':
+        details = twitterUserDetails(request)
+    return details
 
-def userLogin(request, loginFrom, loginID, userName):
+def userLogin(request, loginFrom, loginID):
     if loginFrom == 'twitter':
         access_token = request.session.get('access_token', None)
         try:
@@ -12,11 +18,13 @@ def userLogin(request, loginFrom, loginID, userName):
             if settings.DEBUG:
                 print 'The user exists'
             userProfile.TwitterToken = access_token
-            userProfile.save()
         except UserProfile.DoesNotExist:
             if settings.DEBUG:
                 print 'The user not exists'
-            newUser = User.objects.create_user(userName, settings.DEFAULT_EMAIL, settings.DEFAULT_PASSWORD)
+            userDetails = getUserDetails(request, loginFrom)
+            #userDetails = twitterUserDetails(request)
+	    print "userDetails are:", userDetails
+            newUser = User.objects.create_user(userDetails['userName'], settings.DEFAULT_EMAIL, settings.DEFAULT_PASSWORD)
             newUser.save()
             userProfile = UserProfile(user = newUser, TwitterID = loginID, TwitterToken = access_token)
-            userProfile.save()  
+        userProfile.save()  

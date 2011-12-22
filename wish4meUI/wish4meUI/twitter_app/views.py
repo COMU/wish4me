@@ -17,7 +17,7 @@ from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
 from twitter_app.utils import *
 from userprofile.models import *
-from userprofile.views import userLogin
+from userprofile.views import *
 
 CONSUMER = oauth.OAuthConsumer(CONSUMER_KEY, CONSUMER_SECRET)
 CONNECTION = httplib.HTTPSConnection(SERVER)
@@ -68,8 +68,23 @@ def return_(request):
         userID = creds.get('ID', creds['id'])
         userName = creds.get('screenName', creds['screen_name'])
 
-        userLogin(request, 'twitter', userID, userName)
+        userLogin(request, 'twitter', userID)
     return response
+
+
+def twitterUserDetails(request):
+    access_token = request.session.get('access_token', None)
+    token = oauth.OAuthToken.from_string(access_token)
+    #is_authenticated returns user details as well
+    auth = is_authenticated(CONSUMER, CONNECTION, token)
+
+    if auth:
+        creds = simplejson.loads(auth)
+        userName = creds.get('screenName', creds['screen_name'])
+
+    userDetails = { 'userName' : userName, 'elma' : "elmaaa" ,}
+    return userDetails
+
 
 def userDetails(request):
     access_token = request.session.get('access_token', None)
