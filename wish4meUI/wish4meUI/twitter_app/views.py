@@ -32,7 +32,7 @@ def main(request):
         return render_to_response('twitter_app/base.html')
 
 def unauth(request):
-    response = HttpResponseRedirect(reverse('twitter_oauth_main'))
+    response = HttpResponseRedirect("/home")
     del request.session['access_token']
     del request.session['unauthed_token']
     logout(request)
