@@ -85,7 +85,7 @@ def twitterUserDetails(request):
         creds = simplejson.loads(auth)
         userName = creds.get('screenName', creds['screen_name'])
 
-    userDetails = { 'userName' : userName, 'elma' : "elmaaa" ,}
+    userDetails = { 'userName' : userName,}
     return userDetails
 
 @login_required

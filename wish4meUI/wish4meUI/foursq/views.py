@@ -15,6 +15,8 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login
 
 from foursq.models import Foursq_User, Foursq_Friend
+from userprofile.models import *
+from userprofile.views import *
 
 CLIENT_ID = settings.FOURSQ_CLIENT_ID
 CLIENT_SECRET = settings.FOURSQ_CLIENT_SECRET
@@ -65,6 +67,25 @@ def callback(request):
     # redirect the user to show we're done
     return HttpResponseRedirect(reverse('oauth_done'))
 
+def foursquareUserDetails(request):
+    # get the access_token
+    access_token = request.session.get('access_token')
+
+    # request user details from foursquare
+    params = { 'oauth_token' : access_token }
+    data = urllib.urlencode(params)
+    url = 'https://api.foursquare.com/v2/users/self'
+    full_url = url + '?' + data
+    response = urllib2.urlopen(full_url)
+    response = response.read()
+    user = json.loads(response)['response']['user']
+    name = "".join([user['firstName'], user['lastName']])
+    contact = user['contact']
+    email = contact['email']
+    id = user['id']
+    userDetails = {'userName' : name, 'email' : email,}
+    return userDetails
+
 def done(request):
     # get the access_token
     access_token = request.session.get('access_token')
@@ -77,32 +98,16 @@ def done(request):
     response = urllib2.urlopen(full_url)
     response = response.read()
     user = json.loads(response)['response']['user']
-    name = " ".join([user['firstName'], user['lastName']])
+    name = "".join([user['firstName'], user['lastName']])
     contact = user['contact']
     email = contact['email']
     id = user['id']
     request.session['user_id'] = id
     print "id", id
-
-    #check whether this user has logged before, if not create a default User object for it
-    foursq_user = Foursq_User.objects.filter(foursq_id=id)
-    if not foursq_user:
-        user = User.objects.create(username=email, email=email)
-        Foursq_User.objects.create(foursq_id=id, user=user)
-        #create a default password for the system users, no need to reflect it to the user, the user can change it anytime from the dashboard
-        password = User.objects.make_random_password()
-        print "password", password
-        user.set_password(password)
-        user.save()
-    else:
-        user = foursq_user.user
-
-    print "authenticating", user.email, user.password
+    auth_user = userLogin(request, "foursquare", id)
     #authenticated user object
-    auth_user = authenticate(username=user.email, password=user.password)
     if auth_user is not None:
-        if auth_user.is_active:
-              login(request, auth_user)
+        if auth_user.user.is_active:
               # show the page with the user's name to show they've logged in
               return render_to_response('foursq/done.html', {'name':name})
         else:
