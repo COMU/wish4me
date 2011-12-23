@@ -2,9 +2,9 @@
 
 {% block content %}
 <h2>Here comes your Details:</h2>
-	{{ user.screenName }}<br \>
-	{{ user.name }}<br \>
-	{{ user.ID }}<br \>
+	{{ userDetails.screenName }}<br \>
+	{{ userDetails.name }}<br \>
+	{{ userDetails.ID }}<br \>
 
     <a href = '{% url twitter_oauth_unauth %}'>Logout</a>
 {% endblock %}

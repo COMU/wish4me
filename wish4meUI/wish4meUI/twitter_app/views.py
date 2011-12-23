@@ -114,7 +114,7 @@ def userDetails(request):
 	print "yes"
     else:
         print "no"
-    return render_to_response('twitter_app/user.html', {'user': userDetails}, context_instance=RequestContext(request))
+    return render_to_response('twitter_app/user.html', {'userDetails': userDetails}, context_instance=RequestContext(request))
 
 def friend_list(request):
     users = []
