@@ -38,6 +38,7 @@ def request_oauth_resource(consumer, url, access_token, parameters=None, signatu
 def fetch_response(oauth_request, connection):
     url = oauth_request.to_url()
     connection.request(oauth_request.http_method, url)
+    print "url:", url
     response = connection.getresponse()
     s = response.read()
     return s
@@ -70,7 +71,7 @@ def exchange_request_token_for_access_token(consumer, request_token, signature_m
     )
     oauth_request.sign_request(signature_method, consumer, request_token)
     resp = get_oauth_url(oauth_request)
-    return oauth.OAuthToken.from_string(resp) 
+    return oauth.OAuthToken.from_string(resp)
 
 def is_authenticated(consumer, connection, access_token):
     oauth_request = request_oauth_resource(consumer, TWITTER_CHECK_AUTH, access_token)
@@ -107,3 +108,9 @@ def update_status(consumer, connection, access_token, status):
                                            http_method='POST')
     json = fetch_response(oauth_request, connection)
     return json
+
+def close_twitter_connection(connection):
+    connection.close()
+
+def connect_twitter(connection):
+    connection.connect()

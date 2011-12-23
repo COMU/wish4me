@@ -25,6 +25,7 @@ from django.template import RequestContext
 
 CONSUMER = oauth.OAuthConsumer(CONSUMER_KEY, CONSUMER_SECRET)
 CONNECTION = httplib.HTTPSConnection(SERVER)
+print "SERVER:", SERVER, "CONNECTION:", CONNECTION
 
 
 def main(request):
@@ -37,12 +38,14 @@ def unauth(request):
     response = HttpResponseRedirect("/home")
     del request.session['access_token']
     del request.session['unauthed_token']
+    close_twitter_connection(CONNECTION)
     logout(request)
     #request.session.clear()
     return response
 
 def auth(request):
     "/auth/"
+    connect_twitter(CONNECTION)
     token = get_unauthorised_request_token(CONSUMER, CONNECTION)
     auth_url = get_authorisation_url(CONSUMER, token)
     response = HttpResponseRedirect(auth_url)
