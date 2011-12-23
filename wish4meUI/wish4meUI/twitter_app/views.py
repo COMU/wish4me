@@ -17,7 +17,7 @@ from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
 from twitter_app.utils import *
 from userprofile.models import *
-from userprofile.views import *
+from userprofile.views import userLogin
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
 from django.template import RequestContext
@@ -46,7 +46,7 @@ def auth(request):
     token = get_unauthorised_request_token(CONSUMER, CONNECTION)
     auth_url = get_authorisation_url(CONSUMER, token)
     response = HttpResponseRedirect(auth_url)
-    request.session['unauthed_token'] = token.to_string()   
+    request.session['unauthed_token'] = token.to_string()
     return response
 
 def return_(request):
@@ -54,7 +54,7 @@ def return_(request):
     unauthed_token = request.session.get('unauthed_token', None)
     if not unauthed_token:
         return HttpResponse("No un-authed token cookie")
-    token = oauth.OAuthToken.from_string(unauthed_token)   
+    token = oauth.OAuthToken.from_string(unauthed_token)
     if token.key != request.GET.get('oauth_token', 'no-token'):
         return HttpResponse("Something went wrong! Tokens do not match")
     verifier = request.GET.get('oauth_verifier')
@@ -65,9 +65,9 @@ def return_(request):
     #it seems, authorization request does not return any data about user.
     #we request data via verify_credentials because it is easiest.
     access_token = request.session.get('access_token', None)
-    token = oauth.OAuthToken.from_string(access_token)   
+    token = oauth.OAuthToken.from_string(access_token)
     auth = is_authenticated(CONSUMER, CONNECTION, token)
-    
+
     if auth:
         creds = simplejson.loads(auth)
         userID = creds.get('ID', creds['id'])
@@ -99,8 +99,8 @@ def userDetails(request):
     access_token = request.session.get('access_token', None)
     if not access_token:
         return HttpResponse("You need an access token!")
-    token = oauth.OAuthToken.from_string(access_token)   
-    
+    token = oauth.OAuthToken.from_string(access_token)
+
     # Check if the token works on Twitter
     auth = is_authenticated(CONSUMER, CONNECTION, token)
     if auth:
@@ -118,30 +118,30 @@ def userDetails(request):
 
 def friend_list(request):
     users = []
-    
+
     access_token = request.session.get('access_token', None)
     if not access_token:
         return HttpResponse("You need an access token!")
-    token = oauth.OAuthToken.from_string(access_token)   
-    
+    token = oauth.OAuthToken.from_string(access_token)
+
     # Check if the token works on Twitter
     auth = is_authenticated(CONSUMER, CONNECTION, token)
     if auth:
         # Load the credidentials from Twitter into JSON
         creds = simplejson.loads(auth)
         name = creds.get('name', creds['screen_name']) # Get the name
-        
+
         # Get number of friends. The API only returns 100 results per page,
         # so we might need to divide the queries up.
         friends_count = str(creds.get('friends_count', '100'))
         pages = int( (int(friends_count)/100) ) + 1
         pages = min(pages, 10) # We only want to make ten queries
-        
-        
-        
+
+
+
         for page in range(pages):
             friends = get_friends(CONSUMER, CONNECTION, token, page+1)
-            
+
             # if the result is '[]', we've reached the end of the users friends
             if friends == '[]': break
         #get details for given list of friend IDs
