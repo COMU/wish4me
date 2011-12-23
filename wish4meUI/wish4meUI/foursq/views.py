@@ -23,7 +23,7 @@ CLIENT_SECRET = settings.FOURSQ_CLIENT_SECRET
 
 request_token_url = 'https://foursquare.com/oauth2/authenticate'
 access_token_url = 'https://foursquare.com/oauth2/access_token'
-redirect_url = settings.BASE_URL + '/foursq_auth/callback'
+redirect_url = settings.BASE_URL + '/foursq/callback'
 
 def main(request):
     return render_to_response('foursq/login.html')
