@@ -1,8 +1,8 @@
-{% include "include/header.html" %}
+{% extends "v1/base.html" %}
+{% block content %}
 
         <p>Hi {{ name }}, you've successfully logged in! </p>
         <a href="../logout/">Logout</a>
-        
-{% include "include/footer.html" %}
 
+{% endblock %}
 
