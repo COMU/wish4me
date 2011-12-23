@@ -8,7 +8,7 @@ admin.autodiscover()
 urlpatterns = patterns('',
     # Example:
     # (r'^wish4meUI/', include('wish4meUI.foo.urls')),
-    (r'^foursq_auth/', include('wish4meUI.foursq.urls')),
+    (r'^foursq/', include('wish4meUI.foursq.urls')),
     (r'^twitter/', include('wish4meUI.twitter_app.urls')),
     (r'^facebook/', include('wish4meUI.facebook.urls')),
     (r'^google/', include('wish4meUI.google.urls')),
