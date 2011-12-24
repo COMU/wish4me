@@ -3,7 +3,9 @@
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
   <title>Wish4me :: {{ title }} </title>
-  <link rel="stylesheet" type="text/css" href="/static/css/v1/main.css" />
+  <link href="/static/css/960/960.css" rel="stylesheet" />
+  <link href="/static/css/960/reset.css" rel="stylesheet" />
+  <link href="/static/css/960/text.css" rel="stylesheet" />
   <link rel="stylesheet" type="text/css" href="/static/css/v1/nav.css" />
   <script src="/static/js/libs/jquery-1.6.2.min.js" type="text/javascript" charset="utf-8"> </script>
   <script src="/static/js/libs/jquery.hoverIntent.minified.js" type="text/javascript" charset="utf-8"> </script>
@@ -13,15 +15,15 @@
 <body>
 
 <!-- Begin Wrapper -->
-<div id="wrapper">
+<div class="container_12">
   <!-- Begin Header -->
-  <div id="header">
+  <div id="header" class="grid_12">
     <img src='/static/images/logo.png' />
   </div>
   <!-- End Header -->
 
   <!-- Begin Navigation -->
-  <div id="navigation">
+  <div id="navigation" class="grid_12">
       <ul id="menu">
         <li>
           <h2>
@@ -116,27 +118,22 @@ eiusmod tempor incididunt ut labore et dolore magna aliqua.
   </div>
   <!-- End Navigation -->
 
-  <!-- Begin Faux Columns -->
-  <div id="faux">
-
   <!-- Begin Left Column -->
-  <div id="leftcolumn">
-    {% block content %}  {% endblock %}
+  <div id="leftcolumn" class="grid_9">
+    {% block content %}  This is left column {% endblock %}
   </div>
   <!-- End Left Column -->
 
   <!-- Begin Right Column -->
-  <div id="rightcolumn">
+  <div id="rightcolumn" class="grid_3">
     This is right column.
   </div>
   <!-- End Right Column -->
 
-</div>
-<!-- End Faux Columns -->
 
-<!-- Begin Footer -->
-<div id="footer"> This is the Footer </div>
-<!-- End Footer -->
+  <!-- Begin Footer -->
+  <div id="footer" class="grid_12"> This is the Footer </div>
+  <!-- End Footer -->
 
 </div>
 <!-- End Wrapper -->
