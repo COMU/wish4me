@@ -11,3 +11,10 @@ class FacebookProfile(models.Model):
     def get_facebook_profile(self):
         fb_profile = urllib.urlopen('https://graph.facebook.com/me?access_token=%s' % self.access_token)
         return json.load(fb_profile)
+
+class FacebookNewsFeed(models.Model):
+    message =  models.CharField(max_length=420)
+    facebook_id = models.BigIntegerField()
+    date = models.DateField(auto_now=True)
+    facebook_pub = models.IntegerField()
+    

@@ -101,6 +101,7 @@ INSTALLED_APPS = (
     'userprofile',
     'django_openid_auth',
     'google',
+    'facebook',
     # Uncomment the next line to enable the admin:
     'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:

@@ -9,6 +9,12 @@
         <h2>{{ user }} olarak giriş yaptınız.</h2>
         <a href="/facebook/logout">Çıkış</a>
         <hr />
+        <h1>Facebook NewsFeed </h1>
+	<form action="/facebook/newsfeed" method="post">{% csrf_token %}
+	{{ newsfeed_form.as_p }}
+	<input type="submit" value="Submit" />
+	</form>
+        <hr />
         <h2>Kullanıcı bilgileri:</h2>
         <img src="http://graph.facebook.com/{{ user.get_profile.facebook_id }}/picture" /><br />
         <pre>{{ facebook_profile|pprint }}</pre>
