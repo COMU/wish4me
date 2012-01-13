@@ -8,7 +8,7 @@ from wish4meUI.wish.models import Wish
 
 
 def home(request):
-  return render_to_response("base.html", {})
+ return render_to_response("home/home.html")
 
 
 class WishForm(ModelForm):
