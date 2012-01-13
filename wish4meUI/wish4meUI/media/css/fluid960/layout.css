@@ -15,7 +15,7 @@ body {
 /* anchors
 ----------------------------------------------- */
 a {
-	color: #000;
+	color: #333333;
 	font-weight:bold;
 	text-decoration: none;
 }
@@ -51,7 +51,7 @@ h1#branding {
 	font-weight:normal;
 	font-size:3em;
 	text-align:left;
-	background:#aaa;
+	background:#E6399B;
 	padding:.7em 1em;
 	margin-bottom:0;
 }
@@ -193,7 +193,7 @@ ul.section li a:hover {
 }
 ul.section li a:active {
 	color:#fff;
-	background:#666;
+	background:#A60000;
 }
 ul.section li li a {
 	background:#ddd;
@@ -221,7 +221,7 @@ ul.section ul.current li a:active {
 }
 ul.section li a.current {
 	color:#fff;
-	background:#666;
+	background:#A60000;
 }
 ul.section li a.current:hover {
 	background:#555;
@@ -236,7 +236,7 @@ ul.section li a.active {
 ul.section li.current > a.active,
 ul.section li.current > a.active:hover {
 	color:#fff;
-	background:#666;
+	background:#A60000;
 	cursor:default;
 }
 
@@ -418,8 +418,8 @@ input.search.button {
 /* site information
 ----------------------------------------------- */
 #site_info .box {
-	color:#ccc;
-	background:#666;
+	color:#CD0074;
+	background:#FF7373;
 	margin-bottom:10px;
 }
 #site_info a {
