@@ -26,8 +26,10 @@ request_token_url = 'https://foursquare.com/oauth2/authenticate'
 access_token_url = 'https://foursquare.com/oauth2/access_token'
 redirect_url = settings.BASE_URL + '/foursq/callback'
 
+
 def main(request):
     return render_to_response('foursq/login.html')
+
 
 def auth(request):
     # build the url to request
@@ -38,11 +40,13 @@ def auth(request):
     # redirect the user to the url to confirm access for the app
     return HttpResponseRedirect('%s?%s' % (request_token_url, data))
 
+
 def unauth(request):
     # clear any tokens and logout
     request.session.clear()
     logout(request)
     return HttpResponseRedirect(reverse('main_view'))
+
 
 def callback(request):
    # get the code returned from foursquare
@@ -68,6 +72,7 @@ def callback(request):
     # redirect the user to show we're done
     return HttpResponseRedirect(reverse('oauth_done'))
 
+
 def foursquareUserDetails(request):
     # get the access_token
     access_token = request.session.get('access_token')
@@ -86,6 +91,7 @@ def foursquareUserDetails(request):
     id = user['id']
     userDetails = {'userName' : name, 'email' : email,}
     return userDetails
+
 
 def done(request):
     # get the access_token
