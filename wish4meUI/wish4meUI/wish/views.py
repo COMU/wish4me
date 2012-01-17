@@ -18,12 +18,15 @@ def addWish(request):
         if form.is_valid():
             pass
 
+def addWishlist(request):
+    pass
+
 def listWishlist(request):
     context = dict()
-    wishlist_list = Wishlist.objects.filter(owner=request.user)
+    wishlists = Wishlist.objects.filter(owner=request.user)
 
 
-    return render_to_response('wish/listWishlist.html', {'wishlist_list':wishlist_list}, context_instance=RequestContext(request, context))
+    return render_to_response('wish/listWishlist.html', {'wishlists':wishlists}, context_instance=RequestContext(request, context))
 
 def listWish(request, wish_category_id=0):
     pass

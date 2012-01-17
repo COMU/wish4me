@@ -10,7 +10,6 @@ class Wishlist(models.Model):
     comment = models.CharField(max_length=140)
 
 class Wish(models.Model):
-    owner = models.ForeignKey(User, related_name="owner")
     wish_for = models.ForeignKey(User)
     comment = models.CharField(max_length=140)
     category = models.ForeignKey('WishCategory')
