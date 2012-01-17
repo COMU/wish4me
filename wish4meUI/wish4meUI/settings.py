@@ -115,8 +115,8 @@ FACEBOOK_SCOPE = 'email,publish_stream'
 AUTH_PROFILE_MODULE = 'facebook.FacebookProfile'
 
 AUTHENTICATION_BACKENDS = (
-    'facebook.backend.FacebookBackend',
-    'google.auth.GoogleBackend',
+    'wish4meUI.facebook.backend.FacebookBackend',
+    'wish4meUI.google.auth.GoogleBackend',
     'django.contrib.auth.backends.ModelBackend',
 )
 
