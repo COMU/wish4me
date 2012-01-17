@@ -22,7 +22,7 @@ class Wish(models.Model):
     #location =
 
     def __unicode__(self):
-      return '%s %s' % (self.owner, self.name)
+      return '%s %s' % (self.related_list.owner, self.comment)
 
 
 class WishCategory(models.Model):
