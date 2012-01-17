@@ -1,0 +1,10 @@
+{% extends "v1/base.html" %}
+
+{% block content %}
+<h2>Here comes your Details:</h2>
+	{{ userDetails.screenName }}<br \>
+	{{ userDetails.name }}<br \>
+	{{ userDetails.ID }}<br \>
+
+    <a href = '{% url twitter_oauth_unauth %}'>Logout</a>
+{% endblock %}

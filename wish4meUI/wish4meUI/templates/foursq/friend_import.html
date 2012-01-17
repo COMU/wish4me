@@ -1,0 +1,12 @@
+{% include "include/header.html" %}
+
+<form name="friend_import" action="{% url foursq.views.friend_import %}" method="POST">
+      {% csrf_token %}
+      {% for item in items %}
+        <input type="checkbox" name="friend_id" value="{{ item.id }}">{{ item.firstName }} {{ item.lastName }}</input>
+      {% endfor %}
+      
+      <input type="submit" value="Submit" />
+</form>
+        
+{% include "include/footer.html" %}
