@@ -12,11 +12,12 @@ urlpatterns = patterns('',
     (r'^twitter/', include('wish4meUI.twitter_app.urls')),
     (r'^facebook/', include('wish4meUI.facebook.urls')),
     (r'^google/', include('wish4meUI.google.urls')),
+    (r'^wish/', include('wish4meUI.wish.urls')),
 
     # Uncomment the admin/doc line below to enable admin documentation:
     # (r'^admin/doc/', include('django.contrib.admindocs.urls')),
 
-    (r'^home$', 'wish4meUI.wish.views.home'),
+    #(r'^home$', 'wish4meUI.wish.views.home'),
     # Uncomment the next line to enable the admin:
     (r'^admin/', include(admin.site.urls)),
 )
