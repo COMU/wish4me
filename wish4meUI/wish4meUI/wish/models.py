@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 # Create your models here.
 
 class Wish(models.Model):
-    owner = models.ForeignKey(User)
+    owner = models.ForeignKey(User, related_name="owner")
     wish_for = models.ForeignKey(User)
     comment = models.CharField(max_length=140)
     category = models.ForeignKey('WishCategory')
