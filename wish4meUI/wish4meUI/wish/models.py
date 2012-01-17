@@ -14,6 +14,7 @@ class Wish(models.Model):
     wish_for = models.ForeignKey(User)
     comment = models.CharField(max_length=140)
     category = models.ForeignKey('WishCategory')
+    related_list = models.ForeignKey('WishList')
 
     request_date = models.DateTimeField(auto_now=True, auto_now_add=True)
     accomplish_date = models.DateTimeField(blank=True, null=True)
