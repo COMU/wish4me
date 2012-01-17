@@ -1,0 +1,14 @@
+<table style="border-color:#000000" border=1>
+  <tr bgcolor=#FF00FF>
+    <td>Parent</td>
+    <td>Name</td>
+    <td>Synonyms</td>
+  </tr>
+  {% for wish_category in wish_category_list %}
+  <tr>
+    <td>{{ wish_category.parent }}</td>
+    <td>{{ wish_category.name }}</td>
+    <td>{{ wish_category.synonyms }}</td>
+  </tr>
+  {% endfor %}
+</table>
