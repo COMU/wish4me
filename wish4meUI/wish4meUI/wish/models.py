@@ -5,6 +5,10 @@ from django.contrib.auth.models import User
 
 # Create your models here.
 
+class WishList(models.Model):
+    owner = models.ForeignKey(User, related_name="owner")
+    comment = models.CharField(max_length=140)
+
 class Wish(models.Model):
     owner = models.ForeignKey(User, related_name="owner")
     wish_for = models.ForeignKey(User)
