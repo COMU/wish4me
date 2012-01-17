@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 
 # Create your models here.
 
-class WishList(models.Model):
+class Wishlist(models.Model):
     owner = models.ForeignKey(User, related_name="owner")
     comment = models.CharField(max_length=140)
 
@@ -14,7 +14,7 @@ class Wish(models.Model):
     wish_for = models.ForeignKey(User)
     comment = models.CharField(max_length=140)
     category = models.ForeignKey('WishCategory')
-    related_list = models.ForeignKey('WishList')
+    related_list = models.ForeignKey('Wishlist')
 
     request_date = models.DateTimeField(auto_now=True, auto_now_add=True)
     accomplish_date = models.DateTimeField(blank=True, null=True)

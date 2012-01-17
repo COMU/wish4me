@@ -4,8 +4,8 @@
 from django.shortcuts import render_to_response
 from django.template.context import RequestContext
 
-from wish4meUI.wish.forms import WishForm, WishCategoryForm
-from wish4meUI.wish.models import Wish, WishCategory
+from wish4meUI.wish.forms import WishForm, WishCategoryForm, WishlistForm
+from wish4meUI.wish.models import Wish, WishCategory, Wishlist
 
 def homeWish(request):
     context = dict()
@@ -17,6 +17,13 @@ def addWish(request):
         form = WishForm(request.POST)
         if form.is_valid():
             pass
+
+def listWishlist(request):
+    context = dict()
+    wishlist_list = Wishlist.objects.filter(owner=request.user)
+
+
+    return render_to_response('wish/listWishlist.html', {'wishlist_list':wishlist_list}, context_instance=RequestContext(request, context))
 
 def listWish(request, wish_category_id=0):
     pass

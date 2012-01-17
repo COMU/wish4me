@@ -9,9 +9,8 @@ urlpatterns = patterns('',
 #    url(r'^add_wish_category$', view=addWishCategory, name="addWishCategory"),
     url(r'^list_wish_category$', view=listWishCategory),
 
-#    url(r'^login$', view=login),
-#    url(r'^newsfeed$', view=newsfeed),
-#    url(r'^authentication_callback$', view=authentication_callback),
-#    url(r'^logout$', view='django.contrib.auth.views.logout'),
+    url(r'^list_wishlist$', view=listWishlist),
+    url(r'^add_wishlist-(?P<wishlist_id>\d+)/$', view=addWishlist)
+
 
 )

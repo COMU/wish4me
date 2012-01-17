@@ -1,5 +1,5 @@
 from django import forms
-from wish4meUI.wish.models import Wish, WishCategory, WishList
+from wish4meUI.wish.models import Wish, WishCategory, Wishlist
 
 class WishForm(forms.ModelForm):
     class Meta:
@@ -9,7 +9,7 @@ class WishCategoryForm(forms.ModelForm):
     class Meta:
         model = WishCategory
 
-class WishListForm(forms.ModelForm):
+class WishlistForm(forms.ModelForm):
     class Meta:
-        model = WishList
+        model = Wishlist
 
