@@ -78,7 +78,6 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-    'wish4meUI.auth.middleware.LoginMiddleware',
 )
 
 ROOT_URLCONF = 'wish4meUI.urls'
@@ -116,7 +115,7 @@ FACEBOOK_SCOPE = 'email,publish_stream'
 AUTH_PROFILE_MODULE = 'facebook.FacebookProfile'
 
 AUTHENTICATION_BACKENDS = (
-    'facebook.auth.FacebookBackend',
+    'facebook.backend.FacebookBackend',
     'google.auth.GoogleBackend',
     'django.contrib.auth.backends.ModelBackend',
 )
