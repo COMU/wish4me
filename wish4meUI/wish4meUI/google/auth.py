@@ -4,7 +4,6 @@ from django.contrib.auth.models import User
 from openid.consumer.consumer import SUCCESS
 from django.core.mail import mail_admins
 
-
 class GoogleBackend:
 
   def authenticate(self, openid_response):
