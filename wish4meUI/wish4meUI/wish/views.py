@@ -31,6 +31,12 @@ def listWishlist(request):
 def listWish(request, wish_category_id=0):
     pass
 
+def listWish(request, wishlist_id=0):
+    context = dict()
+    wish_list = Wish.objects.filter(related_list__id=wishlist_id)
+
+    return render_to_response('wish/listWish.html', {'wish_list':wish_list}, context_instance=RequestContext(request, context))
+
 def listWishCategory(request):
     context = dict()
     wish_category_list = WishCategory.objects.filter(is_approved=True)
