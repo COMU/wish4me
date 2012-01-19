@@ -2,13 +2,17 @@
 # -*- coding: utf-8 -*-
 
 from wish4meUI.google.models import GoogleProfile
+from wish4meUI.facebook.models import FacebookProfile
 
 from wish4meUI.google.backend import GoogleBackend
+from wish4meUI.facebook.backend import FacebookBackend
 
 
 LOGIN_MODULES = {
   'google': {'profile': GoogleProfile,
              'backend': GoogleBackend},
+  'facebook': {'profile': FacebookProfile,
+               'backend': FacebookBackend},
 }
 
 
