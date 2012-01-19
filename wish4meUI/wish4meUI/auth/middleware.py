@@ -65,10 +65,9 @@ class LoginBackendProvider(object):
 class LoginMiddleware(object):
 
     def process_request(self, request):
-        self.request.profile = self.request.user.get_profile()
-
-        self.request.login_backend = LoginBackendProvider(request)
-        if not self.request.profile.is_initialized:
-            #initialize profile
-            #path_to_image = self.request.backend.getProfilePicture()
-            pass
+        if not request.user.is_authenticated() or request.path.startswith('/admin/'):
+          request.profile = None
+          request.login_backend = None
+        else:
+          request.profile = request.user.get_profile()
+          request.login_backend = LoginBackendProvider(request)
