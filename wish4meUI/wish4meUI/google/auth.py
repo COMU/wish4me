@@ -7,6 +7,7 @@ from django.contrib.auth.models import User
 from django.core.mail import mail_admins
 
 from wish4meUI.google.models import GoogleProfile
+from wish4meUI.userprofile.models import UserProfile
 
 
 class GoogleAuthBackend(object):
@@ -25,7 +26,7 @@ class GoogleAuthBackend(object):
     google_lastname = openid_response.getSigned(
         'http://openid.net/srv/ax/1.0', 'value.lastname')
     try:
-      google_profile = GoogleProfile.objects.get(email=email)
+      google_profile = GoogleProfile.objects.get(email=google_email)
       google_profile.last_login_backend_name = 'google'
       google_profile.save()
       user = google_profile.user_profile.user
@@ -36,8 +37,8 @@ class GoogleAuthBackend(object):
           user=user, last_login_backend_name='google')
       user_profile.save()
       google_profile = GoogleProfile(
-          user_profile=user_profile,
-          email=email,
+          user=user,
+          email=google_email,
           firstname=google_firstname,
           lastname=google_lastname)
       google_profile.save()
