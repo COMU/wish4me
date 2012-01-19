@@ -41,7 +41,7 @@ class LoginBackendProvider(object):
         else:
           ProfileModel = LOGIN_MODULES[self.current_name]['profile']
           self._profile = ProfileModel.objects.filter(
-              userprofile=self._request.profile)
+              user=self._request.user)
           return self._profile
 
     def useBackend(self, name):
