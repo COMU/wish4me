@@ -16,9 +16,8 @@ from facebook.models import FacebookProfile
 def authentication_callback(request):
     code = request.GET.get('code')
     user = authenticate(token=code, request=request)
-    print user
-    auth_login(request, user)
     return HttpResponseRedirect('/facebook/')
+
 
 def login(request):
     args = {
@@ -37,6 +36,7 @@ def home(request):
     return render_to_response('facebook/home.html',
     	                          { 'facebook_profile': facebook_profile, 'newsfeed_form': NewsFeedForm() },
     	                          context_instance=RequestContext(request))
+
 
 def newsfeed(request):
 
