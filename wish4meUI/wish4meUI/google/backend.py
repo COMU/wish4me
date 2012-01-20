@@ -4,5 +4,5 @@
 from wish4meUI.auth.backend import LoginBackend
 
 
-class FacebookBackend(LoginBackend):
+class GoogleBackend(LoginBackend):
   pass
