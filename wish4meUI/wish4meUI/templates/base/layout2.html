@@ -1,0 +1,16 @@
+{% extends "base/layout1.html" %}
+{% block content %}
+  <div class="grid_12">
+    <div class="box">
+      {% block left %}
+      {% endblock %}
+    </div>
+  </div>
+  <div class="grid_4">
+    <div class="box">
+    {% if user.is_authenticated %}
+      <h2>{% user.username %}</h2>
+    {% endif %}
+    </div>
+  </div>
+{% endblock %}
