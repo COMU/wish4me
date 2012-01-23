@@ -10,5 +10,5 @@
   </tr>
   {% endfor %}
 
-  <a href="{ % url addWishlist wishlists.count }">Add New Wish</a>
 </table>
+<a href="{% url addWishlist wishlists.count %}">Add New Wish</a>
