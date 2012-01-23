@@ -9,7 +9,9 @@ from wish4meUI.wish.models import Wish, WishCategory, Wishlist
 
 def homeWish(request):
     wishlists = Wishlist.objects.filter(owner=request.user)
-    return render_to_response('wish/wish.html', {'wishlists':wishlists}, context_instance=RequestContext(request))
+
+    wishlistForm = WishlistForm()
+    return render_to_response('wish/wish.html', {'wishlists':wishlists, 'WishlistForm': wishlistForm}, context_instance=RequestContext(request))
 
 def addWish(request):
     if request.POST:
