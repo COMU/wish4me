@@ -41,21 +41,6 @@
   }
 </SCRIPT>
 
-<script language="JavaScript">
-<!--
-function refreshParent() {
-  window.opener.location.href = window.opener.location.href;
-
-  if (window.opener.progressWindow)
-    
- {
-    window.opener.progressWindow.close()
-  }
-  window.close();
-}
-//-->
-</script>
-
 </head>
 
 <body>
@@ -69,14 +54,26 @@ function refreshParent() {
     {% block menu %}
       <div class="grid_16">
         <ul class="nav main">
-          <li>
-            <a href="#">Menu 1</a>
-            <ul>
-              <li> <a href="#">Submenu 1</a> </li>
-              <li> <a href="#">Submenu 2</a> </li>
-              <li> <a href="#">Submenu 3</a> </li>
-            </ul>
-          </li>
+          {% if user.is_authenticated %}
+            <li>
+              <a href="#">My wishes</a>
+              <ul>
+                <li> <a href="{% url listWishlist %}">Show my wish list</a> </li>
+                <li> <a href="{% url addWishlist %}">Add a new wish list</a> </li>
+                <li> <a href="#">Submenu 3</a> </li>
+              </ul>
+            </li>
+          {% else %}
+            <li>
+              <a href="#">My Temporary wishes</a>
+              <ul>
+                <li> <a href="{% url listWishlist %}">Show my Temporary wish list</a> </li>
+                <li> <a href="{% url addWishlist %}">Add a new Temporary wish list</a> </li>
+                <li> <a href="#">Submenu 3</a> </li>
+              </ul>
+            </li>
+          {% endif %}
+            
           <li>
             <a href="#">Menu 2</a>
             <ul>
@@ -107,7 +104,7 @@ function refreshParent() {
               <ul>
                 <li> <a href="javascript: openwindow('{% url openid-login %}')">Google</a> </li>
                 <li> <a href="#">Submenu 2</a> </li>
-                <li> <a href="javascript: refreshParent()">refresh parent babe</a> </li>
+                <li> <a href="#">Submenu 3</a> </li>
               </ul>
             </li>
           {% else %}
@@ -116,7 +113,7 @@ function refreshParent() {
               <ul>
                 <li> <a href="javascript: openwindow('{% url openid-login %}')">Google</a> </li>
                 <li> <a href="#">Submenu 2</a> </li>
-                <li> <a href="javascript: refreshParent()">refresh parent babe</a> </li>
+                <li> <a href="#">Submenu 3</a> </li>
               </ul>
             </li>
             <li class="secondary">
