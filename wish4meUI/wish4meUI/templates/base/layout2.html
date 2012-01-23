@@ -10,6 +10,8 @@
     <div class="box">
     {% if user.is_authenticated %}
       <h2>{{ user.username }}</h2>
+    {% else %}
+      <h6> Hey <a href="#">Anonymous</a>, you are testing wish4me!</h6>
     {% endif %}
     </div>
   </div>
