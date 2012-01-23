@@ -34,6 +34,28 @@
   <link rel="stylesheet" href="{{ MEDIA_URL }}css/main.css">
 
   <script src="{{ MEDIA_URL }}js/libs/modernizr-2.0.6.min.js"></script>
+
+<SCRIPT language="JavaScript1.2">
+  function openwindow(urlToOpen) {
+    window.open(urlToOpen,"mywindow","menubar=1,resizable=1,width=350,height=250");
+  }
+</SCRIPT>
+
+<script language="JavaScript">
+<!--
+function refreshParent() {
+  window.opener.location.href = window.opener.location.href;
+
+  if (window.opener.progressWindow)
+    
+ {
+    window.opener.progressWindow.close()
+  }
+  window.close();
+}
+//-->
+</script>
+
 </head>
 
 <body>
@@ -83,18 +105,18 @@
             <li>
               <a href="#">Login Via...</a>
               <ul>
-                <li> <a href="{% url openid-login %}">Google</a> </li>
+                <li> <a href="javascript: openwindow('{% url openid-login %}')">Google</a> </li>
                 <li> <a href="#">Submenu 2</a> </li>
-                <li> <a href="#">Submenu 3</a> </li>
+                <li> <a href="javascript: refreshParent()">refresh parent babe</a> </li>
               </ul>
             </li>
           {% else %}
             <li>
               <a href="#">Add Another Account Via...</a>
               <ul>
-                <li> <a href="{% url openid-login %}">Google</a> </li>
+                <li> <a href="javascript: openwindow('{% url openid-login %}')">Google</a> </li>
                 <li> <a href="#">Submenu 2</a> </li>
-                <li> <a href="#">Submenu 3</a> </li>
+                <li> <a href="javascript: refreshParent()">refresh parent babe</a> </li>
               </ul>
             </li>
             <li class="secondary">
