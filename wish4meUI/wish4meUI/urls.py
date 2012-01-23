@@ -11,6 +11,7 @@ admin.autodiscover()
 
 urlpatterns = patterns('',
     # Example:
+    (r'^$', 'wish4meUI.main.views.welcome'),
     # (r'^wish4meUI/', include('wish4meUI.foo.urls')),
     (r'^foursq/', include('wish4meUI.foursq.urls')),
     (r'^twitter/', include('wish4meUI.twitter_app.urls')),
