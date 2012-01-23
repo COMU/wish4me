@@ -3,14 +3,17 @@
 
 from django.shortcuts import render_to_response, get_list_or_404
 from django.template.context import RequestContext
+from django.core.urlresolvers import reverse
+from django.http import HttpResponseRedirect
+
 
 from wish4meUI.wish.forms import WishForm, WishCategoryForm, WishlistForm
 from wish4meUI.wish.models import Wish, WishCategory, Wishlist
 
 def homeWish(request):
     wishlists = Wishlist.objects.filter(owner=request.user)
-
     wishlistForm = WishlistForm()
+
     return render_to_response('wish/wish.html', {'wishlists':wishlists, 'WishlistForm': wishlistForm}, context_instance=RequestContext(request))
 
 def addWish(request):
@@ -19,9 +22,18 @@ def addWish(request):
         if form.is_valid():
             pass
 
-def addWishlist(request, wishlist_id):
-  form = WishlistForm()
-  return render_to_response('wish/addWishlist.html', {'wishlistForm': form, 'wishlist_id': wishlist_id}, context_instance=RequestContext(request))
+def addWishlist(request):
+  if request.POST:
+    form = WishlistForm(request.POST)
+    if form.is_valid():
+      wishlist = form.save(commit = False)
+      wishlist.owner = request.user
+      wishlist.comment = form.cleaned_data['comment']
+      wishlist.save()
+      return HttpResponseRedirect(reverse('home'))
+  else:
+    pass
+
 
 def listWishlist(request):
     wishlists = Wishlist.objects.filter(owner=request.user)
