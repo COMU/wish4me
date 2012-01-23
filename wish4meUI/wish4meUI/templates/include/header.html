@@ -34,8 +34,8 @@
             <div class="clear"></div>
             <div class="grid_16">
               <ul class="nav main">
-                    {% block menu1 %}
-                    <li>
+                    {% block menu %}
+                      <li>
                         <a href="#">Menu 1</a>
                         <ul>
 
@@ -51,9 +51,7 @@
                             </li>
                         </ul>
                       </li>
-                      {% endblock %}
                       <li>
-                      {% block menu2 %}
                         <a href="#">Menu 2</a>
                         <ul>
                             <li>
@@ -68,8 +66,6 @@
                             </li>
                         </ul>
                       </li>
-                      {% endblock %}
-                      {% block menu3 %}
                       <li>
                         <a href="#">Menu 3</a>
                         <ul>
@@ -84,8 +80,6 @@
                             </li>
                         </ul>
                       </li>
-                      {% endblock %}
-                      {% block menu4 %}
                       <li>
                         <a href="#">Menu 4</a>
                         <ul>
@@ -100,8 +94,6 @@
                             </li>
                         </ul>
                       </li>
-                      {% endblock %}
-                      {% block menu5 %}
                       <li>
                         <a href="#">Menu 4</a>
 
@@ -118,11 +110,9 @@
                             </li>
                         </ul>
                       </li>
-                      {% endblock %}
-                      {% block secondary %}
-                    <li class="secondary">
+                      <li class="secondary">
                         <a href="#" title="Logout">#</a>
-                    </li>
+                      </li>
                     {% endblock %}
                 </ul>
             </div>
