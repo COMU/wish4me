@@ -99,7 +99,7 @@ INSTALLED_APPS = (
 #    'twitter_app',
     'userprofile',
     'django_openid_auth',
-    'google',
+    'wish4meUI.google',
     'facebook',
     'wish',
     # Uncomment the next line to enable the admin:
@@ -116,7 +116,7 @@ AUTH_PROFILE_MODULE = 'userprofile.UserProfile'
 
 AUTHENTICATION_BACKENDS = (
     'facebook.auth.FacebookBackend',
-    'google.auth.GoogleAuthBackend',
+    'wish4meUI.google.auth.GoogleAuthBackend',
     'django.contrib.auth.backends.ModelBackend',
 )
 
