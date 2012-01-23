@@ -13,5 +13,8 @@
   {% endfor %}
 
 </table>
-<a href="{% url addWishlist wishlists.count %}">Add New Wishlist</a>
+<form action="{% url addWishlist%}" method="post">
+  {% csrf_token %}
+  {{ WishlistForm.as_table }}
+  <input type="submit" value="Add Wishlist" />
 {% endblock %}
