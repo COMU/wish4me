@@ -1,16 +1,15 @@
 #! -*- coding: utf-8 -*-
 # Create your views here.
 
-from django.shortcuts import render_to_response
+from django.shortcuts import render_to_response, get_list_or_404
 from django.template.context import RequestContext
 
 from wish4meUI.wish.forms import WishForm, WishCategoryForm, WishlistForm
 from wish4meUI.wish.models import Wish, WishCategory, Wishlist
 
 def homeWish(request):
-    context = dict()
-    return render_to_response("wish/wish.html",
-                              context_instance=RequestContext(request, context))
+    wishlists = Wishlist.objects.filter(owner=request.user)
+    return render_to_response('wish/wish.html', {'wishlists':wishlists}, context_instance=RequestContext(request))
 
 def addWish(request):
     if request.POST:
@@ -18,15 +17,14 @@ def addWish(request):
         if form.is_valid():
             pass
 
-def addWishlist(request):
-    pass
+def addWishlist(request, wishlist_id):
+  form = WishlistForm()
+  return render_to_response('wish/addWishlist.html', {'wishlistForm': form, 'wishlist_id': wishlist_id}, context_instance=RequestContext(request))
 
 def listWishlist(request):
-    context = dict()
     wishlists = Wishlist.objects.filter(owner=request.user)
 
-
-    return render_to_response('wish/listWishlist.html', {'wishlists':wishlists}, context_instance=RequestContext(request, context))
+    return render_to_response('wish/listWishlist.html', {'wishlists':wishlists}, context_instance=RequestContext(request))
 
 def listWish(request, wish_category_id=0):
     pass
