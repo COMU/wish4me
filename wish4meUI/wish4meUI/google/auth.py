@@ -29,7 +29,7 @@ class GoogleAuthBackend(object):
       google_profile = GoogleProfile.objects.get(email=google_email)
       google_profile.last_login_backend_name = 'google'
       google_profile.save()
-      user = google_profile.user_profile.user
+      user = google_profile.user
     except GoogleProfile.DoesNotExist:
       user = User(username=google_email, email=google_email)
       user.save()
