@@ -12,4 +12,5 @@ class WishCategoryForm(forms.ModelForm):
 class WishlistForm(forms.ModelForm):
     class Meta:
         model = Wishlist
+        fields = ('comment',)
 
