@@ -4,6 +4,21 @@ from django.http import *
 from twitter_app.views import *
 from django.contrib.auth import authenticate, login
 
+from django.contrib.auth import logout
+from django.contrib.auth.decorators import login_required
+from django.template import RequestContext
+
+@login_required
+def userLogout(request):
+  logout(request)
+  return HttpResponseRedirect(reverse("homePage"))
+
+@login_required
+def userProfile(request):
+  userDetails = { 'name' : request.user.username }
+  return render_to_response('userprofile/profile.html', {'userDetails': userDetails}, context_instance=RequestContext(request))
+
+
 def getUserDetails(request, loginFrom):
     from twitter_app.views import twitterUserDetails	#imports must be here or wont work
     from foursq.views import foursquareUserDetails

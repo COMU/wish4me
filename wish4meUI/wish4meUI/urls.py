@@ -11,13 +11,14 @@ admin.autodiscover()
 
 urlpatterns = patterns('',
     # Example:
-    (r'^$', 'wish4meUI.main.views.welcome'),
+    url(r'^$', view='wish4meUI.main.views.welcome', name='homePage'),
     # (r'^wish4meUI/', include('wish4meUI.foo.urls')),
     (r'^foursq/', include('wish4meUI.foursq.urls')),
     (r'^twitter/', include('wish4meUI.twitter_app.urls')),
     (r'^facebook/', include('wish4meUI.facebook.urls')),
     (r'^google/', include('wish4meUI.google.urls')),
     (r'^wish/', include('wish4meUI.wish.urls')),
+    (r'^user/', include('wish4meUI.userprofile.urls')),
 
     # Uncomment the admin/doc line below to enable admin documentation:
     # (r'^admin/doc/', include('django.contrib.admindocs.urls')),
