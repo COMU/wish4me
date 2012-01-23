@@ -130,6 +130,6 @@ DEFAULT_EMAIL = 'default@wish4me.com'
 
 #Google OpenID login settings
 LOGIN_URL = '/google/login/'
-LOGIN_REDIRECT_URL = '/'
+LOGIN_REDIRECT_URL = '/user/loginSuccess'
 LOGOUT_URL = '/google/logout/'
 OPENID_SSO_SERVER_URL = 'https://www.google.com/accounts/o8/id'

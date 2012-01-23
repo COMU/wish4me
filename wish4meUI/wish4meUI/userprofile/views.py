@@ -19,6 +19,10 @@ def userProfile(request):
   return render_to_response('userprofile/profile.html', {'userDetails': userDetails}, context_instance=RequestContext(request))
 
 
+@login_required
+def userLoginSuccess(request):
+  return render_to_response('userprofile/loginSuccess.html', context_instance=RequestContext(request))
+
 def getUserDetails(request, loginFrom):
     from twitter_app.views import twitterUserDetails	#imports must be here or wont work
     from foursq.views import foursquareUserDetails
