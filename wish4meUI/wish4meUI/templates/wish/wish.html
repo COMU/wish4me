@@ -1,0 +1,14 @@
+<table style="border-color:#000000" border=1>
+  <tr bgcolor=#FF00FF>
+    <td>Comment</td>
+    <td>Wish Count</td>
+  </tr>
+  {% for wishlist in wishlists %}
+  <tr>
+    <td><a href="{% url list_wish wishlist.id %}">{{ wishlist.comment }}</a></td>
+    <td>{{ wishlist.wish_set.all.count }}</td>
+  </tr>
+  {% endfor %}
+
+  <a href="{ % url addWishlist wishlists.count }">Add New Wish</a>
+</table>
