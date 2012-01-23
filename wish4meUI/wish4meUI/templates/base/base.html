@@ -79,17 +79,28 @@
               <li> <a href="#">Submenu 3</a> </li>
             </ul>
           </li>
-          <li>
-            <a href="#">Menu 4</a>
-            <ul>
-              <li> <a href="#">Submenu 1</a> </li>
-              <li> <a href="#">Submenu 2</a> </li>
-              <li> <a href="#">Submenu 3</a> </li>
-            </ul>
-          </li>
-          <li class="secondary">
-            <a href="#" title="Logout">#</a>
-          </li>
+          {% if not user.is_authenticated %}
+            <li>
+              <a href="#">Login Via...</a>
+              <ul>
+                <li> <a href="{% url openid-login %}">Google</a> </li>
+                <li> <a href="#">Submenu 2</a> </li>
+                <li> <a href="#">Submenu 3</a> </li>
+              </ul>
+            </li>
+          {% else %}
+            <li>
+              <a href="#">Add Another Account Via...</a>
+              <ul>
+                <li> <a href="{% url openid-login %}">Google</a> </li>
+                <li> <a href="#">Submenu 2</a> </li>
+                <li> <a href="#">Submenu 3</a> </li>
+              </ul>
+            </li>
+            <li class="secondary">
+              <a href="{% url user_logout %}" title="Logout">Logout</a>
+            </li>
+    	    {% endif %}
         </ul>
       </div>
     {% endblock %}

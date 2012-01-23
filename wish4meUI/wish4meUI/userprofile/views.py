@@ -4,6 +4,12 @@ from django.http import *
 from twitter_app.views import *
 from django.contrib.auth import authenticate, login
 
+from django.contrib.auth import logout
+
+def userLogout(request):
+  logout(request)
+  return HttpResponseRedirect(reverse("homePage"))
+
 def getUserDetails(request, loginFrom):
     from twitter_app.views import twitterUserDetails	#imports must be here or wont work
     from foursq.views import foursquareUserDetails
