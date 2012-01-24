@@ -16,11 +16,20 @@ def homeWish(request):
 
     return render_to_response('wish/wish.html', {'wishlists':wishlists, 'WishlistForm': wishlistForm}, context_instance=RequestContext(request))
 
-def addWish(request):
+def addWish(request, wishlist_id):
     if request.POST:
         form = WishForm(request.POST)
         if form.is_valid():
-            pass
+          wish = form.save(commit = False)
+          wish.wish_for(request.user)
+          wish.comment = form.cleaned_data['comment']
+          wish.category = form.cleaned_data['category']
+          wish.request_date = form.cleaned_data['request_date']
+          wish.related_list = Wishlist.object.get(pk=wishlist_id)
+          wish.save()
+          return HttpResponseRedirect(reverse('home'))
+        else:
+          pass
 
 def addWishlist(request):
   if request.POST:
