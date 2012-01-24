@@ -6,6 +6,7 @@ from django.template.context import RequestContext
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
 
+from datetime import datetime
 
 from wish4meUI.wish.forms import WishForm, WishCategoryForm, WishlistForm
 from wish4meUI.wish.models import Wish, WishCategory, Wishlist
@@ -25,7 +26,7 @@ def addWish(request, wishlist_id):
           wish.comment = form.cleaned_data['comment']
           wish.category = form.cleaned_data['category']
           wish.request_date = datetime.now()
-          wish.related_list = Wishlist.object.get(pk=wishlist_id)
+          wish.related_list = Wishlist.objects.get(pk=wishlist_id)
           wish.save()
           return HttpResponseRedirect(reverse('home'))
     else:
