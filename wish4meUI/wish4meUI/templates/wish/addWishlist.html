@@ -1,4 +1,0 @@
-<form action="{% url addWishlist %}" method="post">
-  {% csrf_token %}
-  {{ WishlistForm.as_table }}
-<input type="submit" value="Submit" />

@@ -47,7 +47,7 @@
   <div class="container_16">
     <div class="grid_16">
       <h1 id="branding">
-        <a href="#">Wish4me</a>
+        <a href="{% url homePage %}">Wish4me</a>
       </h1>
     </div>
     <div class="clear"></div>
@@ -58,8 +58,7 @@
             <li>
               <a href="#">My wishes</a>
               <ul>
-                <li> <a href="{% url listWishlist %}">Show my wish list</a> </li>
-                <li> <a href="{% url wish_home %}">Add a new wish list</a> </li>
+                <li> <a href="{% url wish_home %}">Wish Home</a> </li>
                 <li> <a href="#">Submenu 3</a> </li>
               </ul>
             </li>

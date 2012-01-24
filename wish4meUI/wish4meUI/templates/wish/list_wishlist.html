@@ -7,7 +7,7 @@
   </tr>
   {% for wishlist in wishlists %}
   <tr>
-    <td><a href="{% url list_wish wishlist.id %}">{{ wishlist.comment }}</a></td>
+    <td><a href="{% url wish_list_wish wishlist.id %}">{{ wishlist.comment }}</a></td>
     <td>{{ wishlist.wish_set.all.count }}</td>
   </tr>
   {% endfor %}

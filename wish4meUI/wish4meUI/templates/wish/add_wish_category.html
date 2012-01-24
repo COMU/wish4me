@@ -1,0 +1,4 @@
+<form action="{% url wish_add_wishcategory wish_category_id %}" method="post">
+  {% csrf_token %}
+  {{ wish_category_form.as_table }}
+<input type="submit" value="Submit" />
