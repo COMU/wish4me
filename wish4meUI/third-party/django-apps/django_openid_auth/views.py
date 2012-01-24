@@ -265,10 +265,9 @@ def login_complete(request, redirect_field_name=REDIRECT_FIELD_NAME,
 
     if openid_response.status == SUCCESS:
         try:
-            user = authenticate(openid_response=openid_response)
+            user = authenticate(request=request, openid_response=openid_response)
         except DjangoOpenIDException, e:
             return render_failure(request, e.message, exception=e)
-            
         if user is not None:
             if user.is_active:
                 auth_login(request, user)
