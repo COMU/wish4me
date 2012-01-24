@@ -21,7 +21,7 @@ def addWish(request, wishlist_id):
         form = WishForm(request.POST)
         if form.is_valid():
           wish = form.save(commit = False)
-          wish.wish_for(request.user)
+          wish.wish_for = request.user
           wish.comment = form.cleaned_data['comment']
           wish.category = form.cleaned_data['category']
           wish.request_date = form.cleaned_data['request_date']
@@ -51,13 +51,10 @@ def listWishlist(request):
 
     return render_to_response('wish/listWishlist.html', {'wishlists':wishlists}, context_instance=RequestContext(request))
 
-def listWish(request, wish_category_id=0):
-    pass
-
 def listWish(request, wishlist_id=0):
     wish_list = Wish.objects.filter(related_list__id=wishlist_id)
 
-    return render_to_response('wish/listWish.html', {'wish_list':wish_list}, context_instance=RequestContext(request))
+    return render_to_response('wish/listWish.html', {'wish_list':wish_list, 'wishlist_id': wishlist_id}, context_instance=RequestContext(request))
 
 def listWishCategory(request):
     wish_category_list = WishCategory.objects.filter(is_approved=True)
