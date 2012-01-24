@@ -96,7 +96,7 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.messages',
  #   'foursq',
-#    'twitter_app',
+    'twitter_app',
     'userprofile',
     'django_openid_auth',
     'wish4meUI.google',
@@ -117,6 +117,7 @@ AUTH_PROFILE_MODULE = 'userprofile.UserProfile'
 AUTHENTICATION_BACKENDS = (
     'facebook.auth.FacebookBackend',
     'wish4meUI.google.auth.GoogleAuthBackend',
+    'wish4meUI.twitter_app.auth.TwitterAuthBackend',
     'django.contrib.auth.backends.ModelBackend',
 )
 
