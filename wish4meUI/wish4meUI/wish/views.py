@@ -33,6 +33,12 @@ def addWish(request, wishlist_id):
       wishForm = WishForm()
       return render_to_response('wish/addWish.html', {'WishForm': wishForm, 'wishlist_id': wishlist_id}, context_instance=RequestContext(request))
 
+def listAllWishes(request):
+  wish_list = Wish.objects.filter(related_list__owner=request.user)
+
+  print wish_list
+
+  return render_to_response('wish/listWish.html', {'wish_list': wish_list, 'wishlist_id': 1}, context_instance=RequestContext(request))
 
 def addWishlist(request):
   if request.POST:
