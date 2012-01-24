@@ -28,8 +28,10 @@ def addWish(request, wishlist_id):
           wish.related_list = Wishlist.object.get(pk=wishlist_id)
           wish.save()
           return HttpResponseRedirect(reverse('home'))
-        else:
-          pass
+    else:
+      wishForm = WishForm()
+      return render_to_response('wish/addWish.html', {'WishForm': wishForm, 'wishlist_id': wishlist_id}, context_instance=RequestContext(request))
+
 
 def addWishlist(request):
   if request.POST:
