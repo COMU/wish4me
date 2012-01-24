@@ -8,7 +8,7 @@ from django.core.urlresolvers import reverse
 
 def welcome(request):
   if request.user.is_authenticated():
-    return HttpResponseRedirect(reverse("listAllWishes"))
+    return HttpResponseRedirect(reverse("wish_list_allwishes"))
   else:
     return render_to_response("home/welcome.html",
                             context_instance=RequestContext(request, {}))
