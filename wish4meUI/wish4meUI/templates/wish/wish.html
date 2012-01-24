@@ -7,14 +7,14 @@
   </tr>
   {% for wishlist in wishlists %}
   <tr>
-    <td><a href="{% url list_wish wishlist.id %}">{{ wishlist.comment }}</a></td>
+    <td><a href="{% url wish_list_wish wishlist.id %}">{{ wishlist.comment }}</a></td>
     <td>{{ wishlist.wish_set.all.count }}</td>
   </tr>
   {% endfor %}
 
 </table>
-<form action="{% url addWishlist%}" method="post">
+<form action="{% url wish_add_wishlist %}" method="post">
   {% csrf_token %}
-  {{ WishlistForm.as_table }}
+  {{ wishlist_form.as_table }}
   <input type="submit" value="Add Wishlist" />
 {% endblock %}
