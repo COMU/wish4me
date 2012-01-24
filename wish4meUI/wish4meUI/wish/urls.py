@@ -4,7 +4,7 @@ from django.conf.urls.defaults import *
 
 
 urlpatterns = patterns('',
-    url(r'^$', view=homeWish, name="home"),
+    url(r'^$', view=homeWish, name="wish_home"),
     url(r'^add_wish-(?P<wishlist_id>\d+)/$', view=addWish, name="addWish"),
     #url(r'^list_wish-(?P<wish_category_id>\d+)/$', view=listWish),
     url(r'^list_wish-(?P<wishlist_id>\d+)/$', view=listWish, name='list_wish'),

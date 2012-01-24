@@ -48,7 +48,7 @@ def addWishlist(request):
       wishlist.owner = request.user
       wishlist.comment = form.cleaned_data['comment']
       wishlist.save()
-      return HttpResponseRedirect(reverse('home'))
+      return HttpResponseRedirect(reverse('wish_home'))
   else:
     pass
 
