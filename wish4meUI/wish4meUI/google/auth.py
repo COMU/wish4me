@@ -12,7 +12,7 @@ from wish4meUI.userprofile.models import UserProfile
 
 class GoogleAuthBackend(object):
 
-  def authenticate(self, openid_response):
+  def authenticate(self, request, openid_response):
 
     if openid_response is None:
       return None
@@ -25,24 +25,26 @@ class GoogleAuthBackend(object):
         'http://openid.net/srv/ax/1.0', 'value.firstname')
     google_lastname = openid_response.getSigned(
         'http://openid.net/srv/ax/1.0', 'value.lastname')
+
+    if not google_email:
+      return
+
     try:
       google_profile = GoogleProfile.objects.get(email=google_email)
-      google_profile.last_login_backend_name = 'google'
-      google_profile.save()
-      user = google_profile.user
+
     except GoogleProfile.DoesNotExist:
-      user = User(username=google_email, email=google_email)
-      user.save()
-      user_profile = UserProfile(
-          user=user, last_login_backend_name='google')
-      user_profile.save()
       google_profile = GoogleProfile(
-          user=user,
           email=google_email,
           firstname=google_firstname,
           lastname=google_lastname)
-      google_profile.save()
+
+    google_profile.save()
+    backend = google_profile.getLoginBackend(request)
+    user = backend.login(
+        google_profile, related_name='google_profile',
+        username=google_email, email=google_email)
     return user
+
 
   def get_user(self, user_id):
     try:
