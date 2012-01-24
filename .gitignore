@@ -4,7 +4,6 @@
 /wish4meUI/downloads/
 /wish4meUI/eggs/
 /wish4meUI/parts/
-/wish4meUI/third-party/
 *.installed.cfg
 *.pyc
 *~
