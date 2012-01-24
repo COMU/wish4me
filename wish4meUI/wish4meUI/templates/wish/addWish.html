@@ -1,4 +1,7 @@
+{% extends "base/layout2.html" %}
+{% block left %}
 <form action="{% url addWish wishlist_id %}" method="post">
   {% csrf_token %}
   {{ WishForm.as_table }}
 <input type="submit" value="Submit" />
+{% endblock %}
