@@ -12,31 +12,29 @@ from wish4meUI.wish.forms import WishForm, WishCategoryForm, WishlistForm
 from wish4meUI.wish.models import Wish, WishCategory, Wishlist
 
 def homeWish(request):
-    wishlists = Wishlist.objects.filter(owner=request.user)
-    wishlistForm = WishlistForm()
+  wishlists = Wishlist.objects.filter(owner=request.user)
+  wishlistForm = WishlistForm()
 
-    return render_to_response('wish/wish.html', {'wishlists':wishlists, 'WishlistForm': wishlistForm}, context_instance=RequestContext(request))
+  return render_to_response('wish/wish.html', {'wishlists':wishlists, 'WishlistForm': wishlistForm}, context_instance=RequestContext(request))
 
 def addWish(request, wishlist_id):
-    if request.POST:
-        form = WishForm(request.POST)
-        if form.is_valid():
-          wish = form.save(commit = False)
-          wish.wish_for = request.user
-          wish.comment = form.cleaned_data['comment']
-          wish.category = form.cleaned_data['category']
-          wish.request_date = datetime.now()
-          wish.related_list = Wishlist.objects.get(pk=wishlist_id)
-          wish.save()
-          return HttpResponseRedirect(reverse('list_wish', args=[wishlist_id]))
-    else:
-      wishForm = WishForm()
-      return render_to_response('wish/addWish.html', {'WishForm': wishForm, 'wishlist_id': wishlist_id}, context_instance=RequestContext(request))
+  if request.POST:
+    form = WishForm(request.POST)
+    if form.is_valid():
+      wish = form.save(commit = False)
+      wish.wish_for = request.user
+      wish.comment = form.cleaned_data['comment']
+      wish.category = form.cleaned_data['category']
+      wish.request_date = datetime.now()
+      wish.related_list = Wishlist.objects.get(pk=wishlist_id)
+      wish.save()
+      return HttpResponseRedirect(reverse('list_wish', args=[wishlist_id]))
+  else:
+    wishForm = WishForm()
+    return render_to_response('wish/addWish.html', {'WishForm': wishForm, 'wishlist_id': wishlist_id}, context_instance=RequestContext(request))
 
 def listAllWishes(request):
   wish_list = Wish.objects.filter(related_list__owner=request.user)
-
-  print wish_list
 
   return render_to_response('wish/listWish.html', {'wish_list': wish_list, 'wishlist_id': 1}, context_instance=RequestContext(request))
 
@@ -52,18 +50,17 @@ def addWishlist(request):
   else:
     pass
 
-
 def listWishlist(request):
-    wishlists = Wishlist.objects.filter(owner=request.user)
+  wishlists = Wishlist.objects.filter(owner=request.user)
 
-    return render_to_response('wish/listWishlist.html', {'wishlists':wishlists}, context_instance=RequestContext(request))
+  return render_to_response('wish/listWishlist.html', {'wishlists':wishlists}, context_instance=RequestContext(request))
 
 def listWish(request, wishlist_id=0):
-    wish_list = Wish.objects.filter(related_list__id=wishlist_id)
+  wish_list = Wish.objects.filter(related_list__id=wishlist_id)
 
-    return render_to_response('wish/listWish.html', {'wish_list':wish_list, 'wishlist_id': wishlist_id}, context_instance=RequestContext(request))
+  return render_to_response('wish/listWish.html', {'wish_list':wish_list, 'wishlist_id': wishlist_id}, context_instance=RequestContext(request))
 
 def listWishCategory(request):
-    wish_category_list = WishCategory.objects.filter(is_approved=True)
+  wish_category_list = WishCategory.objects.filter(is_approved=True)
 
-    return render_to_response('wish/listWishCategory.html', {'wish_category_list':wish_category_list}, context_instance=RequestContext(request))
+  return render_to_response('wish/listWishCategory.html', {'wish_category_list':wish_category_list}, context_instance=RequestContext(request))
