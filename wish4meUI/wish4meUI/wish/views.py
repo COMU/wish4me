@@ -24,7 +24,7 @@ def addWish(request, wishlist_id):
           wish.wish_for = request.user
           wish.comment = form.cleaned_data['comment']
           wish.category = form.cleaned_data['category']
-          wish.request_date = form.cleaned_data['request_date']
+          wish.request_date = datetime.now()
           wish.related_list = Wishlist.object.get(pk=wishlist_id)
           wish.save()
           return HttpResponseRedirect(reverse('home'))
