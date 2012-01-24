@@ -28,7 +28,7 @@ def addWish(request, wishlist_id):
           wish.request_date = datetime.now()
           wish.related_list = Wishlist.objects.get(pk=wishlist_id)
           wish.save()
-          return HttpResponseRedirect(reverse('home'))
+          return HttpResponseRedirect(reverse('list_wish', args=[wishlist_id]))
     else:
       wishForm = WishForm()
       return render_to_response('wish/addWish.html', {'WishForm': wishForm, 'wishlist_id': wishlist_id}, context_instance=RequestContext(request))
