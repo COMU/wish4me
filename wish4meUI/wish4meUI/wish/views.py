@@ -48,7 +48,10 @@ def removeWish(request, wish_id):
 
 def accomplishWish(request, wish_id):
   wish = get_object_or_404(Wish, pk=wish_id)
-  wish.accomplish_date = datetime.now()
+  if wish.accomplish_date is None:
+    wish.accomplish_date = datetime.now()
+  else:
+    wish.accomplish_date = None
   wish.save()
 
   return HttpResponseRedirect(reverse('wish_list_wish', args=[wish.related_list.id]))

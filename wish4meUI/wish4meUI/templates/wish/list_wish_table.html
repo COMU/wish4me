@@ -20,7 +20,7 @@
     <td>{{ wish.category }}</td>
     <td>{{ wish.request_date }}</td>
     <td>{{ wish.accomplish_date }}</td>
-    <td>{% if wish.accomplish_date %} {% else %}<a href="{% url wish_accomplish_wish wish.id %}">X</a>{% endif %}</td>
+    <td><a href="{% url wish_accomplish_wish wish.id %}">X</a></td>
     <td><a href="{% url wish_edit_wish wish.id %}">X</a></td>
     <td><a href="{% url wish_remove_wish wish.id %}">X</a></td>
 
