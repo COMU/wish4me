@@ -9,30 +9,36 @@ from django.http import HttpResponseRedirect
 from django.db import models
 from django.contrib.auth.models import User
 from django.db import IntegrityError
+from django.core.urlresolvers import reverse
+
 from facebook.forms import NewsFeedForm
 from facebook.models import FacebookNewsFeed
 from facebook.models import FacebookProfile
-
-def authentication_callback(request):
-    code = request.GET.get('code')
-    user = authenticate(token=code, request=request)
-    return HttpResponseRedirect('/facebook/')
 
 
 def login(request):
     args = {
         'client_id': settings.FACEBOOK_APP_ID,
         'scope': settings.FACEBOOK_SCOPE,
-        'redirect_uri': request.build_absolute_uri('/facebook/authentication_callback'),
+        'redirect_uri': request.build_absolute_uri(reverse(
+            'facebook_login_callback')),
     }
     return HttpResponseRedirect('https://www.facebook.com/dialog/oauth?' + urllib.urlencode(args))
 
 
+def loginCallback(request):
+    code = request.GET.get('code')
+    user = authenticate(request=request, token=code)
+    if user.is_authenticated():
+      auth_login(request, user)
+    return HttpResponseRedirect(reverse('wish_home'))
+
+
 def home(request):
     try:
-        facebook_profile = request.user.get_profile().get_facebook_profile()
+      facebook_profile = request.user.get_profile().get_facebook_profile()
     except:
-        facebook_profile = ""
+      facebook_profile = ""
     return render_to_response('facebook/home.html',
     	                          { 'facebook_profile': facebook_profile, 'newsfeed_form': NewsFeedForm() },
     	                          context_instance=RequestContext(request))
