@@ -35,6 +35,26 @@ def addWish(request, wishlist_id):
     wish_form = WishForm()
     return render_to_response('wish/add_wish.html', {'wish_form': wish_form, 'wishlist_id': wishlist_id}, context_instance=RequestContext(request))
 
+def editWish(request, wish_id):
+  return HttpResponseRedirect(reverse('wish_home'))
+
+def removeWish(request, wish_id):
+  wish = get_object_or_404(Wish, pk=wish_id)
+  wish.is_hidden = True
+  wish.save()
+
+  return HttpResponseRedirect(reverse('wish_list_wish', args=[wish.related_list.id]))
+
+
+def accomplishWish(request, wish_id):
+  wish = get_object_or_404(Wish, pk=wish_id)
+  wish.accomplish_date = datetime.now()
+  wish.save()
+
+  return HttpResponseRedirect(reverse('wish_list_wish', args=[wish.related_list.id]))
+
+
+
 def listAllWishes(request):
   wish_list = Wish.objects.filter(related_list__owner=request.user, is_hidden=False)
 
@@ -72,9 +92,7 @@ def removeWishlist(request, wishlist_id):
   wishlist = get_object_or_404(Wishlist, pk=wishlist_id)
   wishlist.is_hidden = True
   wishlist.save()
-#  wishlists = Wishlist.objects.filter(owner=request.user)
 
-#  return render_to_response('wish/list_wishlist.html', {'wishlists':wishlists}, context_instance=RequestContext(request))
   return HttpResponseRedirect(reverse('wish_home'))
 
 def listWish(request, wishlist_id=0):
