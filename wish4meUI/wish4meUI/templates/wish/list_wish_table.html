@@ -7,9 +7,9 @@
     <td>Category</td>
     <td>Request Date</td>
     <td>Accomplish Date</td>
-    <td></td>
-    <td></td>
-    <td></td>
+    <td>Accomplish</td>
+    <td>Edit</td>
+    <td>Remove</td>
   </tr>
   {% for wish in wish_list %}
   <tr>
@@ -20,9 +20,9 @@
     <td>{{ wish.category }}</td>
     <td>{{ wish.request_date }}</td>
     <td>{{ wish.accomplish_date }}</td>
-    <td><a href="{% url wish_accomplish_wish wish.id %}">Accomplish</a></td>
-    <td><a href="{% url wish_edit_wish wish.id %}">Edit</a></td>
-    <td><a href="{% url wish_remove_wish wish.id %}">Remove</a></td>
+    <td><a href="{% url wish_accomplish_wish wish.id %}">X</a></td>
+    <td><a href="{% url wish_edit_wish wish.id %}">X</a></td>
+    <td><a href="{% url wish_remove_wish wish.id %}">X</a></td>
 
   </tr>
   {% endfor %}

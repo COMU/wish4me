@@ -2,15 +2,15 @@
   <tr bgcolor=#FF00FF>
     <td>Wishlist Title</td>
     <td>Wish Count</td>
-    <td></td>
-    <td></td>
+    <td>Edit</td>
+    <td>Remove</td>
   </tr>
   {% for wishlist in wishlists %}
   <tr>
     <td><a href="{% url wish_list_wish wishlist.id %}">{{ wishlist.title }}</a></td>
     <td>{{ wishlist.wish_set.all.count }}</td>
-    <td><a href="{% url wish_edit_wishlist wishlist.id %}">Edit</a></td>
-    <td><a href="{% url wish_remove_wishlist wishlist.id %}">Remove</a></td>
+    <td><a href="{% url wish_edit_wishlist wishlist.id %}">X</a></td>
+    <td><a href="{% url wish_remove_wishlist wishlist.id %}">X</a></td>
   </tr>
   {% endfor %}
 </table>
