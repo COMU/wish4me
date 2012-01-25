@@ -1,0 +1,6 @@
+{% extends "base/layout2.html" %}
+{% block left %}
+{% for current_user in all_users %}
+  <p>{{current_user.user.username }}</p>
+{% endfor%}
+{% endblock %}

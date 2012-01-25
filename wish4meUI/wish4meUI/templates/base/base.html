@@ -89,9 +89,9 @@
             </ul>
           </li>
           <li>
-            <a href="#">Menu 4</a>
+            <a href="#">Search</a>
             <ul>
-              <li> <a href="#">Submenu 1</a> </li>
+              <li> <a href="{% url user_search %}">users</a> </li>
               <li> <a href="#">Submenu 2</a> </li>
               <li> <a href="#">Submenu 3</a> </li>
             </ul>
@@ -110,7 +110,8 @@
               <a href="#">Add Another Account Via...</a>
               <ul>
                 <li> <a href="javascript: openwindow('{% url openid-login %}')">Google</a> </li>
-                <li> <a href="#">Submenu 3</a> </li>
+                <li> <a href="#">Submenu 2</a> </li>
+                <li> <a href="javascript: openwindow('{% url twitter_oauth_auth %}')">twitter</a> </li>
               </ul>
             </li>
             <li class="secondary">

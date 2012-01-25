@@ -19,6 +19,7 @@ urlpatterns = patterns('',
     (r'^google/', include('wish4meUI.google.urls')),
     (r'^wish/', include('wish4meUI.wish.urls')),
     (r'^user/', include('wish4meUI.userprofile.urls')),
+    (r'^friend/', include('wish4meUI.friend.urls')),
 
     # Uncomment the admin/doc line below to enable admin documentation:
     # (r'^admin/doc/', include('django.contrib.admindocs.urls')),
