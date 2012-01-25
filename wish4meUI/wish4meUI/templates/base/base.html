@@ -72,7 +72,6 @@
               </ul>
             </li>
           {% endif %}
-            
           <li>
             <a href="#">Menu 2</a>
             <ul>
@@ -102,7 +101,7 @@
               <a href="#">Login Via...</a>
               <ul>
                 <li> <a href="javascript: openwindow('{% url openid-login %}')">Google</a> </li>
-                <li> <a href="#">Submenu 2</a> </li>
+                <li> <a href="javascript: openwindow('{% url facebook_login %}')"> Facebook </a> </li>
                 <li> <a href="javascript: openwindow('{% url twitter_oauth_auth %}')">twitter</a> </li>
               </ul>
             </li>
@@ -111,7 +110,6 @@
               <a href="#">Add Another Account Via...</a>
               <ul>
                 <li> <a href="javascript: openwindow('{% url openid-login %}')">Google</a> </li>
-                <li> <a href="#">Submenu 2</a> </li>
                 <li> <a href="#">Submenu 3</a> </li>
               </ul>
             </li>
