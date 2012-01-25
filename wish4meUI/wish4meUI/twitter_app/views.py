@@ -56,7 +56,7 @@ def return_(request):
     "/return/"
     unauthed_token = request.session.get('unauthed_token', None)
     if not unauthed_token:
-        return HttpResponse("No un-authed token cookie")
+        return HttpResponse("No un-authed token cookie.")
     token = oauth.OAuthToken.from_string(unauthed_token)
     if token.key != request.GET.get('oauth_token', 'no-token'):
         return HttpResponse("Something went wrong! Tokens do not match")
@@ -75,7 +75,8 @@ def return_(request):
         creds = simplejson.loads(auth)
         user = authenticate(request=request, credentials=creds)
         if not user:
-          print "olmadi hacit"
+          print "user was not authenticated"
+        render_to_response(reverse(user_loginFail))
         djangoLogin(request, user)
     return response
 
