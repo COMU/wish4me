@@ -76,7 +76,7 @@ def return_(request):
         user = authenticate(request=request, credentials=creds)
         if not user:
           print "user was not authenticated"
-        render_to_response(reverse(user_loginFail))
+          return HttpResponseRedirect(reverse('user_loginFail'))
         djangoLogin(request, user)
     return response
 
