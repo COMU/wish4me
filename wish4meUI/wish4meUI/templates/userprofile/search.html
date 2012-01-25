@@ -1,0 +1,14 @@
+{% extends "base/layout2.html" %}
+{% block left %}
+{% if users_all != -1 %}
+  {% for current_user in users_all %}
+    <p>{{current_user.username }}</p>
+  {% endfor%}
+{% else %}
+  <form action='{% url user_search %}' method="POST" name='user_search' id='user_search'>
+    {% csrf_token %}
+    {{ form.as_table }}
+    <input type='submit' value='Search' name='search_button'>
+  </form>
+{% endif %}
+{% endblock %}
