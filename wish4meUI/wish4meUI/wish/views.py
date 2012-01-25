@@ -23,7 +23,9 @@ def addWish(request, wishlist_id):
     if form.is_valid():
       wish = form.save(commit = False)
       wish.wish_for = request.user
-      wish.comment = form.cleaned_data['comment']
+      wish.description = form.cleaned_data['description']
+      wish.name = form.cleaned_data['name']
+      wish.brand = form.cleaned_data['brand']
       wish.category = form.cleaned_data['category']
       wish.request_date = datetime.now()
       wish.related_list = Wishlist.objects.get(pk=wishlist_id)
@@ -44,7 +46,7 @@ def addWishlist(request):
     if form.is_valid():
       wishlist = form.save(commit = False)
       wishlist.owner = request.user
-      wishlist.comment = form.cleaned_data['comment']
+      wishlist.title = form.cleaned_data['title']
       wishlist.save()
       return HttpResponseRedirect(reverse('wish_home'))
   else:

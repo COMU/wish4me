@@ -4,7 +4,7 @@ from wish4meUI.wish.models import Wish, WishCategory, Wishlist
 class WishForm(forms.ModelForm):
   class Meta:
     model = Wish
-    fields = ('wish_for', 'comment', 'category', )
+    fields = ('wish_for', 'description', 'category', 'brand', 'name', )
 
 class WishCategoryForm(forms.ModelForm):
   class Meta:
@@ -13,5 +13,5 @@ class WishCategoryForm(forms.ModelForm):
 class WishlistForm(forms.ModelForm):
   class Meta:
     model = Wishlist
-    fields = ('comment',)
+    fields = ('title',)
 
