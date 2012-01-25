@@ -17,7 +17,7 @@ from django.template import RequestContext
 
 from foursq.models import Foursq_User, Foursq_Friend
 from userprofile.models import *
-from userprofile.views import userLogin
+#from userprofile.views import userLogin
 
 CLIENT_ID = settings.FOURSQ_CLIENT_ID
 CLIENT_SECRET = settings.FOURSQ_CLIENT_SECRET
@@ -105,7 +105,7 @@ def done(request):
     id = user['id']
     request.session['user_id'] = id
     print "id", id
-    auth_user = userLogin(request, "foursquare", id)
+#    auth_user = userLogin(request, "foursquare", id)
     #authenticated user object
     if auth_user is not None:
         if auth_user.user.is_active:
