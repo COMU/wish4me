@@ -5,8 +5,10 @@ import json, urllib
 
 from django.db import models
 from django.contrib.auth.models import User
+from django.contrib import admin
 
 from wish4meUI.auth.models import LoginProfile
+from wish4meUI.facebook.backend import FacebookBackend
 
 
 class FacebookProfile(LoginProfile):
@@ -28,3 +30,5 @@ class FacebookNewsFeed(models.Model):
     facebook_id = models.BigIntegerField()
     date = models.DateField(auto_now=True)
     facebook_pub = models.IntegerField()
+
+admin.site.register(FacebookProfile)

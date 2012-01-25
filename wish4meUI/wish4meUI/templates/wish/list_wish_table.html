@@ -1,7 +1,9 @@
 <table style="border-color:#000000" border=1>
   <tr bgcolor=#FF00FF>
     <td>Wish For</td>
-    <td>Comment</td>
+    <td>Brand</td>
+    <td>Name</td>
+    <td>Description</td>
     <td>Category</td>
     <td>Request Date</td>
     <td>Accomplish Date</td>
@@ -9,7 +11,9 @@
   {% for wish in wish_list %}
   <tr>
     <td>{{ wish.wish_for }}</td>
-    <td>{{ wish.comment }}</td>
+    <td>{{ wish.brand }}</td>
+    <td>{{ wish.name }}</td>
+    <td>{{ wish.description }}</td>
     <td>{{ wish.category }}</td>
     <td>{{ wish.request_date }}</td>
     <td>{{ wish.accomplish_date }}</td>
