@@ -35,11 +35,9 @@ class TwitterAuthBackend(object):
 
     twitter_profile.save()
     backend = twitter_profile.getLoginBackend(request)
-    print "user edek basgan"
     user = backend.login(
         twitter_profile, related_name='twitter_profile',
         username=twitter_screenname, email=settings.DEFAULT_EMAIL)
-    print "user olusturduk"
     return user
 
 
