@@ -14,7 +14,8 @@ class FriendshipManager(models.Manager):
       return True
     return False
   
-  def remove(self, user_1, user_2)
+  def remove(self, user_1, user_2):
+    pass
 
 class Friendship(models.Model):
 
@@ -40,8 +41,8 @@ INVITE_STATUS = (
 class FriendshipInvitation(models.Model):
   from_user = models.ForeignKey(User, related_name="invitations_from")
   to_user = models.ForeignKey(User, related_name="invitations_to")
-  message = models.TextField()
-  status = models.CharField(max_length=1, choices=INVITE_STATUS)
+  message = models.TextField( blank = True)
+  status = models.CharField(max_length=1, choices=INVITE_STATUS, default="1")
   date_created = models.DateTimeField("date_created", default=datetime.now())
   
   def accept(self):
@@ -58,4 +59,4 @@ class FriendshipInvitation(models.Model):
       self.save()
 
   def __unicode__(self):
-    return self.from_user +" to " + self.to_user " invate"
+    return self.from_user +" to " + self.to_user +" invate"

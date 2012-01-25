@@ -102,6 +102,7 @@ INSTALLED_APPS = (
     'wish4meUI.google',
     'facebook',
     'wish',
+    'friend',
     # Uncomment the next line to enable the admin:
     'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
