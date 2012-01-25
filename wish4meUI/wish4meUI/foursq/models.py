@@ -1,12 +1,21 @@
 from django.db import models
-from django.contrib.auth.models import User
+
+from wish4meUI.auth.models import LoginProfile
+from wish4meUI.foursq.backend import FoursqBackend
 
 
-class Foursq_User(models.Model):
+class FoursqProfile(LoginProfile):
+
     foursq_id = models.IntegerField()
-    user = models.OneToOneField(User)
+    access_token = models.CharField(max_length=150)
+    username = models.CharField(max_length=100)
+    firstname = models.CharField(max_length=100)
+    lastname = models.CharField(max_length=100)
 
-class Foursq_Friend(models.Model):
-    foursq_id = models.IntegerField()
-    foursq_user = models.ManyToManyField(Foursq_User)
+    def getLoginBackend(self, request):
+        return FoursqBackend(self, request)
+
+#class Foursq_Friend(models.Model):
+#    foursq_id = models.IntegerField()
+#    foursq_user = models.ManyToManyField(Foursq_User)
 
