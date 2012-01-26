@@ -9,14 +9,13 @@ class FriendshipManager(models.Manager):
 
   def areFriends(self, user_1, user_2):
     if self.filter(from_user=user_1, to_user=user_2, is_hidden= False).count() > 0:
-      return True
-    if self.filter(from_user=user_2, to_user=user_1, is_hidden= False).count() > 0:
-      return True
+      if self.filter(from_user=user_2, to_user=user_1, is_hidden= False).count() > 0:
+        return True
     return False
   
   def remove(self, user_1, user_2):
     friendship_to_end = self.filter(from_user=user_1, to_user=user_2, is_hidden= False)
-    if friendship_to_end.is_Hidden
+    if friendship_to_end:
       friendship_to_end.is_Hidden = True
       friendship_to_end.hide_date = datetime.now()
       friendship_to_end.save()
