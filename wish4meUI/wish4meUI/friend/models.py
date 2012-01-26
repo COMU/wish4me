@@ -63,4 +63,4 @@ class FriendshipInvitation(models.Model):
       self.save()
 
   def __unicode__(self):
-    return self.from_user +" to " + self.to_user +" invate"
+    return self.from_user +" to " + self.to_user +" invite"
