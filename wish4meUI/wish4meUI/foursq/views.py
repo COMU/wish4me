@@ -15,7 +15,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login
 from django.template import RequestContext
 
-from foursq.models import Foursq_User, Foursq_Friend
+#from foursq.models import Foursq_User, Foursq_Friend
 from userprofile.models import *
 #from userprofile.views import userLogin
 
@@ -128,11 +128,11 @@ def friend_import(request):
 
     if request.method == 'POST':
         user_id = request.session['user_id']
-        foursq_user = Foursq_User.objects.get(foursq_id=user_id)
+        #foursq_user = Foursq_User.objects.get(foursq_id=user_id)
         for friend_id in request.POST.getlist('friend_id'):
             foursq_friend = Foursq_Friend.objects.create(foursq_id=friend_id)
             # addind the index for many to many field
-            foursq_friend.foursq_user.add(foursq_user)
+            #foursq_friend.foursq_user.add(foursq_user)
             send_data.update({'message':'ok'})
             return render_to_response('foursq/success.html', send_data)
 
