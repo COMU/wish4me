@@ -7,12 +7,14 @@ from django.http import HttpResponseRedirect
 from friend.models import *
 
 @login_required
-def invite(request,friend_id):
-  friend_to_invite = User.objects.get(pk = friend_id)
-  user_that_invites = request.user;
-  if Friendship.objects.filter(from_user=user_that_invites, to_user=friend_to_invite).count() > 0:
+def follow(request,following_user_id):
+  user_to_follow = User.objects.get(pk = following_user_id)
+  user_following = request.user;
+  if user_to_follow == user_following:
+    print "you cannot follow yourself"
+  elif Following.objects.filter(from_user=user_following, to_user=user_to_follow).count() > 0:
     print "You are following that user already"
   else:
-    friendship = Friendship(from_user=user_that_invites, to_user=friend_to_invite)
-    friendship.save()
+    following = Following(from_user=user_following, to_user=user_to_follow)
+    following.save()
   return HttpResponseRedirect(reverse("homePage"))

@@ -2,7 +2,7 @@
 {% block left %}
 {% if users_all != -1 %}
   {% for current_user in users_all %}
-    <p>{{current_user.username }} <a href="{% url friend_invite current_user.id %}">follow</a></p>
+    <p>{{current_user.username }} <a href="{% url friend_follow current_user.id %}">follow</a></p>
   {% endfor%}
 {% else %}
   <form action='{% url user_search %}' method="POST" name='user_search' id='user_search'>

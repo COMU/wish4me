@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 from django.db import models
 from datetime import datetime
 
-class FriendshipManager(models.Manager):
+class FollowingManager(models.Manager):
 
   def areFriends(self, user_1, user_2):
     if self.filter(from_user=user_1, to_user=user_2, is_hidden= False).count() > 0:
@@ -14,35 +14,32 @@ class FriendshipManager(models.Manager):
     return False
   
   def remove(self, user_1, user_2):
-    friendship_to_end = self.filter(from_user=user_1, to_user=user_2, is_hidden= False)
+    following_to_end = self.filter(from_user=user_1, to_user=user_2, is_hidden= False)
     if friendship_to_end:
       friendship_to_end.is_Hidden = True
       friendship_to_end.hide_date = datetime.now()
       friendship_to_end.save()
 
-class Friendship(models.Model):
+class Following(models.Model):
 
-  from_user = models.ForeignKey(User, related_name="friends_with")
-  to_user = models.ForeignKey(User, related_name="friend_of")
+  from_user = models.ForeignKey(User, related_name="follower")
+  to_user = models.ForeignKey(User, related_name="following")
   date_created = models.DateTimeField("date_created", default=datetime.now())
   is_hidden = models.BooleanField("Hiddden", default=False)
   hide_date = models.DateTimeField("hide_date", default=datetime.now())   # since this never used if not is_hidden.
 
   
-  objects = FriendshipManager()
+  objects = FollowingManager()
   def save(self):
-    if Friendship.objects.filter(from_user=self.from_user, to_user=self.to_user, is_hidden= False).count() > 0:
+    if Following.objects.filter(from_user=self.from_user, to_user=self.to_user, is_hidden= False).count() > 0:
       pass
     else:
       friendship_invite = FriendshipInvitation(to_user=self.to_user, from_user=self.from_user)
       friendship_invite.save()
-    super(Friendship, self).save()
+    super(Following, self).save()
 
   class Meta:
     unique_together = (('to_user', 'from_user'),)
-
-def friendSetFor(user):
-  return set([obj["friend"] for obj in Friendship.objects.friends_for_user(user)])
 
 INVITE_STATUS = (
     ("1", "Sent"),
