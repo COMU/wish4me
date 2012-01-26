@@ -46,26 +46,26 @@ def home(request):
 
 def newsfeed(request):
 
-		facebook_profile = request.user.get_profile().get_facebook_profile()
-		message = request.POST.get('message', '')
-		facebook_pub = request.POST.get('facebook_pub', '')
-		token = FacebookProfile.objects.get(facebook_id=facebook_profile['id'])
-		token = token.access_token
+  facebook_profile = request.user.get_profile().get_facebook_profile()
+  message = request.POST.get('message', '')
+  facebook_pub = request.POST.get('facebook_pub', '')
+  token = FacebookProfile.objects.get(facebook_id=facebook_profile['id'])
+  token = token.access_token
 
-		if message and facebook_pub and facebook_profile:
+  if message and facebook_pub and facebook_profile:
 
-			     fb_newsfeed = FacebookNewsFeed(message=message, facebook_id=facebook_profile['id'], date=datetime.datetime.now(), 								    facebook_pub=facebook_pub)
-    	    	             fb_newsfeed.save()
-			     if facebook_pub == '1':
-				url = 'https://graph.facebook.com/me/feed'
-				values = {'message' : message,
-        				 'access_token' : token
-         				 }
-				data = urllib.urlencode(values)
-				req = urllib2.Request(url, data)
-				response = urllib2.urlopen(req)
+	fb_newsfeed = FacebookNewsFeed(message=message, facebook_id=facebook_profile['id'], 
+                                  date=datetime.datetime.now(), facebook_pub=facebook_pub)
+  fb_newsfeed.save()
+  if facebook_pub == '1':
+    url = 'https://graph.facebook.com/me/feed'
+    values = {'message' : message,
+              'access_token' : token }
+    data = urllib.urlencode(values)
+    req = urllib2.Request(url, data)
+    response = urllib2.urlopen(req)
 
-    		return render_to_response('facebook/home.html',
-    	                          { 'facebook_profile': facebook_profile, 'newsfeed_form': NewsFeedForm() },
-    	                          context_instance=RequestContext(request))
+    return render_to_response('facebook/home.html',
+                              { 'facebook_profile': facebook_profile, 'newsfeed_form': NewsFeedForm() },
+                                context_instance=RequestContext(request))
 
