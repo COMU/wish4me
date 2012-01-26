@@ -57,7 +57,6 @@ def accomplishWish(request, wish_id):
   return HttpResponseRedirect(reverse('wish_list_wish', args=[wish.related_list.id]))
 
 
-
 def listAllWishes(request):
   wish_list = Wish.objects.filter(related_list__owner=request.user, is_hidden=False)
 
@@ -102,6 +101,13 @@ def listWish(request, wishlist_id=0):
   wish_list = Wish.objects.filter(related_list__id=wishlist_id, is_hidden=False)
 
   return render_to_response('wish/list_wish.html', {'wish_list':wish_list, 'wishlist_id': wishlist_id}, context_instance=RequestContext(request))
+
+def addWishCategory(request):
+  wishcategory = WishCategory(name="Default", is_approved=True, is_hidden=False)
+  wishcategory.save()
+
+  return HttpResponseRedirect(reverse('wish_home'))
+
 
 def listWishCategory(request):
   wish_category_list = WishCategory.objects.filter(is_approved=True, is_hidden=False)

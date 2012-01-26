@@ -13,6 +13,7 @@ urlpatterns = patterns('',
     url(r'^wish/list/(?P<wishlist_id>\d+)$', view=listWish, name='wish_list_wish'),
 #    url(r'^add_wish_category$', view=addWishCategory, name="addWishCategory"),
     url(r'^wishcategory/list$', view=listWishCategory, name="wish_list_wishcategory"),
+    url(r'^wishcategory/add$', view=addWishCategory, name="wish_add_wishcategory"),
 
     url(r'^wishlist/list$', view=listWishlist, name="wish_list_wishlist"),
     url(r'^wishlist/edit/(?P<wishlist_id>\d+)$', view=editWishlist, name="wish_edit_wishlist"),
