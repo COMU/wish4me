@@ -15,7 +15,11 @@ class FriendshipManager(models.Manager):
     return False
   
   def remove(self, user_1, user_2):
-    pass
+    friendship_to_end = self.filter(from_user=user_1, to_user=user_2, is_hidden= False)
+    if friendship_to_end.is_Hidden
+      friendship_to_end.is_Hidden = True
+      friendship_to_end.hide_date = datetime.now()
+      friendship_to_end.save()
 
 class Friendship(models.Model):
 
