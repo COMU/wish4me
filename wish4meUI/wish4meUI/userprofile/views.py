@@ -40,7 +40,7 @@ def userSearch(request):
     form = UserSearchForm(request.POST.copy())
     if form.is_valid():
       term = form.cleaned_data['term']
-      print term
+      #TODO if term is blank?
       users_all = User.objects.filter(Q(username__icontains = term) |
                                       Q(first_name__icontains = term) |
                                       Q(last_name__icontains = term)).distinct()
