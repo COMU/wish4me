@@ -26,7 +26,17 @@ class Friendship(models.Model):
   to_user = models.ForeignKey(User, related_name="friend_of")
   date_created = models.DateTimeField("date_created", default=datetime.now())
   is_hidden = models.BooleanField("Hiddden", default=False)
-  hide_date = models.DateTimeField("hide_date", blank=True)
+  hide_date = models.DateTimeField("hide_date", default=datetime.now())   # since this never used if not is_hidden.
+
+  
+  objects = FriendshipManager()
+  def save(self):
+    if Friendship.objects.filter(from_user=self.from_user, to_user=self.to_user, is_hidden= False).count() > 0:
+      pass
+    else:
+      friendship_invite = FriendshipInvitation(to_user=self.to_user, from_user=self.from_user)
+      friendship_invite.save()
+    super(Friendship, self).save()
 
   class Meta:
     unique_together = (('to_user', 'from_user'),)
@@ -54,7 +64,7 @@ class FriendshipInvitation(models.Model):
     self.status = "3"
     self.save()
     # auto-create friendship
-    friendship = Friendship(to_user=self.to_user, from_user=self.from_user)
+    friendship = Friendship(to_user=self.from_user, from_user=self.to_user) #this is reverse
     friendship.save()
 
   def decline(self):
