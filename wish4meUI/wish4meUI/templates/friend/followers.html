@@ -7,8 +7,8 @@
         <p>{{ follower.username }}</p>
       </td>
       <td>
-        {% if follower.invite_id != -1 %}
-          <a href="#">follow back</a>
+        {% if follower.invite_id != "-1" %}
+          <a href="{% url friend_accept follower.invite_id %}">follow back</a>
         {% endif %}
       </td>
     </tr>

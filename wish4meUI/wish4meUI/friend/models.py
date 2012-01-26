@@ -61,7 +61,7 @@ class FriendshipInvitation(models.Model):
     self.status = "3"
     self.save()
     # auto-create friendship
-    friendship = Friendship(to_user=self.from_user, from_user=self.to_user) #this is reverse
+    friendship = Following(to_user=self.from_user, from_user=self.to_user) #this is reverse
     friendship.save()
 
   def decline(self):
@@ -70,4 +70,4 @@ class FriendshipInvitation(models.Model):
       self.save()
 
   def __unicode__(self):
-    return self.from_user +" to " + self.to_user +" invite"
+    return "invite from %s to %s" % (self.from_user, self.to_user)
