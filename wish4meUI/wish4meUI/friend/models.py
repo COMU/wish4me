@@ -26,6 +26,7 @@ class Friendship(models.Model):
   to_user = models.ForeignKey(User, related_name="friend_of")
   date_created = models.DateTimeField("date_created", default=datetime.now())
   is_hidden = models.BooleanField("Hiddden", default=False)
+  hide_date = models.DateTimeField("hide_date", blank=True)
 
   class Meta:
     unique_together = (('to_user', 'from_user'),)
