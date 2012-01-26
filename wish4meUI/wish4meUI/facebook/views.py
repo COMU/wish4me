@@ -31,7 +31,7 @@ def loginCallback(request):
     user = authenticate(request=request, token=code)
     if user.is_authenticated():
       auth_login(request, user)
-    return HttpResponseRedirect(reverse('wish_home'))
+    return HttpResponseRedirect(reverse('user_loginSuccess'))
 
 
 def home(request):
