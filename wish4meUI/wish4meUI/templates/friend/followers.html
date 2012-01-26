@@ -1,0 +1,17 @@
+{% extends "base/layout2.html" %}
+{% block left %}
+{% for follower in followers_list  %}
+  <table>
+    <tr>
+      <td>
+        <p>{{ follower.username }}</p>
+      </td>
+      <td>
+        {% if follower.invite_id != -1 %}
+          <a href="#">follow back</a>
+        {% endif %}
+      </td>
+    </tr>
+  </table>
+{% endfor %}
+{% endblock %}
