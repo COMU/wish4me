@@ -8,12 +8,15 @@ class FoursqProfile(LoginProfile):
 
     foursq_id = models.IntegerField()
     access_token = models.CharField(max_length=150)
-    username = models.CharField(max_length=100)
+    email = models.CharField(max_length=100)
     firstname = models.CharField(max_length=100)
     lastname = models.CharField(max_length=100)
 
     def getLoginBackend(self, request):
         return FoursqBackend(self, request)
+
+    def __unicode__(self):
+        return self.email
 
 #class Foursq_Friend(models.Model):
 #    foursq_id = models.IntegerField()

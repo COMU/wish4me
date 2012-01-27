@@ -95,7 +95,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.sites',
     'django.contrib.messages',
- #   'foursq',
+    'foursq',
     'twitter_app',
     'userprofile',
     'django_openid_auth',
@@ -119,6 +119,7 @@ AUTHENTICATION_BACKENDS = (
     'facebook.auth.FacebookBackend',
     'wish4meUI.google.auth.GoogleAuthBackend',
     'wish4meUI.twitter_app.auth.TwitterAuthBackend',
+    'wish4meUI.foursq.auth.FoursqAuthBackend',
     'django.contrib.auth.backends.ModelBackend',
 )
 

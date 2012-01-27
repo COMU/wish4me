@@ -11,13 +11,11 @@ from django.shortcuts import render_to_response
 from django.core.urlresolvers import reverse
 from django.contrib.auth import logout
 from django.conf import settings
-from django.contrib.auth.models import User
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate
+from django.contrib.auth import login as djangoLogin
 from django.template import RequestContext
 
-#from foursq.models import Foursq_User, Foursq_Friend
 from userprofile.models import *
-#from userprofile.views import userLogin
 
 CLIENT_ID = settings.FOURSQ_CLIENT_ID
 CLIENT_SECRET = settings.FOURSQ_CLIENT_SECRET
@@ -66,7 +64,7 @@ def callback(request):
     request.session['access_token'] = access_token
 
     # redirect the user to show we're done
-    return HttpResponseRedirect(reverse('oauth_done'))
+    return HttpResponseRedirect(reverse('foursq_oauth_done'))
 
 def foursquareUserDetails(request):
     # get the access_token
@@ -80,41 +78,26 @@ def foursquareUserDetails(request):
     response = urllib2.urlopen(full_url)
     response = response.read()
     user = json.loads(response)['response']['user']
-    name = "".join([user['firstName'], user['lastName']])
+    firstname = user['firstName']
+    lastname = user['lastName']
     contact = user['contact']
     email = contact['email']
-    id = user['id']
-    userDetails = {'userName' : name, 'email' : email,}
+    foursq_id = user['id']
+    userDetails = {'firstname':firstname, 'lastname':lastname, 'foursq_id':foursq_id, 'access_token':access_token, 'email' : email}
     return userDetails
 
 def done(request):
-    # get the access_token
-    access_token = request.session.get('access_token')
 
-    # request user details from foursquare
-    params = { 'oauth_token' : access_token }
-    data = urllib.urlencode(params)
-    url = 'https://api.foursquare.com/v2/users/self'
-    full_url = url + '?' + data
-    response = urllib2.urlopen(full_url)
-    response = response.read()
-    user = json.loads(response)['response']['user']
-    name = "".join([user['firstName'], user['lastName']])
-    contact = user['contact']
-    email = contact['email']
-    id = user['id']
-    request.session['user_id'] = id
-    print "id", id
-#    auth_user = userLogin(request, "foursquare", id)
-    #authenticated user object
-    if auth_user is not None:
-        if auth_user.user.is_active:
-              # show the page with the user's name to show they've logged in
-              return render_to_response('foursq/done.html', {'name':name}, context_instance=RequestContext(request))
-        else:
-            return render_to_response('errors/disabled_account.html', {'name', name})
-    else:
-        return render_to_response('errors/invalid_login.html', {'name', name})
+    #write the authenticate method here
+    credentials = foursquareUserDetails(request)
+    user = authenticate(request=request, credentials=credentials, backend="foursq")
+
+    if not user:
+        return HttpResponse(reverse('user_loginFail'))
+
+    response = HttpResponseRedirect(reverse('user_loginSuccess'))
+    djangoLogin(request, user)
+    return response
 
 def friend_import(request):
     send_data = {}

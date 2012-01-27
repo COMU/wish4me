@@ -6,16 +6,16 @@ import settings
 
 class FoursqAuthBackend(object):
 
-    def authenticate(self, request, credentials):
+    def authenticate(self, request, credentials, backend="foursq"):
 
         if credentials is None:
             return None
 
-        foursq_id = credentials['id']
+        foursq_id = credentials['foursq_id']
         foursq_acces_token = credentials['access_token']
-        foursq_username = credentials['username']
-        foursq_firstname = credentials['first_name']
-        foursq_lastname = credentials['last_name']
+        foursq_email = credentials['email']
+        foursq_firstname = credentials['firstname']
+        foursq_lastname = credentials['lastname']
 
         try:
             foursq_profile = FoursqProfile.objects.get(foursq_id=foursq_id)
@@ -23,7 +23,7 @@ class FoursqAuthBackend(object):
             foursq_profile = FoursqProfile(
                 foursq_id = foursq_id,
                 access_token = foursq_acces_token,
-                username = foursq_username,
+                email = foursq_email,
                 firstname = foursq_firstname,
                 lastname = foursq_lastname)
 
@@ -32,7 +32,7 @@ class FoursqAuthBackend(object):
         backend = foursq_profile.getLoginBackend(request)
         user = backend.login(
             foursq_profile, related_name='foursq_profile',
-            username=foursq_username, email=settings.DEFAULT_EMAIL)
+            foursq_id=foursq_id, email=settings.DEFAULT_EMAIL)
         return user
 
     def get_user(self, user_id):

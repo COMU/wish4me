@@ -9,9 +9,9 @@ urlpatterns = patterns('foursq.views',
     # logout from the app
     url(r'^logout/$', view='unauth', name='oauth_unauth'),
     # authenticate with 4sq using OAuth
-    url(r'^auth/$', view='auth', name='oauth_auth'),
+    url(r'^auth/$', view='auth', name='foursq_oauth_auth'),
     # main page once logged in
-    url( r'^done/$', view='done', name='oauth_done' ),
+    url( r'^done/$', view='done', name='foursq_oauth_done' ),
     # friend import page
     url( r'^friend_import/$', view='friend_import', name='friend_import' ),
 )
