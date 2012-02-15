@@ -19,10 +19,27 @@ def follow(request, following_user_id):
     following.save()
   return HttpResponseRedirect(reverse("homePage"))
 
-
 @login_required
 def listFollowers(request):
   following_user = request.user
   followers = Following.objects.filter(to_user=following_user, is_hidden = False)
-  return render_to_response('friend/followers.html', {'followers': followers},
-                            context_instance=RequestContext(request))
+  followers_list = []
+  for follower in followers:
+    follower_dict = dict()
+    follower_dict["username"] = follower.from_user.username
+    friendship_invite = FriendshipInvitation.objects.filter(from_user = follower.from_user, to_user=following_user, status = "1")
+    if friendship_invite.count() >0:
+      follower_dict["invite_id"] = friendship_invite[0].id      #TODO this is a little hackish. fix with try/catch
+    else:
+      follower_dict["invite_id"] = "-1"      
+    followers_list.append(follower_dict)
+
+  return render_to_response('friend/followers.html', {'followers_list': followers_list}, context_instance=RequestContext(request))
+
+@login_required
+def acceptInvite(request, invite_id):
+  invite = get_object_or_404(FriendshipInvitation, pk = invite_id)
+  invite.accept()
+  return   HttpResponseRedirect(reverse("friend_followers"))
+
+    
