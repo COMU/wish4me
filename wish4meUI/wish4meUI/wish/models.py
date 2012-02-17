@@ -22,7 +22,8 @@ class Wish(models.Model):
   request_date = models.DateTimeField(auto_now=True, auto_now_add=True)
   accomplish_date = models.DateTimeField(blank=True, null=True)
 
-  #photo =
+  photo = models.ImageField(upload_to='user_data/wish_photos/%Y/%m/%d',
+                            blank=True, null=True)
   #location =
   is_hidden = models.BooleanField(default = False)
 
