@@ -16,7 +16,7 @@ class TwitterProfile(LoginProfile):
   lastname = models.CharField(max_length=100)
 
   def getLoginBackend(self, request):
-    return TwitterBackend(self, request)
+      return TwitterBackend(self, request)
 
   def __unicode__(self):
     return self.screen_name

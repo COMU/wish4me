@@ -12,4 +12,4 @@ class LoginProfile(models.Model):
     abstract =True
 
   def getUserProfile(self):
-    return self.userprofile_set
+      return self.userprofile_set

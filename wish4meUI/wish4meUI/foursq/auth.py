@@ -20,6 +20,7 @@ class FoursqAuthBackend(object):
         try:
             foursq_profile = FoursqProfile.objects.get(foursq_id=foursq_id)
         except FoursqProfile.DoesNotExist:
+            print "Foursq profile does not exist"
             foursq_profile = FoursqProfile(
                 foursq_id = foursq_id,
                 access_token = foursq_acces_token,
@@ -32,7 +33,8 @@ class FoursqAuthBackend(object):
         backend = foursq_profile.getLoginBackend(request)
         user = backend.login(
             foursq_profile, related_name='foursq_profile',
-            foursq_id=foursq_id, email=settings.DEFAULT_EMAIL)
+            username=foursq_id)
+        print user
         return user
 
     def get_user(self, user_id):

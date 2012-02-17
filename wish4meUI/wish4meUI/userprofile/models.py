@@ -20,6 +20,9 @@ class UserProfile(models.Model):
   twitter_profile = models.OneToOneField(
       'twitter_app.TwitterProfile',
       blank=True, null=True, related_name='userprofile_set')
+  foursq_profile = models.OneToOneField(
+      'foursq.FoursqProfile',
+      blank=True, null=True, related_name='userprofile_set')
 
   def __unicode__(self):
     return self.user.__unicode__()

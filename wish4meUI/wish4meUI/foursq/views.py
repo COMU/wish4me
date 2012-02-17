@@ -6,7 +6,7 @@ import urllib2
 import json
 
 from django.core.context_processors import csrf
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render_to_response
 from django.core.urlresolvers import reverse
 from django.contrib.auth import logout
@@ -90,6 +90,7 @@ def done(request):
 
     #write the authenticate method here
     credentials = foursquareUserDetails(request)
+    print credentials
     user = authenticate(request=request, credentials=credentials, backend="foursq")
 
     if not user:

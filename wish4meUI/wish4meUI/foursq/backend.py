@@ -5,4 +5,4 @@ from wish4meUI.auth.backend import LoginBackend
 
 
 class FoursqBackend(LoginBackend):
-  pass
+    pass

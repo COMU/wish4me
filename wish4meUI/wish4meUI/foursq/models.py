@@ -3,7 +3,6 @@ from django.db import models
 from wish4meUI.auth.models import LoginProfile
 from wish4meUI.foursq.backend import FoursqBackend
 
-
 class FoursqProfile(LoginProfile):
 
     foursq_id = models.IntegerField()
@@ -13,6 +12,7 @@ class FoursqProfile(LoginProfile):
     lastname = models.CharField(max_length=100)
 
     def getLoginBackend(self, request):
+        print "getLoginBackend called"
         return FoursqBackend(self, request)
 
     def __unicode__(self):
