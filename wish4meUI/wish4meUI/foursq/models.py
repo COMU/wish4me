@@ -12,7 +12,6 @@ class FoursqProfile(LoginProfile):
     lastname = models.CharField(max_length=100)
 
     def getLoginBackend(self, request):
-        print "getLoginBackend called"
         return FoursqBackend(self, request)
 
     def __unicode__(self):
