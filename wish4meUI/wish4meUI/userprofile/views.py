@@ -11,6 +11,7 @@ from django.shortcuts import render_to_response
 from django.db.models import Q
 
 from userprofile.forms import UserSearchForm, UserInformationForm
+from django.core.files.base import ContentFile
 from itertools import chain
 
 @login_required
@@ -29,6 +30,9 @@ def userInformationEdit(request):
     if request.method == 'POST':
         form = UserInformationForm(request.POST, instance=user)
         if form.is_valid():
+            file_content = ContentFile(request.FILES['photo'].read())
+            profile = user.get_profile()
+            profile.photo.save(request.FILES['photo'].name, file_content)
             form.save()
     else:
         form = UserInformationForm(initial = {'username': user.username, 'first_name': user.first_name, 'last_name': user.last_name, 'email': user.email})

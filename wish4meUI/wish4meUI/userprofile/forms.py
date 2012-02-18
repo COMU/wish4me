@@ -17,6 +17,7 @@ class UserSearchForm(forms.Form):
   term = forms.CharField(label='Search term', required=True, widget=forms.TextInput(attrs={'size': '60',}))
 
 class UserInformationForm(forms.ModelForm):
+    photo = forms.IntegerField()
     password = forms.CharField(
         help_text='', required=False
     )
@@ -25,6 +26,6 @@ class UserInformationForm(forms.ModelForm):
         validators=[check_username]
     )
     class Meta:
-        fields = ('username', 'first_name', 'last_name', 'email', 'password')
+        fields = ('photo', 'username', 'first_name', 'last_name', 'email', 'password')
         model = User
 
