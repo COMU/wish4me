@@ -25,34 +25,15 @@ def userProfile(request):
 
 @login_required
 def userInformationEdit(request):
+    user = request.user
     if request.method == 'POST':
-        form = UserInformationForm(request.POST)
+        form = UserInformationForm(request.POST, instance=user)
         if form.is_valid():
-            username = request.POST.get('username', False)
-            first_name = request.POST.get('first_name', False)
-            last_name = request.POST.get('last_name', False)
-            email = request.POST.get('email', False)
-            password = request.POST.get('password', False)
-
-            #setting the user information
-            #this part should only save the changed value, it can be changed when the ajax is used
-            user = request.user
-
-            if password:
-                    user.set_password(password)
-            if username != user.username:
-                user.username = username
-            if first_name:
-                user.first_name = first_name
-            if last_name:
-                user.last_name = last_name
-            if email:
-                user.email = email
-            user.save()
+            form.save()
     else:
-        form = UserInformationForm(initial = {'username': request.user.username, 'first_name': request.user.first_name, 'last_name': request.user.last_name, 'email': request.user.email})
+        form = UserInformationForm(initial = {'username': user.username, 'first_name': user.first_name, 'last_name': user.last_name, 'email': user.email})
 
-    userDetails = { 'user' : request.user, 'form': form }
+    userDetails = { 'user' : user, 'form': form }
     return render_to_response('userprofile/edit_information.html', userDetails, context_instance=RequestContext(request))
 
 @login_required
