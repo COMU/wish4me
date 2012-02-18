@@ -30,14 +30,15 @@ def userInformationEdit(request):
     if request.method == 'POST':
         form = UserInformationForm(request.POST, instance=user)
         if form.is_valid():
-            file_content = ContentFile(request.FILES['photo'].read())
-            profile = user.get_profile()
-            profile.photo.save(request.FILES['photo'].name, file_content)
+            if request.FILES.has_key('photo'):
+                img = request.FILES['photo']
+                profile = user.get_profile()
+                profile.photo.save(img.name, img)
             form.save()
     else:
         form = UserInformationForm(initial = {'username': user.username, 'first_name': user.first_name, 'last_name': user.last_name, 'email': user.email})
 
-    userDetails = { 'user' : user, 'form': form }
+    userDetails = { 'user' : user, 'profile': user.get_profile(), 'form': form }
     return render_to_response('userprofile/edit_information.html', userDetails, context_instance=RequestContext(request))
 
 @login_required
