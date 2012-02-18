@@ -8,6 +8,8 @@ from django.contrib.auth.models import User
 class UserProfile(models.Model):
   user = models.ForeignKey(User, unique=True)
 
+  photo = models.ImageField(upload_to='photos/%Y/%m/%d', height_field=64, width_field=64, null=True, blank=True)
+
   last_login_backend_name = models.CharField(max_length=100,
                                              blank=True, null=True)
 
