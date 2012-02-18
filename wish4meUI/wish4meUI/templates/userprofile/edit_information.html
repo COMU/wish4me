@@ -1,7 +1,9 @@
 {% extends "base/layout1.html" %}
 
 {% block left %}
-<img src="{{ user.get_profile.photo }}" alt="" width="64" height="64" border="0" /> 
+<p>
+<img src="{{ MEDIA_URL }}{{ profile.photo }}" alt="" width="64" height="64" border="0" />
+</p>
 <form enctype="multipart/form-data" action="{% url user_information_edit  %}" method="post">{% csrf_token %}
   {{ form.as_p }}
   <input type="submit" value="Submit" />
