@@ -1,7 +1,11 @@
 {% extends "base/layout2.html" %}
 {% block left %}
-<form action="{% url wish_add_wish wishlist_id %}" method="post">
+<form action="{% url wish_add_wish wishlist_id %}" enctype="multipart/form-data" method="POST">
   {% csrf_token %}
-  {{ wish_form.as_table }}
+  {{ wish_form }}
+  {{ wish_photo_set_form.management_form }}
+  {% for form in wish_photo_set_form.forms %}
+    {{ form }}
+  {% endfor %}
 <input type="submit" value="Submit" />
 {% endblock %}

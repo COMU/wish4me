@@ -5,11 +5,12 @@ from django.shortcuts import render_to_response, get_object_or_404
 from django.template.context import RequestContext
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
+from django.forms.formsets import formset_factory
 
 from datetime import datetime
 
-from wish4meUI.wish.forms import WishForm, WishCategoryForm, WishlistForm
-from wish4meUI.wish.models import Wish, WishCategory, Wishlist
+from wish4meUI.wish.forms import WishForm, WishCategoryForm, WishlistForm, WishPhotoForm
+from wish4meUI.wish.models import Wish, WishCategory, Wishlist, WishPhoto
 
 def homeWish(request):
   wishlists = Wishlist.objects.filter(owner=request.user, is_hidden=False)
@@ -18,8 +19,10 @@ def homeWish(request):
   return render_to_response('wish/wish.html', {'wishlists':wishlists, 'wishlist_form': wishlist_form}, context_instance=RequestContext(request))
 
 def addWish(request, wishlist_id):
+  wish_photo_set = formset_factory(WishPhotoForm, extra=5, max_num=5)
   if request.POST:
-    form = WishForm(request.POST)
+    form = WishForm(request.POST, prefix='wishform')
+    wish_photo_set_form = wish_photo_set(request.POST, request.FILES, prefix='photoform')
     if form.is_valid():
       wish = form.save(commit = False)
       wish.wish_for = request.user
@@ -27,13 +30,30 @@ def addWish(request, wishlist_id):
       wish.name = form.cleaned_data['name']
       wish.brand = form.cleaned_data['brand']
       wish.category = form.cleaned_data['category']
+      print "hede"
+      print wish_photo_set_form
       wish.request_date = datetime.now()
       wish.related_list = Wishlist.objects.get(pk=wishlist_id)
       wish.save()
+      
+      try:
+        for photoform in wish_photo_set_form.forms:
+          photo = photoform.save(commit = False)
+          if photo.photo:
+            photo.wish = wish
+            photo.save()
+      except:
+        pass
+
+
       return HttpResponseRedirect(reverse('wish_list_wish', args=[wishlist_id]))
+    else:
+      print form.errors
   else:
-    wish_form = WishForm()
-    return render_to_response('wish/add_wish.html', {'wish_form': wish_form, 'wishlist_id': wishlist_id}, context_instance=RequestContext(request))
+    wish_form = WishForm(prefix='wishform')
+    wish_photo_set_form = wish_photo_set(prefix='photoform')
+
+    return render_to_response('wish/add_wish.html', {'wish_form': wish_form, 'wishlist_id': wishlist_id, 'wish_photo_set_form': wish_photo_set_form}, context_instance=RequestContext(request))
 
 def editWish(request, wish_id):
   return HttpResponseRedirect(reverse('wish_home'))
