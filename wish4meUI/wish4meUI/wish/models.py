@@ -3,6 +3,10 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+import random
+import string
+import os
+
 # Create your models here.
 
 class Wishlist(models.Model):
@@ -22,7 +26,6 @@ class Wish(models.Model):
   request_date = models.DateTimeField(auto_now=True, auto_now_add=True)
   accomplish_date = models.DateTimeField(blank=True, null=True)
 
-  #photo =
   #location =
   is_hidden = models.BooleanField(default = False)
 
@@ -42,3 +45,25 @@ class WishCategory(models.Model):
 
   def __unicode__(self):
     return self.name
+
+class WishPhoto(models.Model):
+  wish = models.ForeignKey("Wish")
+  photo = models.ImageField(upload_to="photos/%s/" % ''.join(random.choice(string.letters + string.digits) for x in range(int(random.random()*35))))
+
+  is_hidden = models.BooleanField(default = False)
+
+  def save(self):
+    if not self.is_hidden:
+      super(WishPhoto,self).save()
+      old_path = os.path.split(self.photo.file.name)[0]
+      extension =  os.path.splitext(self.photo.file.name)[-1]
+      new_name = "%s%s" % (''.join(random.choice(string.letters + string.digits) for x in range(int(random.random()*35))), extension)
+      os.rename(self.photo.file.name, old_path+"/"+new_name)
+
+      old_url_head = os.path.split(self.photo.url)[0]
+
+      self.photo.name = "photos" +  old_path[old_path.rfind('/'):] + "/" + new_name 
+    super(WishPhoto, self).save()
+
+  def __unicode__(self):
+    return self.image.file.name 
