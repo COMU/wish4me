@@ -1,0 +1,37 @@
+{% extends "base/layout1.html" %}
+
+{% block left %}
+<p>
+<img src="{{ MEDIA_URL }}{{ profile.photo }}" alt="" width="64" height="64" border="0" />
+</p>
+<form enctype="multipart/form-data" action="{% url user_information_edit  %}" method="post">{% csrf_token %}
+  {{ form.as_p }}
+  <input type="submit" value="Submit" />
+</form>
+{% endblock %}
+
+{% block right %} 
+<div id="tables" class="block" style="margin: 0px;">
+      <table>
+        <tbody>
+          <tr>
+              <th>Username</th>
+              <td>{{ user.username }}</td>
+          </tr>
+          <tr>
+              <th>First Name</th>
+              <td>{{ user.first_name }}</td>
+          </tr>
+          <tr>
+              <th>Last Name</th>
+              <td>{{ user.last_name }}</td>
+          </tr>
+          <tr>
+              <th>Email</th>
+              <td>{{ user.email }}</td>
+          </tr>
+      </tbody>
+    </table>
+</div>
+{% endblock %}
+

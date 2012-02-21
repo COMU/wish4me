@@ -10,7 +10,8 @@ from django.template import RequestContext
 from django.shortcuts import render_to_response
 from django.db.models import Q
 
-from userprofile.forms import *
+from userprofile.forms import UserSearchForm, UserInformationForm
+from django.core.files.base import ContentFile
 from itertools import chain
 
 @login_required
@@ -22,6 +23,23 @@ def userLogout(request):
 def userProfile(request):
   userDetails = { 'name' : request.user.username }
   return render_to_response('userprofile/profile.html', {'userDetails': userDetails}, context_instance=RequestContext(request))
+
+@login_required
+def userInformationEdit(request):
+    user = request.user
+    if request.method == 'POST':
+        form = UserInformationForm(request.POST, instance=user)
+        if form.is_valid():
+            if request.FILES.has_key('photo'):
+                img = request.FILES['photo']
+                profile = user.get_profile()
+                profile.photo.save(img.name, img)
+            form.save()
+    else:
+        form = UserInformationForm(initial = {'username': user.username, 'first_name': user.first_name, 'last_name': user.last_name, 'email': user.email})
+
+    userDetails = { 'user' : user, 'profile': user.get_profile(), 'form': form }
+    return render_to_response('userprofile/edit_information.html', userDetails, context_instance=RequestContext(request))
 
 @login_required
 def userLoginSuccess(request):

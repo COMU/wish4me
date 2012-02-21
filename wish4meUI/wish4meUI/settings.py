@@ -10,6 +10,7 @@ BASE_URL = 'http://127.0.0.1:8000'
 
 ADMINS = (
     ('Oguz Yarimtepe', 'oguzyarimtepe@gmail.com'),
+    ('Mesutcan Kurt', 'mesutcank@gmail.com'),
 )
 
 MANAGERS = ADMINS
@@ -95,6 +96,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.sites',
     'django.contrib.messages',
+    'django.contrib.comments',
     'foursq',
     'twitter_app',
     'userprofile',

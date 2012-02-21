@@ -1,0 +1,30 @@
+<h2> {{ list_name }} </h2>
+<table class="table table-striped">
+  <tbody>
+    {% for element in lst %}
+      <tr>
+        {% for field in element %}
+          <td class="span{{ field.width}}">
+
+          {% if field.is_thumbnail %}
+            <ul class="thumbnails">
+              <a href="#" class="thumbnail">
+                <li class="span{{ field.width }}">
+                  <img src="{{ field.path }}" alt="" />
+                </li>
+              </a>
+            </ul>
+
+          {% else %}
+            <blockquote>
+              {{ field.content }}
+            </blockquote>
+          {% endif %}
+
+          </td>
+        {% endfor %}
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+

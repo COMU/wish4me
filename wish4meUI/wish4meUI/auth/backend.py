@@ -36,17 +36,22 @@ class LoginBackend(object):
 
     def login(self, profile, related_name, **user_kwargs):
 
+
       try:
-        userprofile = profile.getUserProfile()
-        user = userprofile.user
+          #if related_name == "foursq_profile":
+          #    print "foursq_profile"
+          #    profile = UserProfile.objects.get(foursq_profile=profile)
+          #    print profile
+          userprofile = profile.getUserProfile()
+          user = userprofile.user
       except UserProfile.DoesNotExist:
-        user = User(**user_kwargs)
-        user.password = settings.DEFAULT_PASSWORD
-        user.save()
-        kwargs = {related_name: profile}
-        userprofile = UserProfile(user=user, **kwargs)
-        userprofile.last_login_backend_name = related_name
-        userprofile.save()
+          user = User(**user_kwargs)
+          user.password = settings.DEFAULT_PASSWORD
+          user.save()
+          kwargs = {related_name: profile}
+          userprofile = UserProfile(user=user, **kwargs)
+          userprofile.last_login_backend_name = related_name
+          userprofile.save()
       #djangoLogin(self._request,user)
 
       return userprofile.user

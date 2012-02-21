@@ -1,4 +1,18 @@
-  <h2> Hello {{ user.username }} </h2>
+<h2> Hello 
+  {% if user.first_name and user.last_name %}
+    {{ user.first_name }} {{ user.last_name }}
+  {% else %}
+    {% if user.first_name %}
+      {{ user.first_name }}
+    {% else %}
+      {% if user.last_name %}
+          {{ user.last_name }}
+      {% else %}
+          {{ user.username }}
+      {% endif %}
+    {% endif %}
+  {% endif %}
+</h2>
   <p>
     <a href="{% url friend_followers %}">list followers</a>
   </p>

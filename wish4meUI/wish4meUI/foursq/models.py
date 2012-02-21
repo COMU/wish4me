@@ -3,7 +3,6 @@ from django.db import models
 from wish4meUI.auth.models import LoginProfile
 from wish4meUI.foursq.backend import FoursqBackend
 
-
 class FoursqProfile(LoginProfile):
 
     foursq_id = models.IntegerField()

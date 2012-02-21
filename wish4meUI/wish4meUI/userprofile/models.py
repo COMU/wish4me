@@ -8,6 +8,8 @@ from django.contrib.auth.models import User
 class UserProfile(models.Model):
   user = models.ForeignKey(User, unique=True)
 
+  photo = models.ImageField(upload_to='photos/%Y/%m/%d', null=True, blank=True)
+
   last_login_backend_name = models.CharField(max_length=100,
                                              blank=True, null=True)
 
@@ -19,6 +21,9 @@ class UserProfile(models.Model):
       blank=True, null=True, related_name='userprofile_set')
   twitter_profile = models.OneToOneField(
       'twitter_app.TwitterProfile',
+      blank=True, null=True, related_name='userprofile_set')
+  foursq_profile = models.OneToOneField(
+      'foursq.FoursqProfile',
       blank=True, null=True, related_name='userprofile_set')
 
   def __unicode__(self):

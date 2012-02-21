@@ -32,7 +32,8 @@ class FoursqAuthBackend(object):
         backend = foursq_profile.getLoginBackend(request)
         user = backend.login(
             foursq_profile, related_name='foursq_profile',
-            foursq_id=foursq_id, email=settings.DEFAULT_EMAIL)
+            first_name=foursq_firstname, last_name=foursq_lastname,
+            email=foursq_email)
         return user
 
     def get_user(self, user_id):
