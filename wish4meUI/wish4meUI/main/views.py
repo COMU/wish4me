@@ -9,7 +9,7 @@ from django.core.urlresolvers import reverse
 from wish4meUI.wish.models import WishCategory
 
 def welcome(request):
-  if WishCategory.objects.all().count < 1:
+  if WishCategory.objects.all().count() < 1:
     wc = WishCategory(name="Default")
     wc.save()
  
