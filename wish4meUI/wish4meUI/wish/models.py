@@ -28,6 +28,7 @@ class Wish(models.Model):
 
   #location =
   is_hidden = models.BooleanField(default = False)
+  is_private = models.BooleanField(default = False)
 
   def __unicode__(self):
     return '%s %s' % (self.related_list.owner, self.description)
