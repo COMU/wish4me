@@ -41,6 +41,9 @@ class Following(models.Model):
   class Meta:
     unique_together = (('to_user', 'from_user'),)
 
+  def __unicode__(self):
+    return "from " + self.from_user.username + " to " + self.to_user.username
+
 INVITE_STATUS = (
     ("1", "Sent"),
     ("2", "Expired"),

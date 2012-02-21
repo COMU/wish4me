@@ -12,6 +12,7 @@ admin.autodiscover()
 urlpatterns = patterns('',
     # Example:
     url(r'^$', view='wish4meUI.main.views.welcome', name='homePage'),
+    url(r'^list_friends_wishes$', view='wish4meUI.main.views.list_friends_wishes', name='list_friends_wishes'),
     # (r'^wish4meUI/', include('wish4meUI.foo.urls')),
     (r'^foursq/', include('wish4meUI.foursq.urls')),
     (r'^twitter/', include('wish4meUI.twitter_app.urls')),
