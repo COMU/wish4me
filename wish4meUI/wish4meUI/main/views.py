@@ -6,7 +6,8 @@ from django.template.context import RequestContext
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 
-from wish4meUI.wish.models import WishCategory
+from wish4meUI.wish.models import WishCategory, Wish
+from wish4meUI.friend.models import Following
 
 from django.db import connection
 
