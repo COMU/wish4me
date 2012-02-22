@@ -19,5 +19,21 @@
     <a href="{% url wish_edit_wish wish.id %}">Edit</a>
     <a href="{% url wish_remove_wish wish.id %}">Remove</a>
 
+    {% load comments %}
+    {% render_comment_list for wish %}
+    {% get_comment_form for wish as form %}
+<table>
+  <form action="{% comment_form_target %}" method="post">
+    {% csrf_token %}
+    {{ form }}
+    <tr>
+      <td colspan="2">
+        <input type="submit" name="submit" value="Post">
+        <input type="submit" name="preview" value="Preview">
+      </td>
+    </tr>
+  </form>
+</table>
+
 
 {% endblock %}
