@@ -87,7 +87,14 @@ TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
+
+    # Use one of the following to switch design
+
+    # 960.gs design
     os.path.join(PROJECT_PATH, 'templates'),
+
+    # Bootstrap design
+    # os.path.join(PROJECT_PATH, 'templates', 'v2'),
 )
 
 INSTALLED_APPS = (
