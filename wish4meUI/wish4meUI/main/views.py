@@ -20,6 +20,7 @@ def list_friends_wishes(request):
   wishes_from_friends = Wish.objects.filter(related_list__owner__in = friends_list, is_hidden = False)
   wishes_from_following = Wish.objects.filter(related_list__owner__in = following_list, is_hidden = False, is_private = False)
   wishes = wishes_from_friends | wishes_from_following
+  wishes = wishes.order_by("-request_date")[:5]
   #wishes = Wish.objects.filter(related_list__owner__in = following_list, is_hidden = False).order_by("-request_date")[:5]
   return render_to_response("home/list_friend_wishes.html", {'wish_list' : wishes, }, context_instance=RequestContext(request, {}))
 
