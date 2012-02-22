@@ -1,0 +1,23 @@
+{% extends "base/layout2.html" %}
+{% block left %}
+    Wish For: {{ wish.wish_for }} <br/>
+    Brand: {{ wish.brand }}  <br/>
+    Name: {{ wish.name }} <br/>
+    Description: {{ wish.description }} </br>
+    Category: {{ wish.category }} <br/>
+    Request Date: {{ wish.request_date }} <br/>
+    Accomplish Date: {{ wish.accomplish_date }} <br/>
+
+    Photos:
+    {% for photo in photos %}
+    <a id="link_to_photo_{{ photo.id }}" href="{{ photo.photo.url }}">
+ 	<img id="photo_{{ photo_id }}" src="{{ photo.photo.url }}" />
+ 	</a>
+    {% endfor %}
+
+    <a href="{% url wish_accomplish_wish wish.id %}">Accomplish</a>
+    <a href="{% url wish_edit_wish wish.id %}">Edit</a>
+    <a href="{% url wish_remove_wish wish.id %}">Remove</a>
+
+
+{% endblock %}
