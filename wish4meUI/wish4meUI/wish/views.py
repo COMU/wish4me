@@ -30,8 +30,6 @@ def addWish(request, wishlist_id):
       wish.name = form.cleaned_data['name']
       wish.brand = form.cleaned_data['brand']
       wish.category = form.cleaned_data['category']
-      print "hede"
-      print wish_photo_set_form
       wish.request_date = datetime.now()
       wish.related_list = Wishlist.objects.get(pk=wishlist_id)
       wish.save()
@@ -133,3 +131,9 @@ def listWishCategory(request):
   wish_category_list = WishCategory.objects.filter(is_approved=True, is_hidden=False)
 
   return render_to_response('wish/list_wishcategory.html', {'wish_category_list':wish_category_list}, context_instance=RequestContext(request))
+
+def showWishAlone(request, wish_id):
+  wish = get_object_or_404(Wish, is_hidden = False,  pk = wish_id)
+  photos = WishPhoto.objects.filter(is_hidden = False, wish__id = wish_id)
+
+  return render_to_response('wish/show_wish_alone.html', {'wish': wish, 'photos': photos}, context_instance=RequestContext(request))
