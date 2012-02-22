@@ -26,8 +26,6 @@ class Wish(models.Model):
   request_date = models.DateTimeField(auto_now=True, auto_now_add=True)
   accomplish_date = models.DateTimeField(blank=True, null=True)
 
-  photo = models.ImageField(upload_to='user_data/wish_photos/%Y/%m/%d',
-                            blank=True, null=True)
   #location =
   is_hidden = models.BooleanField(default = False)
   is_private = models.BooleanField(default = False)
@@ -69,4 +67,4 @@ class WishPhoto(models.Model):
     super(WishPhoto, self).save()
 
   def __unicode__(self):
-    return self.image.file.name 
+    return self.photo.file.name 
