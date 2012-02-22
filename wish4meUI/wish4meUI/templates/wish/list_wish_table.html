@@ -15,7 +15,7 @@
   <tr>
     <td>{{ wish.wish_for }}</td>
     <td>{{ wish.brand }}</td>
-    <td>{{ wish.name }}</td>
+    <td><a href="{% url wish_show_wish_alone wish.id %}">{{ wish.name }}</td>
     <td>{{ wish.description }}</td>
     <td>{{ wish.category }}</td>
     <td>{{ wish.request_date }}</td>
