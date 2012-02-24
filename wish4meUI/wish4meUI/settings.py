@@ -91,10 +91,10 @@ TEMPLATE_DIRS = (
     # Use one of the following to switch design
 
     # 960.gs design
-    os.path.join(PROJECT_PATH, 'templates'),
+    #os.path.join(PROJECT_PATH, 'templates'),
 
     # Bootstrap design
-    # os.path.join(PROJECT_PATH, 'templates', 'v2'),
+    os.path.join(PROJECT_PATH, 'templates', 'v2'),
 )
 
 INSTALLED_APPS = (
