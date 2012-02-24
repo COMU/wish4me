@@ -30,13 +30,19 @@ lobortis pretium massa ac lobortis. Pellentesque habitant morbi tristique.</p>
   </li>
   </ul>
     <div class="span2">
-      <img src="/site_media/images/social-logos/facebook.png"/>
+      <a href="javascript: openwindow('{% url facebook_login %}')">
+        <img src="/site_media/images/social-logos/facebook.png"/>
+      </a>
     </div>
     <div class="span2">
-      <img src="/site_media/images/social-logos/google-openid.png"/>
+      <a href="javascript: openwindow('{% url openid-login %}')">
+        <img src="/site_media/images/social-logos/google-openid.png"/>
+      </a>
     </div>
     <div class="span2">
-      <img src="/site_media/images/social-logos/twitter.png"/>
+      <a href="javascript: openwindow('{% url twitter_oauth_auth %}')">
+        <img src="/site_media/images/social-logos/twitter.png"/>
+      </a>
     </div>
     <div class="span2">
       <img src="/site_media/images/social-logos/foursquare.png"/>
