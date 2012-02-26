@@ -62,6 +62,7 @@ def userSearch(request):
       users_all = User.objects.filter(Q(username__icontains = term) |
                                       Q(first_name__icontains = term) |
                                       Q(last_name__icontains = term)).distinct()
+      users_all = users_all.exclude(pk = request.user.id)
       print len(users_all)
       return render_to_response('userprofile/search.html', {'users_all': users_all}, context_instance=RequestContext(request))
     else:
