@@ -1,0 +1,6 @@
+{% extends "base/layout2.html" %}
+{% block right %}
+  {% for current_user in users_all %}
+    <p>{{current_user.username }} <a href="{% url friend_follow current_user.id %}">follow</a></p>
+  {% endfor%}
+{% endblock %}
