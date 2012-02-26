@@ -1,0 +1,61 @@
+{% extends "base/layout2.html" %}
+
+{% block right %}
+  <form class="form-horizontal" enctype="multipart/form-data" action="{% url user_information_edit  %}" method="post">
+    {% csrf_token %}
+    <div class="row">
+      <div class="span3">
+        <img src="{{ MEDIA_URL }}{{ profile.photo }}" alt="" width="180" height="180" border="0" />
+        {{ form.photo }}<br \>
+      </div>
+      <div class="span4">
+        <div class="control-group">
+          <label for="id_username" class="control-label">Username</label>
+          <div class="controls">
+            {{ form.username }}<br \>
+          </div>
+        </div>
+        <div class="control-group">
+          <label for="id_password" class="control-label">Password</label>
+          <div class="controls">
+            {{ form.password }}<br \>
+          </div>
+        </div>
+        <div class="control-group">
+          <label for="id_email" class="control-label">E-Mail</label>
+          <div class="controls">
+            {{ form.email }}<br \>
+          </div>
+        </div>
+      </div>
+      <div class="span2">
+      <a href="javascript: openwindow('{% url facebook_login %}')">
+        <img src="/site_media/images/social-logos/facebook.png"/>
+      </a>
+      <a href="javascript: openwindow('{% url openid-login %}')">
+        <img src="/site_media/images/social-logos/google-openid.png"/>
+      </a>
+      <a href="javascript: openwindow('{% url twitter_oauth_auth %}')">
+        <img src="/site_media/images/social-logos/twitter.png"/>
+      </a>
+      <img src="/site_media/images/social-logos/foursquare.png"/>
+    </div>
+    <div class="span9">
+    <br />
+      <div class="control-group">
+        <label for="id_first_name" class="control-label">First Name</label>
+        <div class="controls">
+          {{ form.first_name }}<br \>
+        </div>
+      </div>
+      <div class="control-group">
+        <label for="id_last_name" class="control-label">Last Name</label>
+        <div class="controls">
+          {{ form.last_name }}<br \>
+        </div>
+      </div>
+    <input type="submit" value="Submit" />
+  </form>
+  </div>
+{% endblock %}
+
