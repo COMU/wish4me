@@ -59,15 +59,17 @@ def userSearch(request):
     if form.is_valid():
       term = form.cleaned_data['search_query']
       #TODO if term is blank?
-      users_all = User.objects.filter(Q(username__icontains = term) |
+      users_query = User.objects.filter(Q(username__icontains = term) |
                                       Q(first_name__icontains = term) |
                                       Q(last_name__icontains = term)).distinct()
-      users_all = users_all.exclude(pk = request.user.id)
-      print len(users_all)
-      return render_to_response('userprofile/search.html', {'users_all': users_all}, context_instance=RequestContext(request))
+      users_query = users_query.exclude(pk = request.user.id)
+      users_list = []
+      for user in users_query:
+        users_list.append(user.get_profile())
+      return render_to_response('userprofile/search.html', {'users_list': users_list}, context_instance=RequestContext(request))
     else:
       #return HttpResponse("userprofile.userSearch: form is invalid")
-      print "elma"
+      print "userprofile.userSearch: form is invalid"
   else:
     return HttpResponse("userprofile.userSearch: the request does not contain POST")
 

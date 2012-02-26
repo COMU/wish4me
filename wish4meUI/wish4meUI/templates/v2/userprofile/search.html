@@ -1,6 +1,5 @@
 {% extends "base/layout2.html" %}
+{% load list %}
 {% block right %}
-  {% for current_user in users_all %}
-    <p>{{current_user.username }} <a href="{% url friend_follow current_user.id %}">follow</a></p>
-  {% endfor%}
+    {% create_list "UserSearch" users_list "[{'photo': {'width' : 2}}, { 'user': {'width' : 6 }}]" %}
 {% endblock %}
