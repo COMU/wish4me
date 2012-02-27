@@ -1,0 +1,10 @@
+{% extends "base/layout2.html" %}
+
+{% block right %}
+<a class="btn btn-large btn-primary" style="padding-left: 240px; padding-right: 240px; font-size: 30px; margin-bottom: 20px;" href="{% url wish_add_wish %}">Add Wish</a>
+{% for wish in wish_list %}
+{% include "wish/list_wish_alone.html" %}
+{% endfor %}
+
+{% endblock %}
+
