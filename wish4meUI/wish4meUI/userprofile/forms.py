@@ -5,7 +5,7 @@ from django import forms
 
 
 class UserSearchForm(forms.Form):
-  term = forms.CharField(label='Search term', required=True, widget=forms.TextInput(attrs={'size': '60',}))
+  search_query = forms.CharField(label='search_query', required=True, widget=forms.TextInput(attrs={'size': '60',}))
 
 class UserInformationForm(forms.ModelForm):
     photo = forms.ImageField(required=False)

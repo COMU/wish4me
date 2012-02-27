@@ -95,6 +95,7 @@ TEMPLATE_DIRS = (
 
     # Bootstrap design
     os.path.join(PROJECT_PATH, 'templates', 'v2'),
+    #os.path.join(PROJECT_PATH, 'templates'),
 )
 
 INSTALLED_APPS = (

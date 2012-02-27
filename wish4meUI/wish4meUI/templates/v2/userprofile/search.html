@@ -1,0 +1,5 @@
+{% extends "base/layout2.html" %}
+{% load list %}
+{% block right %}
+    {% create_list "UserSearch" users_list "[{'photo': {'width' : 2}}, { 'user': {'width' : 6 }}]" %}
+{% endblock %}
