@@ -5,7 +5,7 @@ from django.conf.urls.defaults import *
 
 urlpatterns = patterns('',
     url(r'^$', view=homeWish, name="wish_home"),
-    url(r'^wish/add/(?P<wishlist_id>\d+)$', view=addWish, name="wish_add_wish"),
+    url(r'^wish/add/$', view=addWish, name="wish_add_wish"),
     url(r'^wish/show/(?P<wish_id>\d+)$', view=showWishAlone, name="wish_show_wish_alone"),
     url(r'^wish/edit/(?P<wish_id>\d+)$', view=editWish, name="wish_edit_wish"),
     url(r'^wish/remove/(?P<wish_id>\d+)$', view=removeWish, name="wish_remove_wish"),

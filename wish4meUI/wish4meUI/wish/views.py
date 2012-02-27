@@ -18,7 +18,7 @@ def homeWish(request):
 
   return render_to_response('wish/wish.html', {'wishlists':wishlists, 'wishlist_form': wishlist_form}, context_instance=RequestContext(request))
 
-def addWish(request, wishlist_id):
+def addWish(request):
   wish_photo_set = formset_factory(WishPhotoForm, extra=5, max_num=5)
   if request.POST:
     form = WishForm(request.POST, prefix='wishform')
@@ -78,7 +78,7 @@ def accomplishWish(request, wish_id):
 def listAllWishes(request):
   wish_list = Wish.objects.filter(related_list__owner=request.user, is_hidden=False)
 
-  return render_to_response('wish/list_wish.html', {'wish_list': wish_list, 'wishlist_id': 1}, context_instance=RequestContext(request))
+  return render_to_response('wish/list_wishes.html', {'wish_list': wish_list, 'wishlist_id': 1}, context_instance=RequestContext(request))
 
 def addWishlist(request):
   if request.POST:
