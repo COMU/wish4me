@@ -1,0 +1,36 @@
+    <div class="row" style="height:10px">
+    </div>
+
+    <div class="row">
+      <div class="span6"><h3><a href="{% url show-wish wish.id %}">{{ wish.name.title }}</a></h3></div>
+      <div class="span4">
+        <span class="pull-right">
+          <i>created by <a href=#>{{wish.related_list.owner}}</a></i>
+        </span>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="span3">
+        <ul class="thumbnails">
+
+          {% if not wish.getPhotos %}
+            <li class="span3">
+              <a href="#" class="thumbnail">
+                <img src="/site_media/images/no-image.gif" alt="#{{ forloop.counter }} {{ wish.description }}"></img>
+              </a>
+            </li>
+          {% endif %}
+
+          {% for photo in wish.getPhotos %}
+            <li class="span{% if forloop.first %}3{% else %}1{% endif %}">
+              <a href="#" class="thumbnail">
+                <img src="{{ photo.photo.url }}" alt="#{{ forloop.counter}} {{ wish.description }}"/></img>
+              </a>
+            </li>
+          {% endfor %}
+        </ul>
+      </div>
+      <div class="span6"><p>{{ wish.description }}</p></div>
+    </div>
+    <hr>
