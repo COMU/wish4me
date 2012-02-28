@@ -12,20 +12,22 @@ from datetime import datetime
 from wish4meUI.wish.forms import WishForm, WishCategoryForm, WishlistForm, WishPhotoForm
 from wish4meUI.wish.models import Wish, WishCategory, Wishlist, WishPhoto
 
-def myWishActivity(request):
+def myActivity(request):
   wishes = Wish.objects.filter(related_list__owner=request.user, is_hidden=False)
   return render_to_response('wish/activity.html', {'wishes': wishes}, context_instance=RequestContext(request))
 
 
 def friendActivity(request):
+  wishes = Wish.objects.filter(related_list__owner=request.user, is_hidden=False)
   return render_to_response('wish/activity.html', {'wishes': wishes}, context_instance=RequestContext(request))
 
 
-def addWish(request):
-  wish_photo_set = formset_factory(WishPhotoForm, extra=5, max_num=5)
+def add(request):
+  WishPhotoSet = formset_factory(WishPhotoForm, extra=5, max_num=5)
   if request.POST:
-    form = WishForm(request.POST, prefix='wishform')
-    wish_photo_set_form = wish_photo_set(request.POST, request.FILES, prefix='photoform')
+    form = WishForm(request.POST, prefix=WishForm.__class__.__name__)
+    wish_photo_set_form = WishPhotoSet(
+        request.POST, request.FILES, prefix=WishPhotoSet.__class__.__name__)
     if form.is_valid():
       wish = form.save(commit = False)
       wish.wish_for = request.user
@@ -36,7 +38,6 @@ def addWish(request):
       wish.request_date = datetime.now()
       wish.related_list = Wishlist.objects.get(pk=wishlist_id)
       wish.save()
-      
       try:
         for photoform in wish_photo_set_form.forms:
           photo = photoform.save(commit = False)
@@ -56,10 +57,17 @@ def addWish(request):
 
     return render_to_response('wish/add_wish.html', {'wish_form': wish_form, 'wishlist_id': wishlist_id, 'wish_photo_set_form': wish_photo_set_form}, context_instance=RequestContext(request))
 
-def editWish(request, wish_id):
+
+def edit(request, wish_id):
   return HttpResponseRedirect(reverse('wish_home'))
 
-def removeWish(request, wish_id):
+
+def show(request, wish_id):
+  wish = get_object_or_404(Wish, pk=wish_id)
+  return render_to_response('wish/wish.html', {'wish': wish}, context_instance=RequestContext(request))
+
+
+def remove(request, wish_id):
   wish = get_object_or_404(Wish, pk=wish_id)
   wish.is_hidden = True
   wish.save()
@@ -67,7 +75,7 @@ def removeWish(request, wish_id):
   return HttpResponseRedirect(reverse('wish_list_wish', args=[wish.related_list.id]))
 
 
-def accomplishWish(request, wish_id):
+def delete(request, wish_id):
   wish = get_object_or_404(Wish, pk=wish_id)
   if wish.accomplish_date is None:
     wish.accomplish_date = datetime.now()
@@ -78,10 +86,15 @@ def accomplishWish(request, wish_id):
   return HttpResponseRedirect(reverse('wish_list_wish', args=[wish.related_list.id]))
 
 
+def changeStatus(request, wish_id):
+  pass
+
+
 def listAllWishes(request):
   wish_list = Wish.objects.filter(related_list__owner=request.user, is_hidden=False)
 
   return render_to_response('wish/list_wishes.html', {'wish_list': wish_list, 'wishlist_id': 1}, context_instance=RequestContext(request))
+
 
 def addWishlist(request):
   if request.POST:
@@ -95,10 +108,12 @@ def addWishlist(request):
   else:
     pass
 
+
 def listWishlist(request):
   wishlists = Wishlist.objects.filter(owner=request.user, is_hidden=False)
 
   return render_to_response('wish/list_wishlist.html', {'wishlists':wishlists}, context_instance=RequestContext(request))
+
 
 def editWishlist(request, wishlist_id=0):
   wishlist = get_object_or_404(Wishlist, pk=wishlist_id)
