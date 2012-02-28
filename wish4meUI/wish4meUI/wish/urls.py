@@ -5,7 +5,13 @@ from django.conf.urls.defaults import *
 
 urlpatterns = patterns('',
     url(r'^home$', view=friendActivity, name='friend-activity'),
-    url(r'^me$', myWishActivity, name='my-wish-activity'),
+    url(r'^me$', myActivity, name='my-activity'),
+
+    url(r'^add$', add, name='add-wish'),
+    url(r'^(?P<wish_id>\d+)/show$', show, name='show-wish'),
+    url(r'^(?P<wish_id>\d+)/edit$', edit, name='edit-wish'),
+    url(r'^(?P<wish_id>\d+)/delete$', delete, name='delete-wish'),
+    url(r'^(?P<wish_id>\d+)/change-status$', changeStatus, name='change-wish-status'),
 )
 
 #TODO(orc.avs): Remove below
