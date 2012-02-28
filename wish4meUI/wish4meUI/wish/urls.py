@@ -4,6 +4,13 @@ from django.conf.urls.defaults import *
 
 
 urlpatterns = patterns('',
+    url(r'^home$', view=friendActivity, name='friend-activity'),
+    url(r'^me$', myWishActivity, name='my-wish-activity'),
+)
+
+#TODO(orc.avs): Remove below
+'''
+urlpatterns = patterns('',
     url(r'^$', view=homeWish, name="wish_home"),
     url(r'^wish/add/$', view=addWish, name="wish_add_wish"),
     url(r'^wish/show/(?P<wish_id>\d+)$', view=showWishAlone, name="wish_show_wish_alone"),
@@ -22,6 +29,5 @@ urlpatterns = patterns('',
     url(r'^wish/list/all$', view=listAllWishes, name="wish_list_allwishes"),
     url(r'^wishlist/add$', view=addWishlist, name="wish_add_wishlist"),
     (r'^comments/', include('django.contrib.comments.urls')),
-
-
 )
+'''

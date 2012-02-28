@@ -33,6 +33,13 @@ class Wish(models.Model):
   def __unicode__(self):
     return '%s %s' % (self.related_list.owner, self.description)
 
+  def getPhotos(self):
+    if hasattr(self, '_photos'):
+      return self._photos
+    else:
+      self._photos = WishPhoto.objects.filter(wish=self)
+    return self._photos
+
 
 class WishCategory(models.Model):
 
@@ -67,4 +74,4 @@ class WishPhoto(models.Model):
     super(WishPhoto, self).save()
 
   def __unicode__(self):
-    return self.photo.file.name 
+    return self.photo.file.name

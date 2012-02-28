@@ -30,28 +30,36 @@
 {% block content %}
 <div class="container">
   <div class="row">
-    <div class="span3">
+    <div class="span2">
       {% block left %}
         <ul class="nav nav-list">
           <li class="nav-header">
-            My Wishes
+            Wishes
           </li>
           <li>
-            <a href="{% url wish_list_allwishes %}"><i class="icon-book"></i>My Wishes</a>
+            <a href="{% url friend-activity %}"><i class="icon-user"></i>Friend activity</a>
           </li>
+          <li>
+            <a href="{% url my-activity %}"><i class="icon-user"></i>My wishes</a>
           <li class="nav-header">
             My Wishlists
           </li>
           <li>
-            <a href="{% url wish_list_wishlist %}"><i class="icon-book"></i>My Wishlists</a>
+            <a href="#"><i class="icon-book"></i>Manage wishlists</a>
+          </li>
+          <li class="nav-header">
+            Friends
           </li>
           <li>
-            <a href="{% url wish_add_wishlist %}"><i class="icon-plus-sign"></i>Create a wishlist</a>
+            <a href="#"><i class="icon-user"></i>Show friends</a>
+          </li>
+          <li>
+            <a href="#"><i class="icon-search"></i>Find friends</a>
           </li>
         </ul>
       {% endblock %}
     </div>
-    <div class="span9">
+    <div class="span10">
       {% block right %} {% endblock %}
     </div>
   </div>
