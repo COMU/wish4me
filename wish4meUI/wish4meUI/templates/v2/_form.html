@@ -1,0 +1,16 @@
+<!-- Bootstrap compatible form -->
+
+<fieldset>
+  {% for field in form %}
+    <div class="control-group {% if field.errors %}error{% endif %}">
+      <label class="control-label">{{ field.label_tag }}</label>
+      <div class="controls">
+        {{ field }}
+        <p class="help-block">{{ field.help_text }}</p>
+        {% for error in field.errors %}
+          <span class="help-inline">{{ error }}</span>
+        {% endfor %}
+      </div>
+    </div>
+  {% endfor %}
+</fieldset>
