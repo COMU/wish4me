@@ -20,7 +20,15 @@
   </td>
   <td class="span2">
     <blockquote>
-      <a href="{% url friend_follow user.id %}">follow</a></p>
+      {% if user.is_following %}
+      <!-- you are following this user -->
+      {% else %}
+        {% if user.is_followed %}
+          <a href="{% url friend_accept user.invite %}">follow back</a>
+        {% else %}
+          <a href="{% url friend_follow user.user.id %}">follow</a></p>
+        {% endif %}
+      {% endif %}
     </blockquote>
   </td>
 </tr>
