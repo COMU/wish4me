@@ -4,7 +4,7 @@ from wish4meUI.wish.models import Wish, WishCategory, Wishlist, WishPhoto
 class WishForm(forms.ModelForm):
   class Meta:
     model = Wish
-    exclude = ('related_list', 'request_date', 'accomplish_date', 'is_hidden', )
+    exclude = ('request_date', 'accomplish_date', 'is_hidden', )
 
 class WishCategoryForm(forms.ModelForm):
   class Meta:
