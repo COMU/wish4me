@@ -25,14 +25,11 @@ def listFollowers(request):
   followers = Following.objects.filter(to_user=following_user, is_hidden = False)
   followers_list = []
   for follower in followers:
-    follower_dict = dict()
-    follower_dict["username"] = follower.from_user.username
-    friendship_invite = FriendshipInvitation.objects.filter(from_user = follower.from_user, to_user=following_user, status = "1")
-    if friendship_invite.count() >0:
-      follower_dict["invite_id"] = friendship_invite[0].id      #TODO this is a little hackish. fix with try/catch
-    else:
-      follower_dict["invite_id"] = "-1"      
-    followers_list.append(follower_dict)
+    profile = follower.from_user.get_profile()
+    if FriendshipInvitation.objects.filter(from_user = follower.from_user, to_user=following_user, status = "1").count() > 0:
+      invite = FriendshipInvitation.objects.get(from_user = follower.from_user, to_user=following_user, status = "1")
+      profile.invite = invite
+    followers_list.append(profile)
 
   return render_to_response('friend/followers.html', {'followers_list': followers_list}, context_instance=RequestContext(request))
 
