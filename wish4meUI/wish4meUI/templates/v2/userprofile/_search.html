@@ -1,0 +1,34 @@
+<tr>
+  <td class="span2">
+    <ul class="thumbnails">
+      <li class="span2">
+        <a href="#" class="thumbnail">
+          <img src="{{ user.photo.url }}" alt="" />
+        </a>
+      </li>
+    </ul>
+  </td>
+  <td class="span2">
+    <blockquote>
+      {{ user.user.username }}
+    </blockquote>
+  </td>
+  <td class="span2">
+    <blockquote>
+      "%d ortak arkadas"
+    </blockquote>
+  </td>
+  <td class="span2">
+    <blockquote>
+      {% if user.is_following %}
+      <!-- you are following this user -->
+      {% else %}
+        {% if user.is_followed %}
+          <a href="{% url friend_accept user.invite %}">follow back</a>
+        {% else %}
+          <a href="{% url friend_follow user.user.id %}">follow</a></p>
+        {% endif %}
+      {% endif %}
+    </blockquote>
+  </td>
+</tr>

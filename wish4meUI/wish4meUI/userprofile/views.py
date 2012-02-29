@@ -9,10 +9,13 @@ from django.contrib.auth.decorators import login_required
 from django.template import RequestContext
 from django.shortcuts import render_to_response
 from django.db.models import Q
-
-from userprofile.forms import UserSearchForm, UserInformationForm
+from django.core.exceptions import ObjectDoesNotExist
 from django.core.files.base import ContentFile
 from itertools import chain
+
+from userprofile.forms import UserSearchForm, UserInformationForm
+from friend.models import Following, FriendshipInvitation
+from django.conf import settings
 
 @login_required
 def userLogout(request):
@@ -65,7 +68,21 @@ def userSearch(request):
       users_query = users_query.exclude(pk = request.user.id)
       users_list = []
       for user in users_query:
-        users_list.append(user.get_profile())
+        try:
+          profile = user.get_profile()
+          profile.is_following = Following.objects.filter(from_user=request.user, to_user=user).count() > 0
+          print "following " ,profile.is_following
+          profile.is_followed = FriendshipInvitation.objects.filter(from_user=user, to_user=request.user).count() > 0
+          if profile.is_followed:
+            invite = FriendshipInvitation.objects.get(from_user=user, to_user=request.user)
+            if invite.status == "1":
+              profile.invite = invite.id
+          print "follower" , profile.is_followed
+          if not profile.photo:
+            profile.photo = settings.DEFAULT_PROFILE_PICTURE
+          users_list.append(profile)  
+        except ObjectDoesNotExist:
+          pass                                  #TODO better handling for admin needed, but this works for now.
       return render_to_response('userprofile/search.html', {'users_list': users_list}, context_instance=RequestContext(request))
     else:
       #return HttpResponse("userprofile.userSearch: form is invalid")

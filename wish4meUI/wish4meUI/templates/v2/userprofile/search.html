@@ -1,5 +1,14 @@
 {% extends "base/layout2.html" %}
 {% load list %}
 {% block right %}
-    {% create_list "UserSearch" users_list "[{'photo': {'width' : 2}}, { 'user': {'width' : 6 }}]" %}
+  <h2> User Search </h2>
+  <div class="row">
+    <table class="table table-striped">
+      <tbody>
+        {% for user in users_list %}
+          {% include "userprofile/_search.html" %}
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
 {% endblock %}

@@ -12,6 +12,7 @@ from datetime import datetime
 
 from wish4meUI.wish.forms import WishForm, WishCategoryForm, WishlistForm, WishPhotoForm
 from wish4meUI.wish.models import Wish, WishCategory, Wishlist, WishPhoto
+from wish4meUI.friend.models import Following
 
 
 def myActivity(request):
@@ -20,8 +21,16 @@ def myActivity(request):
 
 
 def friendActivity(request):
-  wishes = Wish.objects.filter(related_list__owner=request.user, is_hidden=False)
-  return render_to_response('wish/activity.html', {'wishes': wishes}, context_instance=RequestContext(request))
+  following_list = Following.objects.filter(from_user = request.user).values('to_user_id')
+  friends_list = Following.objects.filter(from_user__in = following_list, to_user = request.user).values('from_user_id')
+
+  #print(str(Wish.objects.filter(related_list__owner__in = following_list).query))
+  wishes_from_friends = Wish.objects.filter(related_list__owner__in = friends_list, is_hidden = False)
+  wishes_from_following = Wish.objects.filter(related_list__owner__in = following_list, is_hidden = False, is_private = False)
+  wishes = wishes_from_friends | wishes_from_following
+  wishes = wishes.order_by("-request_date")[:5]
+  #wishes = Wish.objects.filter(related_list__owner__in = following_list, is_hidden = False).order_by("-request_date")[:5]
+  return render_to_response("wish/activity.html", {'wishes' : wishes, }, context_instance=RequestContext(request, {}))
 
 
 def add(request):
