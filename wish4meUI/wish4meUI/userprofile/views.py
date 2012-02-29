@@ -17,7 +17,7 @@ from itertools import chain
 @login_required
 def userLogout(request):
   logout(request)
-  return HttpResponseRedirect(reverse("welcome_page"))
+  return HttpResponseRedirect(reverse("homePage"))
 
 @login_required
 def userProfile(request):
