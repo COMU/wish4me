@@ -148,3 +148,5 @@ LOGOUT_URL = '/google/logout/'
 OPENID_SSO_SERVER_URL = 'https://www.google.com/accounts/o8/id'
 
 FIXTURE_DIRS = (PROJECT_PATH+'/',)
+DEFAULT_PROFILE_PICTURE = ("images/defaultProfile.jpg")
+#DEFAULT_PROFILE_PICTURE = (MEDIA_ROOT + "/defaultProfile.jpg")

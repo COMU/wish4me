@@ -9,10 +9,12 @@ from django.contrib.auth.decorators import login_required
 from django.template import RequestContext
 from django.shortcuts import render_to_response
 from django.db.models import Q
-
-from userprofile.forms import UserSearchForm, UserInformationForm
+from django.core.exceptions import ObjectDoesNotExist
 from django.core.files.base import ContentFile
 from itertools import chain
+
+from userprofile.forms import UserSearchForm, UserInformationForm
+from django.conf import settings
 
 @login_required
 def userLogout(request):
@@ -65,7 +67,14 @@ def userSearch(request):
       users_query = users_query.exclude(pk = request.user.id)
       users_list = []
       for user in users_query:
-        users_list.append(user.get_profile())
+        try:
+          profile = user.get_profile()
+          if not profile.photo:
+            profile.photo = settings.DEFAULT_PROFILE_PICTURE
+          users_list.append(profile)  
+        except ObjectDoesNotExist:
+          pass                                  #TODO better handling for admin needed, but this works for now.
+          
       return render_to_response('userprofile/search.html', {'users_list': users_list}, context_instance=RequestContext(request))
     else:
       #return HttpResponse("userprofile.userSearch: form is invalid")
