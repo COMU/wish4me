@@ -4,6 +4,8 @@
 from django.conf.urls.defaults import *
 from django.conf import settings
 
+from ajax_select import urls as ajax_select_urls
+
 # Uncomment the next two lines to enable the admin:
 from django.contrib import admin
 admin.autodiscover()
@@ -27,6 +29,8 @@ urlpatterns = patterns('',
 
     #(r'^home$', 'wish4meUI.wish.views.home'),
     # Uncomment the next line to enable the admin:
+
+    (r'^admin/lookups/', include(ajax_select_urls)),
     (r'^admin/', include(admin.site.urls)),
 )
 

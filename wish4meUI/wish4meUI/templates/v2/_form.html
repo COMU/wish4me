@@ -3,7 +3,10 @@
 <fieldset>
   {% for field in form %}
     <div class="control-group {% if field.errors %}error{% endif %}">
-      <label class="control-label">{{ field.label_tag }}</label>
+      <label class="control-label">
+        {% if field.field.required %}{{ field.label }} * 
+        {% else %} {{ field.label_tag }}  {% endif %}
+      </label>
       <div class="controls">
         {{ field }}
         <p class="help-block">{{ field.help_text }}</p>

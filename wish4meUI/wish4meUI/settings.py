@@ -113,6 +113,7 @@ INSTALLED_APPS = (
     'facebook',
     'wish',
     'friend',
+    'ajax_select',
     # Uncomment the next line to enable the admin:
     'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
@@ -149,4 +150,12 @@ OPENID_SSO_SERVER_URL = 'https://www.google.com/accounts/o8/id'
 
 FIXTURE_DIRS = (PROJECT_PATH+'/',)
 DEFAULT_PROFILE_PICTURE = ("images/defaultProfile.jpg")
-#DEFAULT_PROFILE_PICTURE = (MEDIA_ROOT + "/defaultProfile.jpg")
+
+#Ajax Selects Options
+AJAX_LOOKUP_CHANNELS = {
+    #   pass a dict with the model and the field to search against
+    'user-channel'  : {'model':'auth.user', 'search_field':'username'}
+}
+# magically include jqueryUI/js/css
+AJAX_SELECT_BOOTSTRAP = True
+AJAX_SELECT_INLINES = 'inline'

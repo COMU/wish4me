@@ -17,7 +17,7 @@ def follow(request, following_user_id):
   else:
     following = Following(from_user=user_following, to_user=user_to_follow)
     following.save()
-  return HttpResponseRedirect(reverse("welcome_page"))
+  return HttpResponseRedirect(reverse("homePage"))
 
 @login_required
 def listFollowers(request):
