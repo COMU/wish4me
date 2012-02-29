@@ -29,12 +29,14 @@ def welcome(request):
     wc = WishCategory(name="Default")
     wc.save()
  
-  recent_wishes = Wish.objects.all().order_by('request_date')
-  context = {"recent_wishes": recent_wishes}
-  return render_to_response("home/welcome.html",
+  if request.user.is_authenticated():
+  	return render_to_response("home/home.html",
+        	                    context_instance=RequestContext(request, {}))
+	
+  else:
+	recent_wishes = Wish.objects.all().order_by('request_date')
+  	context = {"recent_wishes": recent_wishes}
+  	return render_to_response("home/welcome.html",
                             context_instance=RequestContext(request,
                                                             context))
 
-def home(request):
-  return render_to_response("home/home.html",
-                            context_instance=RequestContext(request, {}))
