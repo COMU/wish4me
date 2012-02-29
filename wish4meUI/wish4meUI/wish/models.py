@@ -30,6 +30,7 @@ class Wish(models.Model):
   is_hidden = models.BooleanField(default = False)
   is_private = models.BooleanField(default = False)
 
+
   def __unicode__(self):
     return '%s %s' % (self.related_list.owner, self.description)
 
@@ -56,7 +57,8 @@ class WishCategory(models.Model):
 
 class WishPhoto(models.Model):
   wish = models.ForeignKey("Wish")
-  photo = models.ImageField(upload_to="photos/%s/" % ''.join(random.choice(string.letters + string.digits) for x in range(int(random.random()*35))))
+  photo = models.ImageField(upload_to="photos/%s/" %
+''.join(random.choice(string.letters + string.digits) for x in range(int(random.random()*35))), blank=True, null=True)
 
   is_hidden = models.BooleanField(default = False)
 
@@ -70,7 +72,7 @@ class WishPhoto(models.Model):
 
       old_url_head = os.path.split(self.photo.url)[0]
 
-      self.photo.name = "photos" +  old_path[old_path.rfind('/'):] + "/" + new_name 
+      self.photo.name = "photos" +  old_path[old_path.rfind('/'):] + "/" + new_name
     super(WishPhoto, self).save()
 
   def __unicode__(self):
