@@ -6,11 +6,13 @@ from django.template.context import RequestContext
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
 from django.forms.formsets import formset_factory
+from django.contrib import messages
 
 from datetime import datetime
 
 from wish4meUI.wish.forms import WishForm, WishCategoryForm, WishlistForm, WishPhotoForm
 from wish4meUI.wish.models import Wish, WishCategory, Wishlist, WishPhoto
+
 
 def myActivity(request):
   wishes = Wish.objects.filter(related_list__owner=request.user, is_hidden=False)
@@ -25,18 +27,18 @@ def friendActivity(request):
 def add(request):
   WishPhotoSet = formset_factory(WishPhotoForm, extra=5, max_num=5)
   if request.POST:
-    form = WishForm(request.POST, prefix=WishForm.__class__.__name__)
+    wish_form = WishForm(request.POST, prefix=WishForm.__class__.__name__)
     wish_photo_set_form = WishPhotoSet(
         request.POST, request.FILES, prefix=WishPhotoSet.__class__.__name__)
-    if form.is_valid():
-      wish = form.save(commit = False)
+    if wish_form.is_valid():
+      wish = wish_form.save(commit = False)
       wish.wish_for = request.user
-      wish.description = form.cleaned_data['description']
-      wish.name = form.cleaned_data['name']
-      wish.brand = form.cleaned_data['brand']
-      wish.category = form.cleaned_data['category']
+      wish.description = wish_form.cleaned_data['description']
+      wish.name = wish_form.cleaned_data['name']
+      wish.brand = wish_form.cleaned_data['brand']
+      wish.category = wish_form.cleaned_data['category']
+      wish.related_list = wish_form.cleaned_data['related_list']
       wish.request_date = datetime.now()
-      wish.related_list = Wishlist.objects.get(pk=wishlist_id)
       wish.save()
       try:
         for photoform in wish_photo_set_form.forms:
@@ -47,15 +49,14 @@ def add(request):
       except:
         pass
 
-
-      return HttpResponseRedirect(reverse('wish_list_wish', args=[wishlist_id]))
+      return HttpResponseRedirect(reverse('my-activity'))
     else:
-      print form.errors
+      messages.add_message(request, messages.ERROR, 'Please correct the errors below.')
   else:
-    wish_form = WishForm(prefix='wishform')
-    wish_photo_set_form = wish_photo_set(prefix='photoform')
+    wish_form = WishForm(prefix=WishForm.__class__.__name__)
+    wish_photo_set_form = WishPhotoSet(prefix=WishPhotoSet.__class__.__name__)
 
-    return render_to_response('wish/add_wish.html', {'wish_form': wish_form, 'wishlist_id': wishlist_id, 'wish_photo_set_form': wish_photo_set_form}, context_instance=RequestContext(request))
+  return render_to_response('wish/add.html', {'page_title': 'Add wish', 'form': wish_form, 'wish_photo_set_form': wish_photo_set_form}, context_instance=RequestContext(request))
 
 
 def edit(request, wish_id):

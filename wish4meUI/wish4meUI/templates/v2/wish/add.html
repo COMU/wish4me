@@ -1,0 +1,15 @@
+{% extends "base/layout2.html" %}
+{% block right %}
+  <form class="form-horizontal" action="{% url add-wish %}" enctype="multipart/form-data" method="POST">
+    <table>
+    {% csrf_token %}
+    {% include "_form.html" %}
+    {{ wish_photo_set_form.management_form.as_table }}
+    {% for form in wish_photo_set_form.forms %}
+      {% include "_form.html" %}
+    {% endfor %}
+    </table>
+    <hr>
+    <input class="btn btn-primary" type="submit" value="Submit" />
+  </form>
+{% endblock %}
