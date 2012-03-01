@@ -24,8 +24,9 @@ def userLogout(request):
 
 @login_required
 def userProfile(request):
-  userDetails = { 'name' : request.user.username }
-  return render_to_response('userprofile/profile.html', {'userDetails': userDetails}, context_instance=RequestContext(request))
+    user = request.user
+    userDetails = { 'user' : user, 'profile': user.get_profile()}
+    return render_to_response('userprofile/profile.html', userDetails, context_instance=RequestContext(request))
 
 @login_required
 def userInformationEdit(request):
@@ -80,7 +81,7 @@ def userSearch(request):
           print "follower" , profile.is_followed
           if not profile.photo:
             profile.photo = settings.DEFAULT_PROFILE_PICTURE
-          users_list.append(profile)  
+          users_list.append(profile)
         except ObjectDoesNotExist:
           pass                                  #TODO better handling for admin needed, but this works for now.
       return render_to_response('userprofile/search.html', {'users_list': users_list}, context_instance=RequestContext(request))
