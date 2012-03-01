@@ -1,0 +1,29 @@
+<ul class="thumbnails">
+        <li class="span2">
+          <a class="thumbnail" href="#">
+            {% if profile.photo  %}
+              <img alt="{{ user.username }}" src="{{ MEDIA_URL }}{{ profile.photo }}">
+            {% else %}
+              <img alt="{{ user.username }}" src="{{ MEDIA_URL }}{{ DEFAULT_PROFILE_PICTURE }}">
+            {% endif %}
+          </a>
+        </li>
+</ul>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Username</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>{{ user.username }}</td>
+            <td>{{ user.first_name }}</td>
+            <td>{{ user.last_name }}</td>
+        </tr>
+    </tbody>
+</table>
+
+

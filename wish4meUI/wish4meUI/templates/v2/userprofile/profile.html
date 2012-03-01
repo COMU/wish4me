@@ -1,0 +1,14 @@
+{% extends "base/layout2.html" %}
+{% block right %}
+  <div class="row well">
+    <div class="span5 offset3">
+      {% include "userprofile/_display_user_information.html" %}
+    </div>
+    
+    <div class="span5 offset3">
+      {% include "userprofile/_btn_edit_user_information.html" %}
+    </div>
+  </div>
+  <div class="row" style="height:10px">
+  </div>
+{% endblock %}
