@@ -1,7 +1,7 @@
 {% extends "base/layout2.html" %}
 
 {% block right %}
-  <form class="form-horizontal" enctype="multipart/form-data" action="{% url user_information_edit  %}" method="post">
+  <form class="well" enctype="multipart/form-data" action="{% url user_information_edit  %}" method="post">
     {% csrf_token %}
     <div class="row">
       <div class="span3">
@@ -38,7 +38,9 @@
       <a href="javascript: openwindow('{% url twitter_oauth_auth %}')">
         <img src="/site_media/images/social-logos/twitter.png"/>
       </a>
-      <img src="/site_media/images/social-logos/foursquare.png"/>
+      <a href="javascript: openwindow('{% url foursq_oauth_auth %}')">
+        <img src="/site_media/images/social-logos/foursquare.png"/>
+      </a>  
     </div>
     <div class="span9">
     <br />
