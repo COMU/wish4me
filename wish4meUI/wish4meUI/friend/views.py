@@ -28,7 +28,8 @@ def listFollowers(request):
     profile = follower.from_user.get_profile()
     if FriendshipInvitation.objects.filter(from_user = follower.from_user, to_user=following_user, status = "1").count() > 0:
       invite = FriendshipInvitation.objects.get(from_user = follower.from_user, to_user=following_user, status = "1")
-      profile.invite = invite
+      profile.invite = invite.id
+      profile.is_followed = True
     followers_list.append(profile)
 
   return render_to_response('friend/followers.html', {'followers_list': followers_list}, context_instance=RequestContext(request))
