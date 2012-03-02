@@ -83,8 +83,6 @@ def userSearch(request):
             if invite.status == "1":
               profile.invite = invite.id
           print "follower" , profile.is_followed
-          if not profile.photo:
-            profile.photo = settings.DEFAULT_PROFILE_PICTURE
           users_list.append(profile)
         except ObjectDoesNotExist:
           pass                                  #TODO better handling for admin needed, but this works for now.

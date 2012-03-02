@@ -3,7 +3,11 @@
     <ul class="thumbnails">
       <li class="span2">
         <a href="#" class="thumbnail">
-          <img src="{{ user.photo.url }}" alt="" />
+          {% if user.photo  %}
+            <img alt="{{ user.user.username }}" src="{{ MEDIA_URL }}{{ user.photo }}">
+          {% else %}
+            <img alt="{{ user.user.username }}" src="{{ MEDIA_URL }}{{ DEFAULT_PROFILE_PICTURE }}">
+          {% endif %}
         </a>
       </li>
     </ul>
