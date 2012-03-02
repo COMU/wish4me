@@ -4,7 +4,7 @@
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template.context import RequestContext
 from django.core.urlresolvers import reverse
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.forms.formsets import formset_factory
 from django.contrib import messages
 
@@ -137,6 +137,18 @@ def editWishlist(request, wishlist_id=0):
 
   return render_to_response('wish/list_wishlist.html', {'wishlists':wishlists}, context_instance=RequestContext(request))
 
+def renameWishlist(request, wishlist_id):
+  if request.POST:
+    if request.POST['new_title']:
+      new_title = request.POST['new_title']
+    else:
+      return HttpResponse("wish.renameWisihlist: the request does not contain new name")
+    wishlist = get_object_or_404(Wishlist, pk=wishlist_id)
+    wishlist.title = new_title
+    wishlist.save()
+    return HttpResponseRedirect(reverse('wish_list_wishlist'))
+  return HttpResponse("wish.renameWisihlist: the request does not contain POST")
+  
 def removeWishlist(request, wishlist_id):
   wishlist = get_object_or_404(Wishlist, pk=wishlist_id)
   wishlist.is_hidden = True

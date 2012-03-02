@@ -1,6 +1,6 @@
   {% for wishlist in wishlists %}
   <div class="row">
-    <div class="span4">
+    <div class="span5">
       <div class="row">
         <div class="span3">
           <div class="row well" style="border-width: 5px 1px 0px 5px; border-radius: 40px 10px 0px 0px; margin-bottom: 0px;">
@@ -11,16 +11,19 @@
             </div>
           </div>
         </div>
-        <div class="span1">
+        <div class="span2">
           <div class="row well" style="padding-top: 1px; margin-bottom: 2px; margin-top: 20px; padding-bottom: 1px; padding-left: 0px; border-left-width: 0px; border-top-width: 3px; border-right-width: 3px; border-radius: 0px 10px 0px 0px;">
-            <div class="span1">
-              <a href="{% url wish_edit_wishlist wishlist.id %}">Edit</a>
+            <div class="span2">
+              <form class="form-inline" method="POST" action="{% url wish_rename_wishlist wishlist.id %}" style="margin-bottom: 0px;">
+                {% csrf_token %}
+                <input type="text" name="new_title"placeholder="Rename" style="width: 100px; height: 13px;">
+              </form>
             </div>
           </div>
         </div>
-        <div class="span1">
+        <div class="span2">
           <div class="row well" style="padding-top: 1px; padding-bottom: 1px; margin-bottom: 2px; padding-left: 0px; border-left-width: 0px; border-bottom-width: 3px; border-right-width: 3px; border-radius: 0px 0px 10px 0px;">
-            <div class="span1">
+            <div class="span2">
               <a href="{% url wish_remove_wishlist wishlist.id %}">Remove</a>
             </div>
           </div>

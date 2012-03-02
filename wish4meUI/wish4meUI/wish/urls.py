@@ -16,7 +16,7 @@ urlpatterns = patterns('',
     url(r'^wishlist/list$', view=listWishlist, name="wish_list_wishlist"),
     url(r'^wish/list/(?P<wishlist_id>\d+)$', view=listWish, name='wish_list_wish'),
     url(r'^wish/edit/(?P<wish_id>\d+)$', view=edit, name="wish_edit_wish"),
-    url(r'^wishlist/edit/(?P<wishlist_id>\d+)$', view=editWishlist, name="wish_edit_wishlist"),
+    url(r'^wishlist/rename/(?P<wishlist_id>\d+)$', view=renameWishlist, name="wish_rename_wishlist"),
     url(r'^wishlist/remove/(?P<wishlist_id>\d+)$', view=removeWishlist, name="wish_remove_wishlist"),
     url(r'^wish/show/(?P<wish_id>\d+)$', view=show, name="wish_show_wish_alone"),
     url(r'^wish/accomplish/(?P<wish_id>\d+)$', view=delete, name="wish_accomplish_wish"), #TODO why delete?
