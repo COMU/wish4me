@@ -1,31 +1,32 @@
-<ul class="thumbnails">
-        <li class="span2">
-          <a class="thumbnail" href="#">
-            {% if profile.photo  %}
-              <img alt="{{ user.username }}" src="{{ MEDIA_URL }}{{ profile.photo }}">
-            {% else %}
-              <img alt="{{ user.username }}" src="{{ MEDIA_URL }}{{ DEFAULT_PROFILE_PICTURE }}">
-            {% endif %}
-          </a>
-        </li>
-</ul>
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th>Username</th>
-            <th>First Name</th>
-            <th>Last Name</th>
-            <th>Gender</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td>{{ user.username }}</td>
-            <td>{{ user.first_name }}</td>
-            <td>{{ user.last_name }}</td>
-            <td>{{ profile.gender }}</td>
-        </tr>
-    </tbody>
-</table>
 
+  <div class="span3">
+      <ul class="thumbnails">
+            <li class="span2">
+              <a class="thumbnail" href="#">
+                {% if profile.photo  %}
+                  <img alt="{{ user.username }}" src="{{ MEDIA_URL }}{{ profile.photo }}">
+                {% else %}
+                  <img alt="{{ user.username }}" src="{{ MEDIA_URL }}{{ DEFAULT_PROFILE_PICTURE }}">
+                {% endif %}
+              </a>
+            </li>
+      </ul>
+  </div>
+  <div class="span4">
+      <label for="id_username" class="label label-info">Username</label>
+            {{ user.username }}<br \>
+      <label for="id_password" class="label label-info">Password</label>
+          {{ user.password }}<br \>
+      <label for="id_email" class="label label-info">E-Mail</label>
+          {{ user.email }}<br \>
+  </div>
+  <div class="span7">
+    <br />
+      <label for="id_first_name" class="label label-info">First Name</label>
+          {{ user.first_name }}<br \>
+      <label for="id_last_name" class="label label-info">Last Name</label>
+          {{ user.last_name }}<br \>
+      <label for="id_gender" class="label label-info">Gender</label>
+          {{ profile.gender }}<br \>
+  </div>
 
