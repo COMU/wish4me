@@ -1,0 +1,33 @@
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Wish For</th>
+      <th>Brand</th>
+      <th>Name</th>
+      <th>Description</th>
+      <th>Category</th>
+      <th>Request Date</th>
+      <th>Accomplish Date</th>
+      <th>Accomplish</th>
+      <th>Edit</th>
+      <th>Remove</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for wish in wishlist.wishes %}
+    <tr>
+      <td>{{ wish.wish_for }}</td>
+      <td>{{ wish.brand }}</td>
+      <td><a href="{% url wish_show_wish_alone wish.id %}">{{ wish.name }}</td>
+      <td>{{ wish.description }}</td>
+      <td>{{ wish.category }}</td>
+      <td>{{ wish.request_date }}</td>
+      <td>{{ wish.accomplish_date }}</td>
+      <td><a href="{% url wish_accomplish_wish wish.id %}">X</a></td>
+      <td><a href="{% url wish_edit_wish wish.id %}">X</a></td>
+      <td><a href="{% url wish_remove_wish wish.id %}">X</a></td>
+
+    </tr>
+    {% endfor %}
+  <tbody>
+</table>

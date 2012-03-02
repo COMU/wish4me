@@ -102,7 +102,6 @@ def changeStatus(request, wish_id):
 
 def listAllWishes(request):
   wish_list = Wish.objects.filter(related_list__owner=request.user, is_hidden=False)
-
   return render_to_response('wish/list_wishes.html', {'wish_list': wish_list, 'wishlist_id': 1}, context_instance=RequestContext(request))
 
 
@@ -121,7 +120,9 @@ def addWishlist(request):
 
 def listWishlist(request):
   wishlists = Wishlist.objects.filter(owner=request.user, is_hidden=False)
-
+  for wishlist in wishlists:
+    wishes = Wish.objects.filter(related_list=wishlist)
+    wishlist.wishes=wishes
   return render_to_response('wish/list_wishlist.html', {'wishlists':wishlists}, context_instance=RequestContext(request))
 
 
