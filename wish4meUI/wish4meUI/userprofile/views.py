@@ -82,7 +82,6 @@ def userSearch(request):
             invite = FriendshipInvitation.objects.get(from_user=user, to_user=request.user)
             if invite.status == "1":
               profile.invite = invite.id
-          print "follower" , profile.is_followed
           users_list.append(profile)
         except ObjectDoesNotExist:
           pass                                  #TODO better handling for admin needed, but this works for now.
