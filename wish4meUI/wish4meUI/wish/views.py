@@ -107,23 +107,27 @@ def listAllWishes(request):
 
 def addWishlist(request):
   if request.POST:
-    form = WishlistForm(request.POST)
-    if form.is_valid():
-      wishlist = form.save(commit = False)
-      wishlist.owner = request.user
-      wishlist.title = form.cleaned_data['title']
-      wishlist.save()
-      return HttpResponseRedirect(reverse('wish_home'))
-  else:
-    pass
-
+    if request.POST['title']:
+      title = request.POST['title']
+    else:
+      return HttpResponse("wish.addWishlist: the request does not contain new name")
+    wishlist = Wishlist()
+    wishlist.owner = request.user
+    wishlist.title = title
+    wishlist.save()
+    return HttpResponseRedirect(reverse('wish_list_wishlist'))
+  return HttpResponse("wish.addWishlist: the request does not contain POST")
 
 def listWishlist(request):
   wishlists = Wishlist.objects.filter(owner=request.user, is_hidden=False)
   for wishlist in wishlists:
     wishes = Wish.objects.filter(related_list=wishlist)
     wishlist.wishes=wishes
-  return render_to_response('wish/list_wishlist.html', {'wishlists':wishlists}, context_instance=RequestContext(request))
+  is_last_wishes = False
+  if Wishlist.objects.filter(owner = request.user, is_hidden = False).count() < 2:
+    is_last_wishes = True
+  return render_to_response('wish/list_wishlist.html', {'wishlists':wishlists, 'is_last_wishes':is_last_wishes}, 
+                                                         context_instance=RequestContext(request))
 
 
 def editWishlist(request, wishlist_id=0):
@@ -154,7 +158,7 @@ def removeWishlist(request, wishlist_id):
   wishlist.is_hidden = True
   wishlist.save()
 
-  return HttpResponseRedirect(reverse('wish_home'))
+  return HttpResponseRedirect(reverse('wish_list_wishlist'))
 
 def listWish(request, wishlist_id=0):
   wish_list = Wish.objects.filter(related_list__id=wishlist_id, is_hidden=False)

@@ -21,6 +21,7 @@ urlpatterns = patterns('',
     url(r'^wish/show/(?P<wish_id>\d+)$', view=show, name="wish_show_wish_alone"),
     url(r'^wish/accomplish/(?P<wish_id>\d+)$', view=delete, name="wish_accomplish_wish"), #TODO why delete?
     url(r'^wish/remove/(?P<wish_id>\d+)$', view=remove, name="wish_remove_wish"),
+    url(r'^wishlist/add$', view=addWishlist, name="wish_add_wishlist"),
 )
 
 #TODO(orc.avs): Remove below
@@ -34,7 +35,6 @@ urlpatterns = patterns('',
     url(r'^wishcategory/add$', view=addWishCategory, name="wish_add_wishcategory"),
 
     url(r'^wish/list/all$', view=listAllWishes, name="wish_list_allwishes"),
-    url(r'^wishlist/add$', view=addWishlist, name="wish_add_wishlist"),
     (r'^comments/', include('django.contrib.comments.urls')),
 )
 '''
