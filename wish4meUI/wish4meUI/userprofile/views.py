@@ -31,6 +31,7 @@ def userProfile(request):
 @login_required
 def userInformationEdit(request):
     user = request.user
+    profile = user.get_profile()
     if request.method == 'POST':
         form = UserInformationForm(request.POST, instance=user)
         if form.is_valid():
@@ -38,11 +39,14 @@ def userInformationEdit(request):
                 img = request.FILES['photo']
                 profile = user.get_profile()
                 profile.photo.save(img.name, img)
+            gender = request.POST.get('gender')
+            profile.gender = gender
+            profile.save()
             form.save()
     else:
-        form = UserInformationForm(initial = {'username': user.username, 'first_name': user.first_name, 'last_name': user.last_name, 'email': user.email})
+        form = UserInformationForm(initial = {'username': user.username, 'first_name': user.first_name, 'last_name': user.last_name, 'email': user.email, 'gender': profile.gender})
 
-    userDetails = { 'user' : user, 'profile': user.get_profile(), 'form': form }
+    userDetails = { 'user' : user, 'profile': profile, 'form': form }
     return render_to_response('userprofile/edit_information.html', userDetails, context_instance=RequestContext(request))
 
 @login_required
