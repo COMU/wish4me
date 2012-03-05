@@ -10,7 +10,7 @@ class WishForm(forms.ModelForm):
     model = Wish
     exclude = ('request_date', 'accomplish_date', 'is_hidden', )
 
-  wish_for  = make_ajax_field(User, 'username', 'user-channel', help_text='', label='Wish For')
+  #wish_for  = make_ajax_field(User, 'username', 'user-channel', help_text='', label='Wish For')
 
 class WishCategoryForm(forms.ModelForm):
   class Meta:
