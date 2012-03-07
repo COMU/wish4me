@@ -1,0 +1,11 @@
+<html>
+    <head prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# neistediginibilirsin: http://ogp.me/ns/fb/neistediginibilirsin#">
+        <title>{{ wish.name.title }}</title> 
+        <meta property="og:title" content="{{ wish.name.title }}" />
+        <meta property="og:image" content="{% if not wish.getPhotos %}/site_media/images/no-image.gif{% endif %}{% for photo in wish.getPhotos %}{{ photo.photo.url }}{% endfor %}" />
+        <meta property="og:description" content="{{ wish.description }}" />
+        <meta property="fb:app_id" content="255768354473895" />
+        <meta property="og:url" content="{% url show-wish wish.id %}" />
+        <meta property="og:type" content="neistediginibilirsin:thing" />    
+   </head>
+</html>
