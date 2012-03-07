@@ -36,7 +36,7 @@ def friendActivity(request):
 def add(request):
   WishPhotoSet = formset_factory(WishPhotoForm, extra=5, max_num=5)
   if request.POST:
-    wish_form = WishForm(request.POST, prefix=WishForm.__class__.__name__)
+    wish_form = WishForm(request.user, request.POST, prefix=WishForm.__class__.__name__)
     wish_photo_set_form = WishPhotoSet(
         request.POST, request.FILES, prefix=WishPhotoSet.__class__.__name__)
     if wish_form.is_valid():
@@ -62,7 +62,7 @@ def add(request):
     else:
       messages.add_message(request, messages.ERROR, 'Please correct the errors below.')
   else:
-    wish_form = WishForm(prefix=WishForm.__class__.__name__)
+    wish_form = WishForm(request.user, prefix=WishForm.__class__.__name__)
     wish_photo_set_form = WishPhotoSet(prefix=WishPhotoSet.__class__.__name__)
 
   return render_to_response('wish/add.html', {'page_title': 'Add wish', 'form': wish_form, 'wish_photo_set_form': wish_photo_set_form}, context_instance=RequestContext(request))
