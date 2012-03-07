@@ -16,10 +16,13 @@ class WishForm(forms.ModelForm):
     followed_relation = Following.objects.filter(from_user = requested_user, is_hidden = False).values('to_user')
     followed = User.objects.filter(id__in = followed_relation)
     
+    wishlists = Wishlist.objects.filter(owner = requested_user, is_hidden = False)
     # add your self too
     users_self = User.objects.filter(id = requested_user.id)
     people_to_list = followers | followed | users_self
     self.fields["wish_for"].queryset = people_to_list
+    self.fields["related_list"].queryset = wishlists
+
 
   class Meta:
     model = Wish

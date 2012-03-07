@@ -14,6 +14,9 @@ class Wishlist(models.Model):
   title = models.CharField(max_length=140)
   is_hidden = models.BooleanField(default = False)
 
+  def __unicode__(self):
+    return self.title
+
 class Wish(models.Model):
   wish_for = models.ForeignKey(User)
   description = models.TextField()
