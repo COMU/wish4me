@@ -11,22 +11,20 @@ class WishForm(forms.ModelForm):
   def __init__(self, requested_user, *args, **kwargs):
     super(WishForm, self).__init__(*args, **kwargs)
 
-    follower_relation = Following.objects.filter(to_user = requested_user, is_hidden = False).values('from_user')
-    followers = User.objects.filter(id__in = follower_relation)
-    followed_relation = Following.objects.filter(from_user = requested_user, is_hidden = False).values('to_user')
-    followed = User.objects.filter(id__in = followed_relation)
-    
     wishlists = Wishlist.objects.filter(owner = requested_user, is_hidden = False)
-    # add your self too
-    users_self = User.objects.filter(id = requested_user.id)
-    people_to_list = followers | followed | users_self
-    self.fields["wish_for"].queryset = people_to_list
     self.fields["related_list"].queryset = wishlists
+  #End of __init__
+
+  wish_for_widget = forms.TextInput(attrs={'data-items': 4, 'data-provide': 'typeahead', 'autocomplete': 'off'})
+  
+  wish_for_text = forms.CharField(widget=wish_for_widget)
 
 
   class Meta:
     model = Wish
-    exclude = ('request_date', 'accomplish_date', 'is_hidden', )
+    fields = ('wish_for_text', 'description', 'category', 'related_list', 'brand', 'name', 'is_private' )
+    
+    #exclude = ('request_date', 'accomplish_date', 'is_hidden', 'wish_for')
 
   #wish_for  = make_ajax_field(User, 'username', 'user-channel', help_text='', label='Wish For')
 

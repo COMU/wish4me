@@ -7,6 +7,7 @@ from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect, HttpResponse
 from django.forms.formsets import formset_factory
 from django.contrib import messages
+from django.contrib.auth.models import User
 
 from datetime import datetime
 
@@ -41,7 +42,8 @@ def add(request):
         request.POST, request.FILES, prefix=WishPhotoSet.__class__.__name__)
     if wish_form.is_valid():
       wish = wish_form.save(commit = False)
-      wish.wish_for = request.user
+      wish_for = wish_form.cleaned_data['wish_for_text']
+      wish.wish_for = User.objects.get(username = wish_for)
       wish.description = wish_form.cleaned_data['description']
       wish.name = wish_form.cleaned_data['name']
       wish.brand = wish_form.cleaned_data['brand']
@@ -64,8 +66,22 @@ def add(request):
   else:
     wish_form = WishForm(request.user, prefix=WishForm.__class__.__name__)
     wish_photo_set_form = WishPhotoSet(prefix=WishPhotoSet.__class__.__name__)
+  follower_relation = Following.objects.filter(to_user = request.user, is_hidden = False).values('from_user')
+  followers = User.objects.filter(id__in = follower_relation)
+  followed_relation = Following.objects.filter(from_user = request.user, is_hidden = False).values('to_user')
+  followed = User.objects.filter(id__in = followed_relation)
+  users_self = User.objects.filter(id = request.user.id)
+  people_to_list = followers | followed | users_self
+  #Bootstrap typeahead is pretty strict, creating list in here is much cleaner.
+  typeahead_source = "["
+  for friend in people_to_list:
+    typeahead_source += "\"" + friend.username + "\","
+  typeahead_source = typeahead_source[:-1]
+  typeahead_source += "]"
+  #friends_list = people_to_list.values('username')
+  wish_form.fields['wish_for_text'].widget.attrs['data-source'] = typeahead_source
 
-  return render_to_response('wish/add.html', {'page_title': 'Add wish', 'form': wish_form, 'wish_photo_set_form': wish_photo_set_form}, context_instance=RequestContext(request))
+  return render_to_response('wish/add.html', {'typeahead_source': typeahead_source, 'page_title': 'Add wish', 'form': wish_form, 'wish_photo_set_form': wish_photo_set_form}, context_instance=RequestContext(request))
 
 
 def edit(request, wish_id):
