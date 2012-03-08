@@ -1,16 +1,42 @@
-<table style="border-color:#000000" border=1>
-  <tr bgcolor=#FF00FF>
-    <td>Wishlist Title</td>
-    <td>Wish Count</td>
-    <td>Edit</td>
-    <td>Remove</td>
-  </tr>
+{% include "wish/_add_wishlist.html" %}
   {% for wishlist in wishlists %}
-  <tr>
-    <td><a href="{% url wish_list_wish wishlist.id %}">{{ wishlist.title }}</a></td>
-    <td>{{ wishlist.wish_set.all.count }}</td>
-    <td><a href="{% url wish_edit_wishlist wishlist.id %}">X</a></td>
-    <td><a href="{% url wish_remove_wishlist wishlist.id %}">X</a></td>
-  </tr>
+  <div class="row">
+    <div class="span5">
+      <div class="row">
+        <div class="span3">
+          <div class="row well" style="border-width: 5px 1px 0px 5px; border-radius: 40px 10px 0px 0px; margin-bottom: 0px;">
+            <div class="span3">
+              <h2>
+                <a href="{% url wish_list_wish wishlist.id %}">{{ wishlist.title }}</a>
+              </h2>
+            </div>
+          </div>
+        </div>
+        <div class="span2">
+          <div class="row well" style="padding-top: 1px; margin-bottom: 2px; margin-top: 20px; padding-bottom: 1px; padding-left: 0px; border-left-width: 0px; border-top-width: 3px; border-right-width: 3px; border-radius: 0px 10px 0px 0px;">
+            <div class="span2">
+              <form class="form-inline" method="POST" action="{% url wish_rename_wishlist wishlist.id %}" style="margin-bottom: 0px;">
+                {% csrf_token %}
+                <input type="text" name="new_title"placeholder="Rename" style="width: 100px; height: 13px;">
+              </form>
+            </div>
+          </div>
+        </div>
+        <div class="span2">
+          <div class="row well" style="padding-top: 1px; padding-bottom: 1px; margin-bottom: 2px; padding-left: 0px; border-left-width: 0px; border-bottom-width: 3px; border-right-width: 3px; border-radius: 0px 0px 10px 0px;">
+            <div class="span2">
+              {% if not is_last_wishes %}
+                <a href="{% url wish_remove_wishlist wishlist.id %}">Remove</a>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row well" style="border-width: 0px 5px 5px 5px; border-radius: 0px 20px 20px 20px;">
+    <div class="span9">
+      {% include "wish/_list_wish_table.html" %}
+    </div>
+  </div>
   {% endfor %}
-</table>

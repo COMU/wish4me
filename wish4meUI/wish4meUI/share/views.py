@@ -1,34 +1,11 @@
-import cgi, urllib, json, urllib2
-from django.shortcuts import render_to_response
+from django.template.context import RequestContext
+from django.shortcuts import render_to_response, get_object_or_404
 from django.http import HttpResponseRedirect
+from wish4meUI.wish.models import Wish
 
 def home(request):
-    print "home"
     return HttpResponseRedirect('/')
 
-def facebook(request):
-username = request.GET.get('username', '')
-fb_id = request.GET.get('fb_id', '')
-fb_message = request.GET.get('fb_message', '')
-fb_token = request.GET.get('fb_access_token', '')
-fb_name = 'follow {}'.format(username)
-fb_link = 'http://wish4me.com/{}'.format(username)
-         actions = ({
-             'name' : fb_name,
-             'link' : fb_link,
-         })
-if fb_id and fb_message and fb_token:
-url = 'https://graph.facebook.com/me/feed'
-values = {'message' : fb_message,
-         'access_token' : fb_token,
-'actions' : actions,
-          }
-data = urllib.urlencode(values)
-req = urllib2.Request(url, data)
-response = urllib2.urlopen(req)
-     print "success"
-return HttpResponseRedirect('/')
-
-def twitter(request):
-    print "twitter"
-    return HttpResponseRedirect('/')
+def show(request, wish_id):
+   wish = get_object_or_404(Wish, pk=wish_id)
+   return render_to_response('share/show.html', {'wish': wish}, context_instance=RequestContext(request))

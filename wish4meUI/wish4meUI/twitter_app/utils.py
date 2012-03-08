@@ -22,6 +22,7 @@ TWITTER_CHECK_AUTH = 'https://twitter.com/account/verify_credentials.json'
 TWITTER_USER='https://api.twitter.com/1/users/show.json?screen_name=TwitterAPI'
 TWITTER_FRIENDS = 'https://api.twitter.com/1/friends/ids.json?screen_name=twitterapi'
 TWITTER_FRIEND_DETAILS = 'https://api.twitter.com/1/users/lookup.json?screen_name=twitterapi'
+TWITTER_UPDATE_STATUS = 'https://api.twitter.com/1/statuses/update.json'
 
 def request_oauth_resource(consumer, url, access_token, parameters=None, signature_method=signature_method, http_method="GET"):
     """

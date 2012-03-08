@@ -5,11 +5,16 @@ from django.db import models
 from django.contrib.auth.models import User
 
 
+GENDER=(
+        ('M', 'Male'),
+        ('F', 'Female'),
+)
+
 class UserProfile(models.Model):
   user = models.ForeignKey(User, unique=True)
 
   photo = models.ImageField(upload_to='photos/%Y/%m/%d', null=True, blank=True)
-
+  gender = models.CharField(max_length=2, choices=GENDER)
   last_login_backend_name = models.CharField(max_length=100,
                                              blank=True, null=True)
 

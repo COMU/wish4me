@@ -98,6 +98,16 @@ TEMPLATE_DIRS = (
     #os.path.join(PROJECT_PATH, 'templates'),
 )
 
+TEMPLATE_CONTEXT_PROCESSORS = (
+    "django.contrib.auth.context_processors.auth",
+    "django.core.context_processors.debug",
+    "django.core.context_processors.i18n",
+    "django.core.context_processors.media",
+    "django.core.context_processors.static",
+    "userprofile.context_processors.default_profile_image",
+)
+
+
 INSTALLED_APPS = (
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -149,6 +159,7 @@ LOGOUT_URL = '/google/logout/'
 OPENID_SSO_SERVER_URL = 'https://www.google.com/accounts/o8/id'
 
 FIXTURE_DIRS = (PROJECT_PATH+'/',)
+DEFAULT_PROFILE_PICTURE = ("images/defaultProfile.jpg")
 
 #Ajax Selects Options
 AJAX_LOOKUP_CHANNELS = {
