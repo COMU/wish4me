@@ -8,7 +8,9 @@
   <div class="row" style="height:10px">
   </div>
   {% for wish in wishes %}
+    <div class="row well">
     {% include "wish/_detail.html" %}
+    </div>
   {% endfor %}
 
 {% endblock %}

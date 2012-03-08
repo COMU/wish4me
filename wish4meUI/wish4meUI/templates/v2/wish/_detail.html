@@ -1,11 +1,11 @@
-    <div class="row" style="height:10px">
+    <div class="row" style="">
+      <div class="pull-right label span1 offset9"><a href="#">{{wish.related_list.title }}</a></div>
     </div>
-
     <div class="row">
-      <div class="span6"><h3><a href="{% url show-wish wish.id %}">{{ wish.name.title }}</a></h3></div>
+      <div class="span5"><h3><a href="{% url show-wish wish.id %}">{{wish.brand.title }} - {{ wish.name.title }}</a></h3></div>
       <div class="span4">
         <span class="pull-right">
-          <i>created by <a href=#>{{wish.related_list.owner}}</a></i>
+          <i>created by <a href=#>{{wish.related_list.owner}}</a></i><i> to <a href=#>{{ wish.wish_for }}</a></i>
         </span>
       </div>
     </div>
@@ -33,4 +33,3 @@
       </div>
       <div class="span6"><p>{{ wish.description }}</p></div>
     </div>
-    <hr>
