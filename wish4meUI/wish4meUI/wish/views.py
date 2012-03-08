@@ -10,8 +10,8 @@ from django.contrib import messages
 
 from datetime import datetime
 
-from wish4meUI.wish.forms import WishForm, WishCategoryForm, WishlistForm, WishPhotoForm
-from wish4meUI.wish.models import Wish, WishCategory, Wishlist, WishPhoto
+from wish4meUI.wish.forms import WishForm, WishCategoryForm, WishPhotoForm
+from wish4meUI.wish.models import Wish, WishCategory, WishPhoto
 
 
 def myActivity(request):
@@ -32,7 +32,7 @@ def add(request):
         request.POST, request.FILES, prefix=WishPhotoSet.__class__.__name__)
     if wish_form.is_valid():
       wish = wish_form.save(commit = False)
-      wish.wish_for = request.user
+      wish.wish_for = user.wish_form.cleaned_data['wish_for']
       wish.description = wish_form.cleaned_data['description']
       wish.name = wish_form.cleaned_data['name']
       wish.brand = wish_form.cleaned_data['brand']
@@ -95,44 +95,6 @@ def listAllWishes(request):
   wish_list = Wish.objects.filter(related_list__owner=request.user, is_hidden=False)
 
   return render_to_response('wish/list_wishes.html', {'wish_list': wish_list, 'wishlist_id': 1}, context_instance=RequestContext(request))
-
-
-def addWishlist(request):
-  if request.POST:
-    form = WishlistForm(request.POST)
-    if form.is_valid():
-      wishlist = form.save(commit = False)
-      wishlist.owner = request.user
-      wishlist.title = form.cleaned_data['title']
-      wishlist.save()
-      return HttpResponseRedirect(reverse('wish_home'))
-  else:
-    pass
-
-
-def listWishlist(request):
-  wishlists = Wishlist.objects.filter(owner=request.user, is_hidden=False)
-
-  return render_to_response('wish/list_wishlist.html', {'wishlists':wishlists}, context_instance=RequestContext(request))
-
-
-def editWishlist(request, wishlist_id=0):
-  wishlist = get_object_or_404(Wishlist, pk=wishlist_id)
-  form = WishlistForm()
-  form.title = wishlist.title
-  form.id = wishlist.id
-  form.owner = wishlist.owner
-  form.is_hidden = wishlist.is_hidden
-  wishlists = Wishlist.objects.filter(owner=request.user)
-
-  return render_to_response('wish/list_wishlist.html', {'wishlists':wishlists}, context_instance=RequestContext(request))
-
-def removeWishlist(request, wishlist_id):
-  wishlist = get_object_or_404(Wishlist, pk=wishlist_id)
-  wishlist.is_hidden = True
-  wishlist.save()
-
-  return HttpResponseRedirect(reverse('wish_home'))
 
 def listWish(request, wishlist_id=0):
   wish_list = Wish.objects.filter(related_list__id=wishlist_id, is_hidden=False)

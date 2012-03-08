@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 
 from ajax_select import make_ajax_field
 
-from wish4meUI.wish.models import Wish, WishCategory, Wishlist, WishPhoto
+from wish4meUI.wish.models import Wish, WishCategory, WishPhoto
 
 class WishForm(forms.ModelForm):
   class Meta:
@@ -15,11 +15,6 @@ class WishForm(forms.ModelForm):
 class WishCategoryForm(forms.ModelForm):
   class Meta:
     model = WishCategory
-
-class WishlistForm(forms.ModelForm):
-  class Meta:
-    model = Wishlist
-    fields = ('title',)
 
 class WishPhotoForm(forms.ModelForm):
   class Meta:
