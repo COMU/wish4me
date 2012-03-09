@@ -7,8 +7,8 @@ from django.http import HttpResponseRedirect
 from django.forms.formsets import formset_factory
 from django.contrib import messages
 
-from wish4meUI.wishlist.forms import WishlistForm
-from wish4meUI.wishlist.models import Wishlist
+from wish4meUI.wishlist.forms import Wishlist, WishlistForm
+from wish4meUI.wish.models import Wish
 
 def add(request):
   if request.POST:
@@ -18,14 +18,21 @@ def add(request):
       wishlist.owner = request.user
       wishlist.title = form.cleaned_data['title']
       wishlist.save()
-      return HttpResponseRedirect(reverse('wish_home'))
+      return HttpResponseRedirect(reverse('wishlist-home'))
   else:
     pass
 
 def myWishlists(request):
-  wishlists = Wishlist.objects.filter(owner = request.user, is_hidden = False)
-  
-  return render_to_response('wishlist/myWishlists.html', {'wishlists': wishlists}, context_instance=RequestContext(request))
+  wishlists = Wishlist.objects.filter(owner=request.user, is_hidden=False)
+  for wishlist in wishlists:
+    wishes = Wish.objects.filter(related_list=wishlist)
+    wishlist.wishes=wishes
+  is_last_wishes = False
+  if Wishlist.objects.filter(owner = request.user, is_hidden = False).count() < 2:
+    is_last_wishes = True
+
+  return render_to_response('wishlist/list_wishlist.html', {'wishlists':wishlists, 'is_last_wishes':is_last_wishes},
+                                                         context_instance=RequestContext(request))
 
 def show(request, wishlist_id=0):
   wishlist = get_object_or_404(Wishlist, pk=wishlist_id)
@@ -48,4 +55,16 @@ def remove(request, wishlist_id):
   wishlist.is_hidden = True
   wishlist.save()
 
-  return HttpREsponseRedirect(reverse('wish_home'))
+  return HttpResponseRedirect(reverse('wishlist-home'))
+
+def rename(request, wishlist_id):
+  if request.POST:
+    if request.POST['new_title']:
+      new_title = request.POST['new_title']
+    else:
+      return HttpResponse("wish.renameWisihlist: the request does not contain new name")
+    wishlist = get_object_or_404(Wishlist, pk=wishlist_id)
+    wishlist.title = new_title
+    wishlist.save()
+    return HttpResponseRedirect(reverse('wishlist-home'))
+  return HttpResponse("wish.renameWisihlist: the request does not contain POST")

@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from ajax_select import make_ajax_field
 
 from wish4meUI.wish.models import Wish, WishCategory, WishPhoto
+from wish4meUI.wishlist.models import Wishlist
 from wish4meUI.friend.models import Following
 
 class WishForm(forms.ModelForm):

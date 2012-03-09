@@ -122,6 +122,7 @@ INSTALLED_APPS = (
     'wish4meUI.google',
     'facebook',
     'wish',
+    'wishlist',
     'friend',
     'ajax_select',
     # Uncomment the next line to enable the admin:

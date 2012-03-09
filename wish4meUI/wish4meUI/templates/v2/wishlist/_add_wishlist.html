@@ -13,7 +13,7 @@
       <div class="span2">
         <div class="row well" style="padding-top: 1px; margin-bottom: 2px; margin-top: 20px; padding-bottom: 1px; padding-left: 0px; border-left-width: 0px; border-top-width: 3px; border-right-width: 3px; border-radius: 0px 10px 0px 0px;">
           <div class="span2">
-            <form class="form-inline" method="POST" action="{% url wish_add_wishlist %}" style="margin-bottom: 0px;">
+            <form class="form-inline" method="POST" action="{% url wishlist-add %}" style="margin-bottom: 0px;">
               {% csrf_token %}
               <input type="text" name="title"placeholder="Name" style="width: 100px; height: 13px;">
             </form>
