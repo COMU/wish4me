@@ -98,7 +98,7 @@ def remove(request, wish_id):
   wish.is_hidden = True
   wish.save()
 
-  return HttpResponseRedirect(reverse('wish_list_wish', args=[wish.related_list.id]))
+  return HttpResponseRedirect(reverse('wishlist-home'))
 
 
 def delete(request, wish_id):

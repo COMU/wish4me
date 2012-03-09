@@ -25,7 +25,7 @@ def add(request):
 def myWishlists(request):
   wishlists = Wishlist.objects.filter(owner=request.user, is_hidden=False)
   for wishlist in wishlists:
-    wishes = Wish.objects.filter(related_list=wishlist)
+    wishes = Wish.objects.filter(related_list=wishlist, is_hidden=False)
     wishlist.wishes=wishes
   is_last_wishes = False
   if Wishlist.objects.filter(owner = request.user, is_hidden = False).count() < 2:
