@@ -14,6 +14,11 @@ class WishForm(forms.ModelForm):
 
     wishlists = Wishlist.objects.filter(owner = requested_user, is_hidden = False)
     self.fields["related_list"].queryset = wishlists
+    self.fields["wish_for_text"].label = "Wish for"
+    print "initial = ", self.fields["wish_for_text"].initial , " by the way"  
+    if not self.fields["wish_for_text"].initial:
+      self.fields["wish_for_text"].initial = requested_user.username
+
   #End of __init__
 
   wish_for_widget = forms.TextInput(attrs={'data-items': 4, 'data-provide': 'typeahead', 'autocomplete': 'off'})
