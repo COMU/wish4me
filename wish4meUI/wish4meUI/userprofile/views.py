@@ -66,7 +66,6 @@ def userSearch(request):
     form = UserSearchForm(request.POST.copy())
     if form.is_valid():
       term = form.cleaned_data['search_query']
-      #TODO if term is blank?
       users_query = User.objects.filter(Q(username__icontains = term) |
                                       Q(first_name__icontains = term) |
                                       Q(last_name__icontains = term)).distinct()
@@ -87,8 +86,10 @@ def userSearch(request):
           pass                                  #TODO better handling for admin needed, but this works for now.
       return render_to_response('userprofile/search.html', {'users_list': users_list}, context_instance=RequestContext(request))
     else:
-      #return HttpResponse("userprofile.userSearch: form is invalid")
       print "userprofile.userSearch: form is invalid"
+      #return HttpResponse("userprofile.userSearch: form is invalid")
+      search_form = UserSearchForm()
+      return render_to_response('userprofile/search.html', {'form' : search_form, }, context_instance=RequestContext(request))
   else:
     return HttpResponse("userprofile.userSearch: the request does not contain POST")
 
