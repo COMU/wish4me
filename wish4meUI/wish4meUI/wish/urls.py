@@ -12,8 +12,8 @@ urlpatterns = patterns('',
     url(r'^(?P<wish_id>\d+)/edit$', edit, name='edit-wish'),
     url(r'^(?P<wish_id>\d+)/delete$', delete, name='delete-wish'),
     url(r'^(?P<wish_id>\d+)/change-status$', changeStatus, name='change-wish-status'),
+    url(r'^wish/list/(?P<wishlist_id>\d+)$', view=list, name='wish-list'),
     #TODO(orc.avs) Remove below
-    url(r'^wish/list/(?P<wishlist_id>\d+)$', view=listWish, name='wish_list_wish'),
     url(r'^wish/edit/(?P<wish_id>\d+)$', view=edit, name="wish_edit_wish"),
     url(r'^wish/show/(?P<wish_id>\d+)$', view=show, name="wish_show_wish_alone"),
     url(r'^wish/accomplish/(?P<wish_id>\d+)$', view=delete, name="wish_accomplish_wish"), #TODO why delete?

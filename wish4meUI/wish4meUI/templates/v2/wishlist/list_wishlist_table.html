@@ -20,7 +20,7 @@
           <div class="row well" style="border-width: 5px 1px 0px 5px; border-radius: 40px 10px 0px 0px; margin-bottom: 0px;">
             <div class="span3">
               <h2>
-                <a href="{% url wish_list_wish wishlist.id %}">{{ wishlist.title }}</a>
+                <a href="{% url wish-list wishlist.id %}">{{ wishlist.title }}</a>
               </h2>
             </div>
           </div>
@@ -40,7 +40,6 @@
             <div class="span2">
               {% if not is_last_wishes %}
                 <a data-toggle="modal" href="#myModal" onClick="$('#removeWishlist').attr('href', '{% url wishlist-remove wishlist.id %}')">Remove</a>
-                <!--<a href="{% url wishlist-remove wishlist.id %}">Remove</a>-->
               {% endif %}
             </div>
           </div>
