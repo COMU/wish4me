@@ -80,7 +80,6 @@ def add(request):
   typeahead_source += "]"
   #friends_list = people_to_list.values('username')
   wish_form.fields['wish_for_text'].widget.attrs['data-source'] = typeahead_source
-
   return render_to_response('wish/add.html', {'typeahead_source': typeahead_source, 'page_title': 'Add wish', 'form': wish_form, 'wish_photo_set_form': wish_photo_set_form}, context_instance=RequestContext(request))
 
 
