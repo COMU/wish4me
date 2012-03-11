@@ -1,4 +1,17 @@
 {% include "wishlist/_add_wishlist.html" %}
+                <div class="modal fade" id="myModal">
+                  <div class="modal-header">
+                    <a class="close" data-dismiss="modal">×</a>
+                    <h3>Remove Wishlist</h3>
+                  </div>
+                  <div class="modal-body">
+                    <p>Are you sure?</p>
+                  </div>
+                  <div class="modal-footer">
+                    <a href="#" class="btn" id="removeWishlist">Save changes</a>
+                    <a href="#" data-dismiss="modal" class="btn btn-primary">Close</a>
+                  </div>
+                </div>
   {% for wishlist in wishlists %}
   <div class="row">
     <div class="span5">
@@ -26,7 +39,8 @@
           <div class="row well" style="padding-top: 1px; padding-bottom: 1px; margin-bottom: 2px; padding-left: 0px; border-left-width: 0px; border-bottom-width: 3px; border-right-width: 3px; border-radius: 0px 0px 10px 0px;">
             <div class="span2">
               {% if not is_last_wishes %}
-                <a href="{% url wishlist-remove wishlist.id %}">Remove</a>
+                <a data-toggle="modal" href="#myModal" onClick="$('#removeWishlist').attr('href', '{% url wishlist-remove wishlist.id %}')">Remove</a>
+                <!--<a href="{% url wishlist-remove wishlist.id %}">Remove</a>-->
               {% endif %}
             </div>
           </div>
