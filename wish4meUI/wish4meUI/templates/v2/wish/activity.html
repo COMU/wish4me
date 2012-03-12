@@ -9,6 +9,7 @@
   </div>
   {% for wish in wishes %}
     <div class="row well">
+    {% include "wish/_gallery_snippet.html" %}
     {% include "wish/_detail.html" %}
     </div>
   {% endfor %}

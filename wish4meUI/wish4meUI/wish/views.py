@@ -18,7 +18,7 @@ from wish4meUI.friend.models import Following
 
 def myActivity(request):
   wishes = Wish.objects.filter(related_list__owner=request.user, is_hidden=False).order_by("-request_date")
-  return render_to_response('wish/activity.html', {'wishes': wishes}, context_instance=RequestContext(request))
+  return render_to_response('wish/activity.html', {'wishes': wishes, 'title': "My wish activity"}, context_instance=RequestContext(request))
 
 
 def friendActivity(request):
