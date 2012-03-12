@@ -89,7 +89,7 @@ def edit(request, wish_id):
 
 def show(request, wish_id):
   wish = get_object_or_404(Wish, pk=wish_id)
-  return render_to_response('wish/wish.html', {'wish': wish}, context_instance=RequestContext(request))
+  return render_to_response('wish/wish.html', {'wish': wish, 'title': "What i wish is ... "}, context_instance=RequestContext(request))
 
 
 def remove(request, wish_id):
@@ -121,7 +121,7 @@ def listAllWishes(request):
 
 def list(request, wishlist_id=0):
   wishes = Wish.objects.filter(related_list__owner=request.user, related_list__id=wishlist_id, is_hidden=False).order_by("-request_date")
-  
+
   return render_to_response('wish/activity.html', {'wishes': wishes}, context_instance=RequestContext(request))
 
 def addWishCategory(request):
