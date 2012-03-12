@@ -16,9 +16,9 @@
 
           {% if not wish.getPhotos %}
             <li class="span3">
-              <a href="#" class="thumbnail" title="No images defined">
+              <div class="thumbnail" title="No images defined">
                 <img src="/site_media/images/no-image.gif" alt="#{{ forloop.counter }} {{ wish.description }}"></img>
-              </a>
+              </div>
             </li>
           {% endif %}
 
