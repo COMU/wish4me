@@ -24,6 +24,7 @@ urlpatterns = patterns('',
     (r'^user/', include('wish4meUI.userprofile.urls')),
     (r'^friend/', include('wish4meUI.friend.urls')),
     (r'^share/', include('wish4meUI.share.urls')),
+    (r'^comments/', include('django.contrib.comments.urls')),
     # Uncomment the admin/doc line below to enable admin documentation:
     # (r'^admin/doc/', include('django.contrib.admindocs.urls')),
 
