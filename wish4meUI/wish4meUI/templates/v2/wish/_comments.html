@@ -1,0 +1,29 @@
+{% load comments %}
+
+{% get_comment_count for wish as comment_count %}
+<p>{{ comment_count }} comments have been posted.</p>
+
+{% get_comment_list for wish as comment_list %}
+{% for comment in comment_list %}
+<p>Posted by: {{ comment.user_name }} on {{ comment.submit_date }}</p>
+<p>Comment: {{ comment.comment }}</p>
+{% endfor %}
+
+{% get_comment_form for wish as form %}
+  <div class="row">
+      <div class="span5">
+        <form action="{% comment_form_target %}" method="post" class="well">
+          {% csrf_token %}
+          {% for field in form %}
+            {% ifequal field.name "comment" %}
+                <p>{{ field.label }}</p>
+                <p>{{ field }}</p>
+            {% endifequal %}
+             {% if field.is_hidden %}
+                <p>{{ field }}</p>
+             {% endif %}
+          {% endfor %}
+          <input type="submit" name="submit" value="Post">
+        </form>
+      </div>
+   </div>
