@@ -2,6 +2,8 @@ import os
 
 # Django settings for wish4meUI project.
 
+PROJECT_NAME = 'Wish4Me'
+
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
@@ -171,3 +173,4 @@ AJAX_LOOKUP_CHANNELS = {
 # magically include jqueryUI/js/css
 AJAX_SELECT_BOOTSTRAP = True
 AJAX_SELECT_INLINES = 'inline'
+
