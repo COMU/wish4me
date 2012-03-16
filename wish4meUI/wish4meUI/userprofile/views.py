@@ -27,8 +27,8 @@ def userLogout(request):
 @login_required
 def userProfile(request):
     user = request.user
-    userDetails = { 'user' : user, 'profile': user.get_profile()}
-    return render_to_response('userprofile/profile.html', userDetails, context_instance=RequestContext(request))
+    context = { 'user' : user, 'profile': user.get_profile(), 'page_title': 'User details'}
+    return render_to_response('userprofile/profile.html', context, context_instance=RequestContext(request))
 
 @login_required
 def userInformationEdit(request):
@@ -48,7 +48,8 @@ def userInformationEdit(request):
     else:
         form = UserInformationForm(initial = {'username': user.username, 'first_name': user.first_name, 'last_name': user.last_name, 'email': user.email, 'gender': profile.gender})
 
-    userDetails = { 'user' : user, 'profile': profile, 'form': form }
+    userDetails = { 'user' : user, 'profile': profile, 'form': form,
+                    'page_title': 'Edit profile'}
     return render_to_response('userprofile/edit_information.html', userDetails, context_instance=RequestContext(request))
 
 @login_required
@@ -94,12 +95,12 @@ def userSearch(request):
                              Q(description__icontains = term) |
                              Q(brand__icontains = term) |
                              Q(name__icontains = term))
-      return render_to_response('userprofile/search.html', {'users_list': users_list, 'wishes' :wishes}, context_instance=RequestContext(request))
+      return render_to_response('userprofile/search.html', {'page_title': 'Search user', 'users_list': users_list, 'wishes' :wishes}, context_instance=RequestContext(request))
     else:
       print "userprofile.userSearch: form is invalid"
       #return HttpResponse("userprofile.userSearch: form is invalid")
       search_form = UserSearchForm()
-      return render_to_response('userprofile/search.html', {'form' : search_form, }, context_instance=RequestContext(request))
+      return render_to_response('userprofile/search.html', {'page_title': 'Search user', 'form' : search_form, }, context_instance=RequestContext(request))
   else:
     return HttpResponse("userprofile.userSearch: the request does not contain POST")
 

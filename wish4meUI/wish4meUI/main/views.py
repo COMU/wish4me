@@ -28,15 +28,16 @@ def welcome(request):
   if WishCategory.objects.all().count() < 1:
     wc = WishCategory(name="Default")
     wc.save()
- 
+
+  context = {
+      'page_title': 'Welcome to %s' % settings.PROJECT_NAME
+  }
   if request.user.is_authenticated():
-  	return render_to_response("home/home.html",
-        	                    context_instance=RequestContext(request, {}))
-	
+  	return render_to_response("home/home.html", context,
+        	                    context_instance=RequestContext(request))
   else:
-	recent_wishes = Wish.objects.all().order_by('request_date')
-  	context = {"recent_wishes": recent_wishes}
+	  recent_wishes = Wish.objects.all().order_by('request_date')
+  	context.update({"recent_wishes": recent_wishes})
   	return render_to_response("home/welcome.html",
-                            context_instance=RequestContext(request,
-                                                            context))
+                            context_instance=RequestContext(request, context))
 

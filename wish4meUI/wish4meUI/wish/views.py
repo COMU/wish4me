@@ -18,7 +18,9 @@ from wish4meUI.friend.models import Following
 
 def myActivity(request):
   wishes = Wish.objects.filter(related_list__owner=request.user, is_hidden=False).order_by("-request_date")
-  return render_to_response('wish/activity.html', {'wishes': wishes, 'title': "My wish activity"}, context_instance=RequestContext(request))
+  context = {'wishes': wishes,
+             'page_title': "My wish activity"}
+  return render_to_response('wish/activity.html', context, context_instance=RequestContext(request))
 
 
 def friendActivity(request):
@@ -31,7 +33,9 @@ def friendActivity(request):
   wishes = wishes_from_friends | wishes_from_following
   wishes = wishes.order_by("-request_date")[:5]
   #wishes = Wish.objects.filter(related_list__owner__in = following_list, is_hidden = False).order_by("-request_date")[:5]
-  return render_to_response("wish/activity.html", {'wishes' : wishes, }, context_instance=RequestContext(request, {}))
+  context = {'wishes': wishes,
+             'page_title': 'Friend activity'}
+  return render_to_response("wish/activity.html", context, context_instance=RequestContext(request, {}))
 
 
 def add(request):
@@ -80,7 +84,12 @@ def add(request):
   typeahead_source += "]"
   #friends_list = people_to_list.values('username')
   wish_form.fields['wish_for_text'].widget.attrs['data-source'] = typeahead_source
-  return render_to_response('wish/add.html', {'typeahead_source': typeahead_source, 'page_title': 'Add wish', 'form': wish_form, 'wish_photo_set_form': wish_photo_set_form}, context_instance=RequestContext(request))
+
+  context = {'typeahead_source': typeahead_source,
+             'page_title': 'Add wish',
+             'form': wish_form,
+             'wish_photo_set_form': wish_photo_set_form}
+  return render_to_response('wish/add.html', context, context_instance=RequestContext(request))
 
 
 def edit(request, wish_id):
@@ -89,7 +98,9 @@ def edit(request, wish_id):
 
 def show(request, wish_id):
   wish = get_object_or_404(Wish, pk=wish_id)
-  return render_to_response('wish/wish.html', {'wish': wish, 'title': "What i wish is ... "}, context_instance=RequestContext(request))
+  return render_to_response('wish/wish.html',
+                            {'wish': wish, 'page_title': "What i wish is ... "},
+                            context_instance=RequestContext(request))
 
 
 def remove(request, wish_id):
@@ -117,12 +128,15 @@ def changeStatus(request, wish_id):
 
 def listAllWishes(request):
   wish_list = Wish.objects.filter(related_list__owner=request.user, is_hidden=False)
-  return render_to_response('wish/list_wishes.html', {'wish_list': wish_list, 'wishlist_id': 1}, context_instance=RequestContext(request))
+  return render_to_response('wish/list_wishes.html',
+                            {'wish_list': wish_list, 'wishlist_id': 1,
+                             'page_title': 'List all wishes'},
+                            context_instance=RequestContext(request))
 
 def list(request, wishlist_id=0):
   wishes = Wish.objects.filter(related_list__owner=request.user, related_list__id=wishlist_id, is_hidden=False).order_by("-request_date")
 
-  return render_to_response('wish/activity.html', {'wishes': wishes}, context_instance=RequestContext(request))
+  return render_to_response('wish/activity.html', {'wishes': wishes, 'page_title': 'List'}, context_instance=RequestContext(request))
 
 def addWishCategory(request):
   wishcategory = WishCategory(name="Default", is_approved=True, is_hidden=False)
@@ -134,10 +148,14 @@ def addWishCategory(request):
 def listWishCategory(request):
   wish_category_list = WishCategory.objects.filter(is_approved=True, is_hidden=False)
 
-  return render_to_response('wish/list_wishcategory.html', {'wish_category_list':wish_category_list}, context_instance=RequestContext(request))
+  return render_to_response('wish/list_wishcategory.html',
+                            {'wish_category_list':wish_category_list, 'page_title': 'List wish category'},
+                            context_instance=RequestContext(request))
 
 def showWishAlone(request, wish_id):
   wish = get_object_or_404(Wish, is_hidden = False,  pk = wish_id)
   photos = WishPhoto.objects.filter(is_hidden = False, wish__id = wish_id)
 
-  return render_to_response('wish/show_wish_alone.html', {'wish': wish, 'photos': photos}, context_instance=RequestContext(request))
+  return render_to_response('wish/show_wish_alone.html',
+                            {'wish': wish, 'photos': photos, 'page_title': 'Show wish'},
+                            context_instance=RequestContext(request))

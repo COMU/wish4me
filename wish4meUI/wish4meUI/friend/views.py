@@ -32,12 +32,10 @@ def listFollowers(request):
       profile.is_followed = True
     followers_list.append(profile)
 
-  return render_to_response('friend/followers.html', {'followers_list': followers_list}, context_instance=RequestContext(request))
+  return render_to_response('friend/followers.html', {'followers_list': followers_list, 'page_title': 'List followers'}, context_instance=RequestContext(request))
 
 @login_required
 def acceptInvite(request, invite_id):
   invite = get_object_or_404(FriendshipInvitation, pk = invite_id)
   invite.accept()
   return   HttpResponseRedirect(reverse("friend_followers"))
-
-    

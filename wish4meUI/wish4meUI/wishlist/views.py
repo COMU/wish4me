@@ -38,13 +38,13 @@ def myWishlists(request):
   if Wishlist.objects.filter(owner = request.user, is_hidden = False).count() < 2:
     is_last_wishes = True
 
-  return render_to_response('wishlist/list_wishlist.html', {'wishlists':wishlists, 'is_last_wishes':is_last_wishes},
+  return render_to_response('wishlist/list_wishlist.html', {'page_title': 'My wishlists', 'wishlists':wishlists, 'is_last_wishes':is_last_wishes},
                                                          context_instance=RequestContext(request))
 
 def show(request, wishlist_id=0):
   wishlist = get_object_or_404(Wishlist, pk=wishlist_id)
 
-  return render_to_response('wishlist/show.html', {'wishlist': wishlist}, context_instance=RequestContext(request))
+  return render_to_response('wishlist/show.html', {'wishlist': wishlist, 'page_title': 'Wishlist details'}, context_instance=RequestContext(request))
 
 def edit(request, wishlist_id=0):
   wishlist = get_object_or_404(Wishlist, pk=wishlist_id)
@@ -55,7 +55,7 @@ def edit(request, wishlist_id=0):
   form.is_hidden = wishlist.is_hidden
   wishlists = Wishlist.objects.filter(owner=request.user)
 
-  return render_to_response('wishlist/list_wishlist.html', {'wishlists':wishlists}, context_instance=RequestContext(request))
+  return render_to_response('wishlist/list_wishlist.html', {'wishlists':wishlists, 'page_title': 'Edit wishlist'}, context_instance=RequestContext(request))
 
 def remove(request, wishlist_id):
   wishlist = get_object_or_404(Wishlist, pk=wishlist_id)
