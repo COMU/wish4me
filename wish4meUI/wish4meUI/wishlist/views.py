@@ -10,6 +10,13 @@ from django.contrib import messages
 from wish4meUI.wishlist.forms import Wishlist, WishlistForm
 from wish4meUI.wish.models import Wish
 
+def addDefaultWishlist(user):
+  wishlist = Wishlist()
+  wishlist.owner = user
+  wishlist.title = "My wishes"
+  wishlist.save()
+  return wishlist
+
 def add(request):
   if request.POST:
     form = WishlistForm(request.POST)
