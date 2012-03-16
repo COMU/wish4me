@@ -2,7 +2,9 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>Wish for Me</title>
+    <title>{% if title %}{{ title }}{% else %}Wish for Me{% endif %}</title>
+    <link rel="icon" href="{{ MEDIA_URL }}images/favicon.ico" type="image/x-icon">
+
     <meta name="description" content="Social networking site to share your wishes, gifts">
     <meta name="author" content="Engin Manap">
     <meta name="author" content="Mesurcan Kurt">
@@ -16,6 +18,8 @@
 
     <!-- Le styles -->
     <link href="/site_media/bootstrap/assets/css/bootstrap.css" rel="stylesheet">
+    <!--[if lt IE 7]><link rel="stylesheet" href="/site_media/bootstrap-image-gallery/css/bootstrap-ie6.min.css"><![endif]-->
+    <link href="/site_media/bootstrap-image-gallery/css/bootstrap-image-gallery.min.css" rel="stylesheet">
     <style>
       body {
         padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
@@ -51,10 +55,13 @@
     <script src="/site_media/bootstrap/assets/js/bootstrap-collapse.js"></script>
     <script src="/site_media/bootstrap/assets/js/bootstrap-carousel.js"></script>
     <script src="/site_media/bootstrap/assets/js/bootstrap-typeahead.js"></script>
+    <script src="/site_media/bootstrap-image-gallery/js/load-image.min.js"></script>
+    <script src="/site_media/bootstrap-image-gallery/js/bootstrap-image-gallery.min.js"></script>
     <script language="JavaScript1.2">
       function openwindow(urlToOpen) {
         window.open(urlToOpen,"mywindow","menubar=1,resizable=1,width=520,height=360");
       }
     </script>
+    <script src="/site_media/custom/comment-post.js"></script>
   </body>
 </html>

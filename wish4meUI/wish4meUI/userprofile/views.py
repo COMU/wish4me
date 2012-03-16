@@ -14,6 +14,8 @@ from django.core.files.base import ContentFile
 from itertools import chain
 
 from userprofile.forms import UserSearchForm, UserInformationForm
+from wish4meUI.friend.utils import getFollowingWishes
+from wish4meUI.wish.models import Wish
 from friend.models import Following, FriendshipInvitation
 from django.conf import settings
 
@@ -66,17 +68,16 @@ def userSearch(request):
     form = UserSearchForm(request.POST.copy())
     if form.is_valid():
       term = form.cleaned_data['search_query']
-      #TODO if term is blank?
+      #search for users #
       users_query = User.objects.filter(Q(username__icontains = term) |
-                                      Q(first_name__icontains = term) |
-                                      Q(last_name__icontains = term)).distinct()
+                                        Q(first_name__icontains = term) |
+                                        Q(last_name__icontains = term)).distinct()
       users_query = users_query.exclude(pk = request.user.id)
       users_list = []
       for user in users_query:
         try:
           profile = user.get_profile()
           profile.is_following = Following.objects.filter(from_user=request.user, to_user=user).count() > 0
-          print "following " ,profile.is_following
           profile.is_followed = FriendshipInvitation.objects.filter(from_user=user, to_user=request.user).count() > 0
           if profile.is_followed:
             invite = FriendshipInvitation.objects.get(from_user=user, to_user=request.user)
@@ -85,10 +86,20 @@ def userSearch(request):
           users_list.append(profile)
         except ObjectDoesNotExist:
           pass                                  #TODO better handling for admin needed, but this works for now.
-      return render_to_response('userprofile/search.html', {'users_list': users_list}, context_instance=RequestContext(request))
+      # End Search for users #
+      # search for wishes #
+      my_wishes = Wish.objects.filter(related_list__owner = request.user, is_hidden = False)
+      wishes = getFollowingWishes(request) | my_wishes
+      wishes = wishes.filter(Q(wish_for__username__icontains = term) |
+                             Q(description__icontains = term) |
+                             Q(brand__icontains = term) |
+                             Q(name__icontains = term))
+      return render_to_response('userprofile/search.html', {'users_list': users_list, 'wishes' :wishes}, context_instance=RequestContext(request))
     else:
-      #return HttpResponse("userprofile.userSearch: form is invalid")
       print "userprofile.userSearch: form is invalid"
+      #return HttpResponse("userprofile.userSearch: form is invalid")
+      search_form = UserSearchForm()
+      return render_to_response('userprofile/search.html', {'form' : search_form, }, context_instance=RequestContext(request))
   else:
     return HttpResponse("userprofile.userSearch: the request does not contain POST")
 

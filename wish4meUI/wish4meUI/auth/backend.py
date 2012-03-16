@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import login as djangoLogin
 
 from wish4meUI.userprofile.models import UserProfile
+from wish4meUI.wishlist.views import addDefaultWishlist
 from django.conf import settings
 
 class LoginBackend(object):
@@ -52,6 +53,8 @@ class LoginBackend(object):
           userprofile = UserProfile(user=user, **kwargs)
           userprofile.last_login_backend_name = related_name
           userprofile.save()
+          addDefaultWishlist(user)
+          
       #djangoLogin(self._request,user)
 
       return userprofile.user
