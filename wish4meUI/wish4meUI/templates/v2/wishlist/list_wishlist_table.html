@@ -5,7 +5,7 @@
                     <h3>Remove Wishlist</h3>
                   </div>
                   <div class="modal-body">
-                    <p>If you remove this wishlist, all wishes under this list will be removed too.</p>
+                    <p id="removeHelp" hidden="false">If you remove this wishlist, all wishes under this list will be removed too.</p>
                     <br/>
                     <p>Are you sure you want to proceed?</p>
                   </div>
@@ -40,8 +40,13 @@
         <div class="span2">
           <div class="row well" style="padding-top: 1px; padding-bottom: 1px; margin-bottom: 2px; padding-left: 0px; border-left-width: 0px; border-bottom-width: 3px; border-right-width: 3px; border-radius: 0px 0px 10px 0px;">
             <div class="span2">
-              {% if not is_last_wishes %}
-                <a data-toggle="modal" href="#myModal" onClick="$('#removeWishlist').attr('href', '{% url wishlist-remove wishlist.id %}')">Remove</a>
+                <a data-toggle="modal" href="#myModal" onClick="$('#removeWishlist').attr('href', '{% url wishlist-remove wishlist.id %}');
+                                                                {% if wishlist.wish_count < 1 %}
+                                                                  $('#removeHelp').attr('hidden', 'true')
+                                                                {% else %}
+                                                                  $('#removeHelp').removeAttr('hidden')
+                                                                {% endif %}
+              ">{% if not is_last_wishes %}Remove</a>
               {% endif %}
             </div>
           </div>

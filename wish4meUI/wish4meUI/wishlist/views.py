@@ -32,6 +32,7 @@ def add(request):
 def myWishlists(request):
   wishlists = Wishlist.objects.filter(owner=request.user, is_hidden=False)
   for wishlist in wishlists:
+    wishlist.wish_count = Wish.objects.filter(related_list=wishlist, is_hidden=False).count()
     wishes = Wish.objects.filter(related_list=wishlist, is_hidden=False)
     wishlist.wishes=wishes
   is_last_wishes = False
