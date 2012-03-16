@@ -60,6 +60,10 @@ def edit(request, wishlist_id=0):
 
 def remove(request, wishlist_id):
   wishlist = get_object_or_404(Wishlist, pk=wishlist_id)
+  wishes = Wish.objects.filter(related_list=wishlist, is_hidden=False);
+  for wish in wishes:
+    wish.is_hidden = True
+    wish.save()
   wishlist.is_hidden = True
   wishlist.save()
 
