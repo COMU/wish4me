@@ -27,13 +27,27 @@ def userLogout(request):
 @login_required
 def userProfile(request):
     user = request.user
-    context = { 'user' : user, 'profile': user.get_profile(), 'page_title': 'User details'}
+    profile = user.get_profile()
+
+    context = {
+        'user' : user,
+        'profile': user.get_profile(),
+        'page_title': 'User details'
+    }
     return render_to_response('userprofile/profile.html', context, context_instance=RequestContext(request))
 
 @login_required
 def userInformationEdit(request):
     user = request.user
     profile = user.get_profile()
+
+    context = {
+      'facebook_profile_activated': profile.facebook_profile and True or False,
+      'google_profile_activated': profile.google_profile and True or False,
+      'twitter_profile_activated': profile.twitter_profile and True or False,
+      'foursq_profile_activated': profile.foursq_profile and True or False,
+    }
+
     if request.method == 'POST':
         form = UserInformationForm(request.POST, instance=user)
         if form.is_valid():
@@ -50,7 +64,8 @@ def userInformationEdit(request):
 
     userDetails = { 'user' : user, 'profile': profile, 'form': form,
                     'page_title': 'Edit profile'}
-    return render_to_response('userprofile/edit_information.html', userDetails, context_instance=RequestContext(request))
+    context.update(userDetails)
+    return render_to_response('userprofile/edit_information.html', context, context_instance=RequestContext(request))
 
 @login_required
 def userLoginSuccess(request):
