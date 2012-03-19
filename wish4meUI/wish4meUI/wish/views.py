@@ -35,7 +35,7 @@ def friendActivity(request):
   #wishes = Wish.objects.filter(related_list__owner__in = following_list, is_hidden = False).order_by("-request_date")[:5]
   context = {'wishes': wishes,
              'page_title': 'Friend activity'}
-  return render_to_response("wish/activity.html", context, context_instance=RequestContext(request, {}))
+  return render_to_response("wish/activity.html", context, context_instance=RequestContext(request))
 
 
 def add(request):
