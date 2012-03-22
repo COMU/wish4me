@@ -59,15 +59,27 @@ def edit(request, wishlist_id=0):
   return render_to_response('wishlist/list_wishlist.html', {'wishlists':wishlists, 'page_title': 'Edit wishlist'}, context_instance=RequestContext(request))
 
 def remove(request, wishlist_id):
-  wishlist = get_object_or_404(Wishlist, pk=wishlist_id)
-  wishes = Wish.objects.filter(related_list=wishlist, is_hidden=False);
-  for wish in wishes:
-    wish.is_hidden = True
-    wish.save()
-  wishlist.is_hidden = True
-  wishlist.save()
+  if request.POST:
+    if request.POST['wishlist_id']:
+      move_wishlist_id = request.POST['wishlist_id']
+      wishlist = get_object_or_404(Wishlist, pk=wishlist_id)
+      move_wishlist = get_object_or_404(Wishlist, pk=move_wishlist_id)
+      wishes = Wish.objects.filter(related_list=wishlist, is_hidden=False);
+      if move_wishlist_id == wishlist_id:
+        for wish in wishes:
+          wish.is_hidden = True
+          wish.save()
+      else:	
+        for wish in wishes:
+	      wish.related_list = move_wishlist
+	      wish.save()
+      wishlist.is_hidden = True
+      wishlist.save()
 
-  return HttpResponseRedirect(reverse('wishlist-home'))
+      return HttpResponseRedirect(reverse('wishlist-home'))
+    print("Wislist.views.remove: POST does not contain wishlist_id")
+  print("Wislist.views.remove: request does not contain POST")
+  return HttpResponseNotFound('<h1>Remove request was invalid</h1>')
 
 def rename(request, wishlist_id):
   if request.POST:

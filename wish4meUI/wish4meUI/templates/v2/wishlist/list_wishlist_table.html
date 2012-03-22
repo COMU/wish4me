@@ -1,18 +1,33 @@
 {% include "wishlist/_add_wishlist.html" %}
                 <div class="modal fade" id="myModal">
-                  <div class="modal-header">
-                    <a class="close" data-dismiss="modal">×</a>
-                    <h3>Remove Wishlist</h3>
-                  </div>
-                  <div class="modal-body">
-                    <p id="removeHelp" hidden="false">If you remove this wishlist, all wishes under this list will be removed too.</p>
-                    <br/>
-                    <p>Are you sure you want to proceed?</p>
-                  </div>
-                  <div class="modal-footer">
-                    <a href="#" class="btn" id="removeWishlist">Remove wishlist</a>
-                    <a href="#" data-dismiss="modal" class="btn btn-primary">Close</a>
-                  </div>
+                  <form id="removeWishlistForm" action="" method="POST" >
+                    {% csrf_token %}
+                    <div class="modal-header">
+                      <a class="close" data-dismiss="modal">×</a>
+                      <h3>Remove Wishlist</h3>
+                    </div>
+                    <div class="modal-body">
+                      <div id="removeHelp" hidden="false">
+                        <p>If you remove this wishlist, all wishes under this list will be removed too.</p>
+                        <br/>
+                        <p id="moveText">To move the wishes before, just select a list to move:</p>
+                        <select name="wishlist_id" id="removeSelection" rel="popover" data-content="If you select the list you are about to remove, wishes in it will be deleted" data-original-title="Move to" onmouseover="$('#removeSelection').popover('show');">
+                          {% for wishlist in wishlists %}
+                            <option id="removeSelection-{{ wishlist.id }}"value="{{ wishlist.id  }}">{{ wishlist.title }}</option>
+                          {% endfor %}
+                        </select> 
+                        <br/>
+                        <br/>
+                        <br/>
+                      </div>
+                      <p class="pull-right">Are you sure you want to proceed?</p>
+                      <br/>
+                    </div>
+                    <div class="modal-footer">
+                      <button class="btn" id="removeWishlistFormSubmit" type="submit" >Remove wishlist</button>
+                      <a href="#" data-dismiss="modal" class="btn btn-primary">Close</a>
+                    </div>
+                  </form>
                 </div>
   {% for wishlist in wishlists %}
   <div class="row">
@@ -40,12 +55,13 @@
         <div class="span2">
           <div class="row well" style="padding-top: 1px; padding-bottom: 1px; margin-bottom: 2px; padding-left: 0px; border-left-width: 0px; border-bottom-width: 3px; border-right-width: 3px; border-radius: 0px 0px 10px 0px;">
             <div class="span2">
-                <a data-toggle="modal" href="#myModal" onClick="$('#removeWishlist').attr('href', '{% url wishlist-remove wishlist.id %}');
+                <a data-toggle="modal" href="#myModal" onClick="$('#removeWishlistForm').attr('action', '{% url wishlist-remove wishlist.id %}');
                                                                 {% if wishlist.wish_count < 1 %}
-                                                                  $('#removeHelp').attr('hidden', 'true')
+                                                                  $('#removeHelp').attr('hidden', 'true');
                                                                 {% else %}
-                                                                  $('#removeHelp').removeAttr('hidden')
+                                                                  $('#removeHelp').removeAttr('hidden');
                                                                 {% endif %}
+                                                                $('#removeSelection-{{ wishlist.id}}').attr('selected', 'selected');
               ">{% if not is_last_wishes %}Remove</a>
               {% endif %}
             </div>
