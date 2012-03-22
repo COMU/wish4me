@@ -21,5 +21,6 @@ function bindPostCommentHandler() {
 }
  
 $(document).ready(function() {
+    $('#navbarExample').scrollspy();
     bindPostCommentHandler();
 });

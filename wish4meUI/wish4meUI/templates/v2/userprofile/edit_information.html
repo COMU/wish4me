@@ -29,19 +29,58 @@
         </div>
       </div>
       <div class="span2">
-      <a href="javascript: openwindow('{% url facebook_login %}')">
-        <img src="/site_media/images/social-logos/facebook.png"/>
-      </a>
-      <a href="javascript: openwindow('{% url openid-login %}')">
-        <img src="/site_media/images/social-logos/google-openid.png"/>
-      </a>
-      <a href="javascript: openwindow('{% url twitter_oauth_auth %}')">
-        <img src="/site_media/images/social-logos/twitter.png"/>
-      </a>
-      <a href="javascript: openwindow('{% url foursq_oauth_auth %}')">
-        <img src="/site_media/images/social-logos/foursquare.png"/>
-      </a>  
-    </div>
+        <div class="row">
+          <a href="javascript: openwindow('{% url facebook_login %}')">
+            <img src="/site_media/images/social-logos/facebook.png"/>
+          </a>
+        </div>
+        <div class="row">
+          {% if facebook_profile_activated %}
+            <span class="label label-success">activated</span>
+          {% else %}
+            <span class="label label-default">not activated</span>
+          {% endif %}
+        </div>
+        <div class="row"><hr></div>
+        <div class="row">
+          <a href="javascript: openwindow('{% url openid-login %}')">
+            <img src="/site_media/images/social-logos/google-openid.png"/>
+          </a>
+        </div>
+        <div class="row">
+          {% if google_profile_activated %}
+            <span class="label label-success">activated</span>
+          {% else %}
+            <span class="label label-default">not activated</span>
+          {% endif %}
+        </div>
+        <div class="row"><hr></div>
+        <div class="row">
+        <a href="javascript: openwindow('{% url twitter_oauth_auth %}')">
+          <img src="/site_media/images/social-logos/twitter.png"/>
+        </a>
+        </div>
+        <div class="row">
+          {% if twitter_profile_activated %}
+            <span class="label label-success">activated</span>
+          {% else %}
+            <span class="label label-default">not activated</span>
+          {% endif %}
+        </div>
+        <div class="row"><hr></div>
+        <div class="row">
+          <a href="javascript: openwindow('{% url foursq_oauth_auth %}')">
+            <img src="/site_media/images/social-logos/foursquare.png"/>
+          </a>
+        </div>
+        <div class="row">
+          {% if foursq_profile_activated %}
+            <span class="label label-success">activated</span>
+          {% else %}
+            <span class="label label-default">not activated</span>
+          {% endif %}
+        </div>
+      </div>
     <div class="span9">
     <br />
       <div class="control-group">
