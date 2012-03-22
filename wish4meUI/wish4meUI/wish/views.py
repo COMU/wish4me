@@ -14,6 +14,7 @@ from datetime import datetime
 from wish4meUI.wish.forms import WishForm, WishCategoryForm, WishPhotoForm
 from wish4meUI.wish.models import Wish, WishCategory, WishPhoto
 from wish4meUI.friend.models import Following
+from wish4meUI.wishlist.models import Wishlist
 
 
 def myActivity(request):
@@ -135,8 +136,9 @@ def listAllWishes(request):
 
 def list(request, wishlist_id=0):
   wishes = Wish.objects.filter(related_list__owner=request.user, related_list__id=wishlist_id, is_hidden=False).order_by("-request_date")
-
-  return render_to_response('wish/activity.html', {'wishes': wishes, 'page_title': 'List'}, context_instance=RequestContext(request))
+  wishlist = Wishlist.objects.get(pk = wishlist_id)
+  title = "Wishes in \"" + wishlist.title + "\" list"
+  return render_to_response('wish/activity.html', {'wishes': wishes, 'page_title': title}, context_instance=RequestContext(request))
 
 def addWishCategory(request):
   wishcategory = WishCategory(name="Default", is_approved=True, is_hidden=False)
