@@ -16,6 +16,8 @@ from wish4meUI.wish.models import Wish, WishCategory, WishPhoto
 from wish4meUI.friend.models import Following
 from wish4meUI.wishlist.models import Wishlist
 
+from django.conf import settings
+import urllib2, json, datetime
 
 def myActivity(request):
   wishes = Wish.objects.filter(related_list__owner=request.user, is_hidden=False).order_by("-request_date")
@@ -161,3 +163,51 @@ def showWishAlone(request, wish_id):
   return render_to_response('wish/show_wish_alone.html',
                             {'wish': wish, 'photos': photos, 'page_title': 'Show wish'},
                             context_instance=RequestContext(request))
+
+def getLocations(request):
+    print "POST:", request.POST['city']
+    #location operations
+    location_address = request.POST['city']
+    #sending to the google_maps api to get the latitude and longitude
+    google_api_url = "".join(["http://maps.googleapis.com/maps/api/geocode/json?address=",location_address,"&sensor=false"])
+    response = urllib2.urlopen(google_api_url)
+    response = response.read()
+    result = json.loads(response)[0]
+    geometry = result['geometry']['location']
+    latitude = geometry['lat']
+    longitude = geometry['lng']
+    # get the the environments aroun the location
+    oauth_token = settings.LOCATION_SEARCH_OAUTH_TOKEN
+    now = datetime.datetime.now()
+    v = now.strftime("%Y%m%d")
+    foursquare_api_url = "".join(["https://api.foursquare.com/v2/", "venues/search?ll=", ",".join([latitude,longitude]),"&oauth_token=", oauth_token, "&v=", v, "&intent=checkin"])
+    response = urllib2.urlopen(foursquare_api_url)
+    response = response.read()
+    venues = result['response']['venues']
+    for venue in venues:
+        #keys
+        #[u'verified',
+        #  u'name',
+        #  u'hereNow',
+        #  u'specials',
+        #  u'contact',
+        #  u'location',
+        #  u'stats',
+        #  u'id',
+        #  u'categories']
+        location = venue['location']
+        #example location out
+        #{u'address': u'180 Maiden Lane',
+        #  u'city': u'New York',
+        #  u'country': u'United States',
+        #  u'crossStreet': u'Water Street',
+        #  u'distance': 36,
+        #  u'lat': 40.70019871930678,
+        #  u'lng': -73.99964860547712,
+        #  u'postalCode': u'10038',
+        #  u'state': u'NY'}
+
+
+
+
+

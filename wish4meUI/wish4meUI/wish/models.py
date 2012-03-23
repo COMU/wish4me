@@ -3,6 +3,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from wish4meUI.wishlist.models import Wishlist
+from django_countries import CountryField
 
 import random
 import string
@@ -22,7 +23,9 @@ class Wish(models.Model):
   request_date = models.DateTimeField(auto_now=True, auto_now_add=True)
   accomplish_date = models.DateTimeField(blank=True, null=True)
 
-  #location =
+  #location
+  location = models.ForeignKey('WishLocation')
+
   is_hidden = models.BooleanField(default = False)
   is_private = models.BooleanField(default = False)
 
@@ -73,3 +76,13 @@ class WishPhoto(models.Model):
 
   def __unicode__(self):
     return self.photo.file.name
+
+class WishLocation(models.Model):
+
+    name = models.CharField(max_length=100)
+    address = models.CharField(max_length=200)
+    latitude = models.FloatField()
+    longitude = models.FloatField()
+    city = models.CharField(max_length=100)
+    state = models.CharField(max_length=100)
+    country = CountryField()

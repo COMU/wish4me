@@ -2,19 +2,31 @@
 {% block right %}
   <div class="row" style='height:50px'><i>* fields are required. </i></div>
   <form class="form-vertical" action="{% url add-wish %}" enctype="multipart/form-data" method="POST">
-  <div class="container">
-    <div class="span4">
+    <!-- <div class="container"> -->
+      <!-- map&textfield part starts -->
       {% csrf_token %}
-      {% include "_form.html" %}
-      {{ wish_photo_set_form.management_form.as_table }}
-    </div>
-    <div class="span4 well">
-      <h3><i class="icon-picture"></i> Photos of wish </h3>
-      {% for form in wish_photo_set_form.forms %}
-        {% include "_form.html" %}
-      {% endfor %}
-    </div>
-  </div>
+      <div class="row">
+        <div class="span4">
+          <label class="control-label" for="searchTextField">City name:</label>
+          <input id="searchTextField" type="text" class="span3" onkeypress="return checkEnter(event)" name="city">
+        </div>
+      </div>
+      <!-- map&textfield part ends -->
+      <div class="row">
+          <!-- form and image area starts -->
+        <div class="span5">
+          {% include "_form.html" %}
+          {{ wish_photo_set_form.management_form.as_table }}
+        </div>
+        <div class="span4 well">
+          <h3><i class="icon-picture"></i> Photos of wish </h3>
+          {% for form in wish_photo_set_form.forms %}
+            {% include "_form.html" %}
+          {% endfor %}
+        </div>
+        <!-- form and image area ends -->
+      </div>
+      <!-- </div> -->
     <hr>
     <input class="btn btn-primary" type="submit" value="Submit" />
   </form>

@@ -21,12 +21,14 @@ class WishForm(forms.ModelForm):
   #End of __init__
 
   wish_for_widget = forms.TextInput(attrs={'data-items': 4, 'data-provide': 'typeahead', 'autocomplete': 'off'})
-  
   wish_for_text = forms.CharField(widget=wish_for_widget)
+
+  location_widget = forms.TextInput(attrs={'data-items': 4, 'data-provide': 'typeahead', 'autocomplete': 'off'})
+  location = forms.CharField(widget=location_widget)
 
   def clean(self):
     cleaned_data = self.cleaned_data
-    
+
     wish_for_text = cleaned_data.get('wish_for_text')
     related_list= cleaned_data.get('related_list')
 
@@ -42,7 +44,7 @@ class WishForm(forms.ModelForm):
     print "wish for = ", wish_for_text, type(wish_for_text)
     if related_list.owner.username != wish_for_text:
       print "not equal"
-    if related_list.owner.username != wish_for_text: 
+    if related_list.owner.username != wish_for_text:
       if related_people.filter(username = wish_for_text).count() < 1:
         msg = u"Username does not match related people"
         self._errors['wish_for_text'] = self.error_class([msg])
@@ -53,8 +55,8 @@ class WishForm(forms.ModelForm):
 
   class Meta:
     model = Wish
-    fields = ('wish_for_text', 'description', 'category', 'related_list', 'brand', 'name', 'is_private' )
-    
+    fields = ('location', 'wish_for_text', 'description', 'category', 'related_list', 'brand', 'name', 'is_private' )
+
     #exclude = ('request_date', 'accomplish_date', 'is_hidden', 'wish_for')
 
   #wish_for  = make_ajax_field(User, 'username', 'user-channel', help_text='', label='Wish For')
