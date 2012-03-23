@@ -99,8 +99,8 @@ def userSearch(request):
         try:
           profile = user.get_profile()
           profile.is_followed = FriendshipInvitation.objects.filter(from_user=user, to_user=request.user).count() > 0
-          if profile.is_followed is False and user.is_private is True:  # this way we hide
-            pass                                                        # private users
+          if profile.is_followed is False and user.get_profile().is_private is True:  # this way we hide
+            continue                                                                  # private users
           profile.is_following = Following.objects.filter(from_user=request.user, to_user=user).count() > 0
           if profile.is_followed:
             invite = FriendshipInvitation.objects.get(from_user=user, to_user=request.user)
