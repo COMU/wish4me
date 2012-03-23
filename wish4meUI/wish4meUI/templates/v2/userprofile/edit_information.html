@@ -27,6 +27,16 @@
             {{ form.email }}<br \>
           </div>
         </div>
+        <div class="control-group">
+          <label for="id_privacy" class="control-label">Privacy</label>
+          <div class="controls">
+            
+            <span id="span_is_private" rel="popover" data-content="If you select this, your profile and wishes will be hidden from unreleated people." data-original-title="Privacy Control" onmouseover="$('#span_is_private').popover('show')">
+              Make my profile private: {{ form.is_private }}
+            </span>
+            <br/>
+          </div>
+        </div>
       </div>
       <div class="span2">
         <div class="row">

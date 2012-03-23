@@ -17,6 +17,7 @@ class UserProfile(models.Model):
   gender = models.CharField(max_length=2, choices=GENDER)
   last_login_backend_name = models.CharField(max_length=100,
                                              blank=True, null=True)
+  is_private = models.BooleanField(default = False)
 
   google_profile = models.OneToOneField(
       'google.GoogleProfile',

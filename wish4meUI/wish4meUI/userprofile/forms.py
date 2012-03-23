@@ -20,6 +20,7 @@ class UserInformationForm(forms.ModelForm):
     username = forms.CharField(
         required=False
     )
+    is_private = forms.BooleanField(required=False)
     class Meta:
         fields = ('photo', 'username', 'first_name', 'last_name', 'gender', 'email', 'password')
         model = User

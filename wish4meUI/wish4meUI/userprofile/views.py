@@ -57,6 +57,8 @@ def userInformationEdit(request):
                 profile.photo.save(img.name, img)
             gender = request.POST.get('gender')
             profile.gender = gender
+            is_private = request.POST.get('is_private')
+            profile.is_private = is_private
             profile.save()
             form.save()
     else:
