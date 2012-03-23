@@ -4,7 +4,7 @@ from django.template import RequestContext
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response, get_object_or_404
-from friend.models import *
+from wish4meUI.friend.models import *
 
 @login_required
 def follow(request, following_user_id):
@@ -26,10 +26,13 @@ def listFollowers(request):
   followers_list = []
   for follower in followers:
     profile = follower.from_user.get_profile()
-    if FriendshipInvitation.objects.filter(from_user = follower.from_user, to_user=following_user, status = "1").count() > 0:
-      invite = FriendshipInvitation.objects.get(from_user = follower.from_user, to_user=following_user, status = "1")
-      profile.invite = invite.id
-      profile.is_followed = True
+    if Following.objects.filter(from_user = following_user, to_user=profile.user).count() > 0:
+      profile.is_following=True
+    else:
+      if FriendshipInvitation.objects.filter(from_user = follower.from_user, to_user=following_user, status = "1").count() > 0:
+        invite = FriendshipInvitation.objects.get(from_user = follower.from_user, to_user=following_user, status = "1")
+        profile.invite = invite.id
+        profile.is_followed = True
     followers_list.append(profile)
 
   return render_to_response('friend/followers.html', {'followers_list': followers_list, 'page_title': 'List followers'}, context_instance=RequestContext(request))
