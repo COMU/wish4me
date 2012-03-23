@@ -13,7 +13,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.core.files.base import ContentFile
 from itertools import chain
 
-from userprofile.forms import UserSearchForm, UserInformationForm
+from userprofile.forms import UserSearchForm, UserInformationForm, UserPrivacyForm
 from wish4meUI.friend.utils import getFollowingWishes
 from wish4meUI.wish.models import Wish
 from friend.models import Following, FriendshipInvitation
@@ -49,22 +49,25 @@ def userInformationEdit(request):
     }
 
     if request.method == 'POST':
-        form = UserInformationForm(request.POST, instance=user)
-        if form.is_valid():
-            if request.FILES.has_key('photo'):
-                img = request.FILES['photo']
+        userForm = UserInformationForm(request.POST, instance=user, prefix = UserInformationForm.__class__.__name__)
+        profileForm = UserPrivacyForm(request.POST, instance=profile, prefix = UserPrivacyForm.__class__.__name__)
+        if userForm.is_valid():
+            if request.FILES.has_key(UserInformationForm.__class__.__name__+'-photo'):
+                img = request.FILES[UserInformationForm.__class__.__name__+'-photo']
                 profile = user.get_profile()
                 profile.photo.save(img.name, img)
-            gender = request.POST.get('gender')
-            profile.gender = gender
-            is_private = request.POST.get('is_private')
-            profile.is_private = is_private
+            
             profile.save()
-            form.save()
+            userForm.save()
+            profileForm.save()
     else:
-        form = UserInformationForm(initial = {'username': user.username, 'first_name': user.first_name, 'last_name': user.last_name, 'email': user.email, 'gender': profile.gender})
+        userForm = UserInformationForm(initial = {'username': user.username, 'first_name': user.first_name, 
+                                                  'last_name': user.last_name, 'email': user.email, }, 
+                                       prefix=UserInformationForm.__class__.__name__)
+        profileForm = UserPrivacyForm(initial = {'is_private': profile.is_private, 'gender': profile.gender}, 
+                                       prefix=UserPrivacyForm.__class__.__name__)
 
-    userDetails = { 'user' : user, 'profile': profile, 'form': form,
+    userDetails = { 'user' : user, 'profile': profile, 'userForm': userForm, 'profileForm': profileForm,
                     'page_title': 'Edit profile'}
     context.update(userDetails)
     return render_to_response('userprofile/edit_information.html', context, context_instance=RequestContext(request))
@@ -95,8 +98,10 @@ def userSearch(request):
       for user in users_query:
         try:
           profile = user.get_profile()
-          profile.is_following = Following.objects.filter(from_user=request.user, to_user=user).count() > 0
           profile.is_followed = FriendshipInvitation.objects.filter(from_user=user, to_user=request.user).count() > 0
+          if profile.is_followed is False and user.is_private is True:  # this way we hide
+            pass                                                        # private users
+          profile.is_following = Following.objects.filter(from_user=request.user, to_user=user).count() > 0
           if profile.is_followed:
             invite = FriendshipInvitation.objects.get(from_user=user, to_user=request.user)
             if invite.status == "1":
