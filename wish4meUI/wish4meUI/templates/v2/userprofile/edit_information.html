@@ -4,36 +4,62 @@
   <form class="well" enctype="multipart/form-data" action="{% url user_information_edit %}" method="post">
     {% csrf_token %}
     <div class="row">
-      <div class="span3">
-        <img src="{{ MEDIA_URL }}{{ profile.photo }}" alt="" width="180" height="180" border="0" />
-        {{ userForm.photo }}<br \>
-      </div>
-      <div class="span4">
-        <div class="control-group">
-          <label for="id_username" class="control-label">Username</label>
-          <div class="controls">
-            {{ userForm.username }}<br \>
+      <div class="span7">
+        <div class="row">
+          <div class="span3">
+            <img src="{{ MEDIA_URL }}{{ profile.photo }}" alt="" width="180" height="180" border="0" />
+            {{ userForm.photo }}<br \>
           </div>
-        </div>
-        <div class="control-group">
-          <label for="id_password" class="control-label">Password</label>
-          <div class="controls">
-            {{ userForm.password }}<br \>
+          <div class="span4">
+            <div class="control-group">
+              <label for="id_username" class="control-label">Username</label>
+              <div class="controls">
+                {{ userForm.username }}<br \>
+              </div>
+            </div>
+            <div class="control-group">
+              <label for="id_password" class="control-label">Password</label>
+              <div class="controls">
+                {{ userForm.password }}<br \>
+              </div>
+            </div>
+            <div class="control-group">
+              <label for="id_email" class="control-label">E-Mail</label>
+              <div class="controls">
+                {{ userForm.email }}<br/>
+              </div>
+            </div>
+            <div class="control-group">
+              <label for="id_privacy" class="checkbox">
+                <span  id="span_is_private" rel="popover" data-content="If you select this, your profile and wishes will be hidden from unreleated people." data-original-title="Privacy Control" onmouseover="$('#span_is_private').popover('show')">
+                  Make my profile Private
+                  {{ profileForm.is_private }}
+                </span>
+              </label>
+            </div>
           </div>
-        </div>
-        <div class="control-group">
-          <label for="id_email" class="control-label">E-Mail</label>
-          <div class="controls">
-            {{ userForm.email }}<br/>
+          <div class="span7">
+            <br/>
+            <div class="control-group">
+              <label for="id_first_name" class="control-label">First Name</label>
+              <div class="controls">
+                {{ userForm.first_name }}<br \>
+              </div>
+            </div>
+            <div class="control-group">
+              <label for="id_last_name" class="control-label">Last Name</label>
+              <div class="controls">
+                {{ userForm.last_name }}<br \>
+              </div>
+            </div>
+            <div class="control-group">
+              <label for="id_gender" class="control-label">Gender</label>
+              <div class="controls">
+                {{ profileForm.gender }}<br \>
+              </div>
+            </div>
+            <input type="submit" value="Submit" />
           </div>
-        </div>
-        <div class="control-group">
-          <label for="id_privacy" class="checkbox">
-            <span  id="span_is_private" rel="popover" data-content="If you select this, your profile and wishes will be hidden from unreleated people." data-original-title="Privacy Control" onmouseover="$('#span_is_private').popover('show')">
-              Make my profile Private
-              {{ profileForm.is_private }}
-            </span>
-          </label>
         </div>
       </div>
       <div class="span2">
@@ -89,27 +115,6 @@
           {% endif %}
         </div>
       </div>
-    <div class="span9">
-    <br />
-      <div class="control-group">
-        <label for="id_first_name" class="control-label">First Name</label>
-        <div class="controls">
-          {{ userForm.first_name }}<br \>
-        </div>
-      </div>
-      <div class="control-group">
-        <label for="id_last_name" class="control-label">Last Name</label>
-        <div class="controls">
-          {{ userForm.last_name }}<br \>
-        </div>
-      </div>
-      <div class="control-group">
-        <label for="id_gender" class="control-label">Gender</label>
-        <div class="controls">
-          {{ profileForm.gender }}<br \>
-        </div>
-      </div>
-    <input type="submit" value="Submit" />
   </form>
   </div>
 {% endblock %}
