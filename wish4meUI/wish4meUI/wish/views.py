@@ -17,7 +17,7 @@ from wish4meUI.friend.models import Following
 from wish4meUI.wishlist.models import Wishlist
 
 from django.conf import settings
-import urllib2, json, datetime
+import urllib, urllib2, json, datetime
 
 def myActivity(request):
   wishes = Wish.objects.filter(related_list__owner=request.user, is_hidden=False).order_by("-request_date")
@@ -165,14 +165,13 @@ def showWishAlone(request, wish_id):
                             context_instance=RequestContext(request))
 
 def getLocations(request):
-    print "POST:", request.POST['city']
     #location operations
-    location_address = request.POST['city']
+    location_address = urllib.quote(request.POST.get('city', False))
     #sending to the google_maps api to get the latitude and longitude
     google_api_url = "".join(["http://maps.googleapis.com/maps/api/geocode/json?address=",location_address,"&sensor=false"])
     response = urllib2.urlopen(google_api_url)
     response = response.read()
-    result = json.loads(response)[0]
+    result = json.loads(response)['results'][0]
     geometry = result['geometry']['location']
     latitude = geometry['lat']
     longitude = geometry['lng']
@@ -180,10 +179,12 @@ def getLocations(request):
     oauth_token = settings.LOCATION_SEARCH_OAUTH_TOKEN
     now = datetime.datetime.now()
     v = now.strftime("%Y%m%d")
-    foursquare_api_url = "".join(["https://api.foursquare.com/v2/", "venues/search?ll=", ",".join([latitude,longitude]),"&oauth_token=", oauth_token, "&v=", v, "&intent=checkin"])
+    foursquare_api_url = "".join(["https://api.foursquare.com/v2/", "venues/search?ll=", ",".join([str(latitude),str(longitude)]),"&oauth_token=", oauth_token, "&v=", v, "&intent=checkin"])
     response = urllib2.urlopen(foursquare_api_url)
     response = response.read()
+    result = json.loads(response)
     venues = result['response']['venues']
+    response_data = []
     for venue in venues:
         #keys
         #[u'verified',
@@ -195,8 +196,9 @@ def getLocations(request):
         #  u'stats',
         #  u'id',
         #  u'categories']
-        location = venue['location']
-        #example location out
+        name = venue['name']
+        #location = venue['location']
+        #example location output
         #{u'address': u'180 Maiden Lane',
         #  u'city': u'New York',
         #  u'country': u'United States',
@@ -206,6 +208,8 @@ def getLocations(request):
         #  u'lng': -73.99964860547712,
         #  u'postalCode': u'10038',
         #  u'state': u'NY'}
+        response_data.append(name)
+    return HttpResponse(json.dumps(response_data), mimetype="application/json")
 
 
 

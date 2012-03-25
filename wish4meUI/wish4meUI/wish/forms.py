@@ -23,7 +23,7 @@ class WishForm(forms.ModelForm):
   wish_for_widget = forms.TextInput(attrs={'data-items': 4, 'data-provide': 'typeahead', 'autocomplete': 'off'})
   wish_for_text = forms.CharField(widget=wish_for_widget)
 
-  location_widget = forms.TextInput(attrs={'data-items': 4, 'data-provide': 'typeahead', 'autocomplete': 'off'})
+  location_widget = forms.TextInput(attrs={'data-items': 4, 'data-provide': 'typeahead', 'autocomplete': 'off', 'id':'location'})
   location = forms.CharField(widget=location_widget)
 
   def clean(self):

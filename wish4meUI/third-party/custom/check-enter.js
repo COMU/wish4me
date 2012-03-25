@@ -7,11 +7,20 @@ function checkEnter(e){
           data: $('#searchTextField').serialize(),
           url: "/wish/locations",
           cache: false,
-          dataType: "html",
+          dataType: "json",
           success: function(html, textStatus) {
-            console.log("ok");
+            var list = new Array();
+
+             $.each(html, function(index, value) {
+
+               list.push('"'+value+'"')
+
+             });
+             var new_value = "[" + new String(list) + "]";
+             $('#location').attr('data-source', new_value);
           },
           error: function (XMLHttpRequest, textStatus, errorThrown) {
+              console.log("error")
               console.log(XMLHttpRequest);
               //$('#locations').replaceWith('No place detected around');
           }
