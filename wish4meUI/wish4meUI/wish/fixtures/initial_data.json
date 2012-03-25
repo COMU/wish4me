@@ -1,0 +1,112 @@
+[
+  {
+    "model": "wish.wishcategory",
+    "pk": 2,
+    "fields": {
+      "is_hidden": false,
+      "synonyms": "",
+      "name": "Electronics & Gadgets",
+      "parent": null,
+      "is_approved": true
+    }
+  },
+  {
+    "model": "wish.wishcategory",
+    "pk": 3,
+    "fields": {
+      "is_hidden": false,
+      "synonyms": "",
+      "name": "Toys & Games",
+      "parent": null,
+      "is_approved": true
+    }
+  },
+  {
+    "model": "wish.wishcategory",
+    "pk": 4,
+    "fields": {
+      "is_hidden": false,
+      "synonyms": "",
+      "name": "Audio & Video",
+      "parent": null,
+      "is_approved": true
+    }
+  },
+  {
+    "model": "wish.wishcategory",
+    "pk": 5,
+    "fields": {
+      "is_hidden": false,
+      "synonyms": "",
+      "name": "Apparel",
+      "parent": null,
+      "is_approved": true
+    }
+  },
+  {
+    "model": "wish.wishcategory",
+    "pk": 6,
+    "fields": {
+      "is_hidden": false,
+      "synonyms": "",
+      "name": "Jewelery & Watche",
+      "parent": null,
+      "is_approved": true
+    }
+  },
+  {
+    "model": "wish.wishcategory",
+    "pk": 7,
+    "fields": {
+      "is_hidden": false,
+      "synonyms": "",
+      "name": "Books & Stationery",
+      "parent": null,
+      "is_approved": true
+    }
+  },
+  {
+    "model": "wish.wishcategory",
+    "pk": 8,
+    "fields": {
+      "is_hidden": false,
+      "synonyms": "",
+      "name": "Home Decor",
+      "parent": null,
+      "is_approved": true
+    }
+  },
+  {
+    "model": "wish.wishcategory",
+    "pk": 9,
+    "fields": {
+      "is_hidden": false,
+      "synonyms": "",
+      "name": "Health & Body Care",
+      "parent": null,
+      "is_approved": true
+    }
+  },
+  {
+    "model": "wish.wishcategory",
+    "pk": 10,
+    "fields": {
+      "is_hidden": false,
+      "synonyms": "",
+      "name": "Flowers & Fruits",
+      "parent": null,
+      "is_approved": true
+    }
+  },
+  {
+    "model": "wish.wishcategory",
+    "pk": 2,
+    "fields": {
+      "is_hidden": false,
+      "synonyms": "",
+      "name": "Accessories",
+      "parent": null,
+      "is_approved": true
+    }
+  }
+]
