@@ -13,11 +13,12 @@ function checkEnter(e){
 
              $.each(html, function(index, value) {
 
-               list.push('"'+value+'"')
+               list.push(value);
 
              });
-             var new_value = "[" + new String(list) + "]";
-             $('#location').attr('data-source', new_value);
+             $('#location').typeahead({
+               source:list
+             });
           },
           error: function (XMLHttpRequest, textStatus, errorThrown) {
               console.log("error")
@@ -28,5 +29,6 @@ function checkEnter(e){
 
     return false;
   }
+  console.log("no entered");
 }
 
