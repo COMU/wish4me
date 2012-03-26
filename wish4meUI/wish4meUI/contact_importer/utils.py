@@ -15,7 +15,7 @@ except ImportError:
             raise "Requires either simplejson, Python 2.6 or django.utils!"
 
 def facebook_contact_import(request):
-
+    friends_list=[]
     user = request.user
     profile = user.get_profile()
     fb_id = profile.facebook_profile_id
@@ -28,6 +28,12 @@ def facebook_contact_import(request):
     full_url = url + '?' + url_values
     response = urllib2.urlopen(full_url)
     response = response.read()
+    json = simplejson.loads(response)
+    for i in json.get('data','0'):
+      i=i.get('id','0')
+      friends_list.append(i)
+    return friends_list
+
     return response
 
 def twitter_contact_import(request):
