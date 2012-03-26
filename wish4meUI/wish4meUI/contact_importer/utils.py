@@ -1,4 +1,4 @@
-import oauth, urllib, urllib2, httplib, re
+import json, oauth, urllib, urllib2, httplib, re
 from django.shortcuts import render_to_response
 from facebook.models import FacebookProfile
 from twitter_app.utils import *
@@ -31,12 +31,28 @@ def facebook_contact_import(request):
     return response
 
 def twitter_contact_import(request):
+    friends_list = []
     CONSUMER = oauth.OAuthConsumer(CONSUMER_KEY, CONSUMER_SECRET)
     CONNECTION = httplib.HTTPSConnection(SERVER)
     access_token = request.session.get('access_token', None)
     token = oauth.OAuthToken.from_string(access_token)
-    friend_list = get_friends(CONSUMER, CONNECTION, token, page=0)
-    return friend_list
+    auth = is_authenticated(CONSUMER, CONNECTION, token)
+    if auth:
+        creds = simplejson.loads(auth)
+        name = creds.get('name', creds['screen_name']) # Get the name
+
+        # Get number of friends. The API only returns 100 results per page,
+        # so we might need to divide the queries up.
+        friends_count = str(creds.get('friends_count', '100'))
+        pages = int( (int(friends_count)/100) ) + 1
+        pages = min(pages, 10) # We only want to make ten queries
+        for page in range(pages):
+          friends = get_friends(CONSUMER, CONNECTION, token, page+1)
+          if friends == '[]': break
+    json = simplejson.loads(friends)
+    for i in json.get('ids','0'):
+      friends_list.append(i)
+    return friends_list
     
 def google_contact_import(request):
     print request.session.get('access_token')

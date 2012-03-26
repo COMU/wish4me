@@ -6,7 +6,17 @@
 
 <div class="span8">
 <h1>Import Your Friends</h1>
-{{ imported_friends|pprint }}
+<br>
+<h2>Here comes your twitter friends:</h2>
+<ul>
+{% for json in imported_friends %}
+<li>
+<dt>Id</dt>
+<dd>{{ json|default:"Not specified" }}</dd>
+
+</li>
+{% endfor %}
+</ul>
 </div>
 <div class="span2">
 <div class="row">
