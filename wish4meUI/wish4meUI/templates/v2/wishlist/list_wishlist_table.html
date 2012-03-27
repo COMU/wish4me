@@ -48,7 +48,7 @@
               <form class="form-inline" method="POST" action="{% url wishlist-rename wishlist.id %}" style="margin-bottom: 0px;">
                 {% csrf_token %}
                 <input type="text" name="new_title"placeholder="Rename" style="width: 100px; height: 13px;">
-                <span  id="span_is_private-{{ wishlist.id }}" rel="popover" data-content="If you select this, this wishlist and all wishes in it will be set as private." data-original-title="Privacy Control" 
+                <span  id="span_is_private-{{ wishlist.id }}" rel="popover" data-content="Changes wishes to private, and default privacy  setting to 'private'. Deselecting does not change wish states." data-original-title="Privacy Control" 
                                                                                                             onmouseover="$('#span_is_private-{{ wishlist.id }}').popover('show')">
                   <button class="btn btn-info 
                                               {% if wishlist.is_private %}

@@ -111,6 +111,11 @@ def setPrivacy(request, wishlist_id):
     wishlist.save()
     print "private"
     return HttpResponse("private")
-  
-
-  
+ 
+@csrf_exempt
+def getPrivacy(request, wishlist_id):
+  wishlist = Wishlist.objects.get(pk = wishlist_id)
+  if wishlist.is_private:
+    return HttpResponse("private")
+  else:
+    return HttpResponse("public")
