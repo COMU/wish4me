@@ -3,7 +3,8 @@ from django.contrib.auth.models import User
 
 from ajax_select import make_ajax_field
 
-from wish4meUI.wish.models import Wish, WishCategory, Wishlist, WishPhoto
+from wish4meUI.wish.models import Wish, WishCategory, WishPhoto
+from wish4meUI.wishlist.models import Wishlist
 from wish4meUI.friend.models import Following
 
 class WishForm(forms.ModelForm):
@@ -13,12 +14,42 @@ class WishForm(forms.ModelForm):
 
     wishlists = Wishlist.objects.filter(owner = requested_user, is_hidden = False)
     self.fields["related_list"].queryset = wishlists
+    self.fields["wish_for_text"].label = "Wish for"
+    if not self.fields["wish_for_text"].initial:
+      self.fields["wish_for_text"].initial = requested_user.username
+
   #End of __init__
 
   wish_for_widget = forms.TextInput(attrs={'data-items': 4, 'data-provide': 'typeahead', 'autocomplete': 'off'})
   
   wish_for_text = forms.CharField(widget=wish_for_widget)
 
+  def clean(self):
+    cleaned_data = self.cleaned_data
+    
+    wish_for_text = cleaned_data.get('wish_for_text')
+    related_list= cleaned_data.get('related_list')
+
+    #since we do not know who the user is, we check the Wishlist owner to get user.
+    #user_id = Wishlist.objects.get(pk = related_list).values('owner')
+    user_id = related_list.owner.id
+    followers = Following.objects.filter(to_user = user_id).values('id')
+    followed = Following.objects.filter(from_user = user_id).values('id')
+
+    related_people = followers | followed
+    related_people = User.objects.filter(id__in = related_people)
+    print "owner = ", related_list.owner.username, type(related_list.owner.username)
+    print "wish for = ", wish_for_text, type(wish_for_text)
+    if related_list.owner.username != wish_for_text:
+      print "not equal"
+    if related_list.owner.username != wish_for_text: 
+      if related_people.filter(username = wish_for_text).count() < 1:
+        msg = u"Username does not match related people"
+        self._errors['wish_for_text'] = self.error_class([msg])
+        #since this field is not valid
+        del cleaned_data['wish_for_text']
+        raise forms.ValidationError("Username does not match related people")
+    return cleaned_data
 
   class Meta:
     model = Wish
@@ -31,11 +62,6 @@ class WishForm(forms.ModelForm):
 class WishCategoryForm(forms.ModelForm):
   class Meta:
     model = WishCategory
-
-class WishlistForm(forms.ModelForm):
-  class Meta:
-    model = Wishlist
-    fields = ('title',)
 
 class WishPhotoForm(forms.ModelForm):
   class Meta:

@@ -1,0 +1,80 @@
+{% extends "base/layout2.html" %}
+
+{% block right %}
+
+<div class="row">
+
+<div class="span8">
+<h1>Import Your Friends</h1>
+<br>
+<h2>Here comes your twitter friends:</h2>
+<ul>
+{% for json in imported_friends %}
+<li>
+<dt>Id</dt>
+<dd>{{ json|default:"Not specified" }}</dd>
+
+</li>
+{% endfor %}
+</ul>
+</div>
+<div class="span2">
+<div class="row">
+          <a href="javascript: openwindow('{% url facebook_login %}')">
+            <img src="/site_media/images/social-logos/facebook.png"/>
+          </a>
+        </div>
+        <div class="row">
+          {% if facebook_profile_activated %}
+            <a href="{% url contact_importer_home importing_profile="facebook" %}"><span class="label label-warning">import contacts</span></a>
+          {% else %}
+            <span class="label label-default">not activated</span>
+          {% endif %}
+        </div>
+        <div class="row"><hr></div>
+        <div class="row">
+          <a href="javascript: openwindow('{% url openid-login %}')">
+            <img src="/site_media/images/social-logos/google-openid.png"/>
+          </a>
+        </div>
+        <div class="row">
+          {% if google_profile_activated %}
+            <a href="{% url contact_importer_home importing_profile="google" %}"><span class="label label-warning">import contacts</span></a>
+          {% else %}
+            <span class="label label-default">not activated</span>
+          {% endif %}
+        </div>
+        <div class="row"><hr></div>
+        <div class="row">
+        <a href="javascript: openwindow('{% url twitter_oauth_auth %}')">
+          <img src="/site_media/images/social-logos/twitter.png"/>
+        </a>
+        </div>
+        <div class="row">
+          {% if twitter_profile_activated %}
+            <a href="{% url contact_importer_home importing_profile="twitter" %}"><span class="label label-warning">import contacts</span></a>
+          {% else %}
+            <span class="label label-default">not activated</span>
+          {% endif %}
+        </div>
+        <div class="row"><hr></div>
+        <div class="row">
+          <a href="javascript: openwindow('{% url foursq_oauth_auth %}')">
+            <img src="/site_media/images/social-logos/foursquare.png"/>
+          </a>
+        </div>
+        <div class="row">
+          {% if foursq_profile_activated %}
+            <a href="{% url contact_importer_home importing_profile="foursquare" %}"><span class="label label-warning">import contacts</span></a>
+          {% else %}
+            <span class="label label-default">not activated</span>
+          {% endif %}
+        </div>
+      </div>
+</div>
+
+</div>
+
+
+{% endblock %}
+

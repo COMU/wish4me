@@ -19,6 +19,12 @@
           {{ user.password }}<br \>
       <label for="id_email" class="label label-info">E-Mail</label>
           {{ user.email }}<br \>
+      <label for="id_privacy" class="label label-info">Privacy</label>
+          {% if profile.is_private %}
+            Your profile is <font color="#CC0000">private</font>
+          {% else %}
+            Your profile is <font color="#0000CC">public</font>
+          {% endif %}
   </div>
   <div class="span7">
     <br />

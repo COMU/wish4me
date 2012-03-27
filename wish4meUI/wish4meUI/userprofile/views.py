@@ -13,7 +13,9 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.core.files.base import ContentFile
 from itertools import chain
 
-from userprofile.forms import UserSearchForm, UserInformationForm
+from userprofile.forms import UserSearchForm, UserInformationForm, UserPrivacyForm
+from wish4meUI.friend.utils import getFollowingWishes
+from wish4meUI.wish.models import Wish
 from friend.models import Following, FriendshipInvitation
 from django.conf import settings
 
@@ -25,29 +27,50 @@ def userLogout(request):
 @login_required
 def userProfile(request):
     user = request.user
-    userDetails = { 'user' : user, 'profile': user.get_profile()}
-    return render_to_response('userprofile/profile.html', userDetails, context_instance=RequestContext(request))
+    profile = user.get_profile()
+
+    context = {
+        'user' : user,
+        'profile': user.get_profile(),
+        'page_title': 'User details'
+    }
+    return render_to_response('userprofile/profile.html', context, context_instance=RequestContext(request))
 
 @login_required
 def userInformationEdit(request):
     user = request.user
     profile = user.get_profile()
+
+    context = {
+      'facebook_profile_activated': profile.facebook_profile and True or False,
+      'google_profile_activated': profile.google_profile and True or False,
+      'twitter_profile_activated': profile.twitter_profile and True or False,
+      'foursq_profile_activated': profile.foursq_profile and True or False,
+    }
+
     if request.method == 'POST':
-        form = UserInformationForm(request.POST, instance=user)
-        if form.is_valid():
-            if request.FILES.has_key('photo'):
-                img = request.FILES['photo']
+        userForm = UserInformationForm(request.POST, instance=user, prefix = UserInformationForm.__class__.__name__)
+        profileForm = UserPrivacyForm(request.POST, instance=profile, prefix = UserPrivacyForm.__class__.__name__)
+        if userForm.is_valid():
+            if request.FILES.has_key(UserInformationForm.__class__.__name__+'-photo'):
+                img = request.FILES[UserInformationForm.__class__.__name__+'-photo']
                 profile = user.get_profile()
                 profile.photo.save(img.name, img)
-            gender = request.POST.get('gender')
-            profile.gender = gender
+            
             profile.save()
-            form.save()
+            userForm.save()
+            profileForm.save()
     else:
-        form = UserInformationForm(initial = {'username': user.username, 'first_name': user.first_name, 'last_name': user.last_name, 'email': user.email, 'gender': profile.gender})
+        userForm = UserInformationForm(initial = {'username': user.username, 'first_name': user.first_name, 
+                                                  'last_name': user.last_name, 'email': user.email, }, 
+                                       prefix=UserInformationForm.__class__.__name__)
+        profileForm = UserPrivacyForm(initial = {'is_private': profile.is_private, 'gender': profile.gender}, 
+                                       prefix=UserPrivacyForm.__class__.__name__)
 
-    userDetails = { 'user' : user, 'profile': profile, 'form': form }
-    return render_to_response('userprofile/edit_information.html', userDetails, context_instance=RequestContext(request))
+    userDetails = { 'user' : user, 'profile': profile, 'userForm': userForm, 'profileForm': profileForm,
+                    'page_title': 'Edit profile'}
+    context.update(userDetails)
+    return render_to_response('userprofile/edit_information.html', context, context_instance=RequestContext(request))
 
 @login_required
 def userLoginSuccess(request):
@@ -66,18 +89,19 @@ def userSearch(request):
     form = UserSearchForm(request.POST.copy())
     if form.is_valid():
       term = form.cleaned_data['search_query']
-      #TODO if term is blank?
+      #search for users #
       users_query = User.objects.filter(Q(username__icontains = term) |
-                                      Q(first_name__icontains = term) |
-                                      Q(last_name__icontains = term)).distinct()
+                                        Q(first_name__icontains = term) |
+                                        Q(last_name__icontains = term)).distinct()
       users_query = users_query.exclude(pk = request.user.id)
       users_list = []
       for user in users_query:
         try:
           profile = user.get_profile()
-          profile.is_following = Following.objects.filter(from_user=request.user, to_user=user).count() > 0
-          print "following " ,profile.is_following
           profile.is_followed = FriendshipInvitation.objects.filter(from_user=user, to_user=request.user).count() > 0
+          if profile.is_followed is False and user.get_profile().is_private is True:  # this way we hide
+            continue                                                                  # private users
+          profile.is_following = Following.objects.filter(from_user=request.user, to_user=user).count() > 0
           if profile.is_followed:
             invite = FriendshipInvitation.objects.get(from_user=user, to_user=request.user)
             if invite.status == "1":
@@ -85,10 +109,20 @@ def userSearch(request):
           users_list.append(profile)
         except ObjectDoesNotExist:
           pass                                  #TODO better handling for admin needed, but this works for now.
-      return render_to_response('userprofile/search.html', {'users_list': users_list}, context_instance=RequestContext(request))
+      # End Search for users #
+      # search for wishes #
+      my_wishes = Wish.objects.filter(related_list__owner = request.user, is_hidden = False)
+      wishes = getFollowingWishes(request) | my_wishes
+      wishes = wishes.filter(Q(wish_for__username__icontains = term) |
+                             Q(description__icontains = term) |
+                             Q(brand__icontains = term) |
+                             Q(name__icontains = term))
+      return render_to_response('userprofile/search.html', {'page_title': 'Search user', 'users_list': users_list, 'wishes' :wishes}, context_instance=RequestContext(request))
     else:
-      #return HttpResponse("userprofile.userSearch: form is invalid")
       print "userprofile.userSearch: form is invalid"
+      #return HttpResponse("userprofile.userSearch: form is invalid")
+      search_form = UserSearchForm()
+      return render_to_response('userprofile/search.html', {'page_title': 'Search user', 'form' : search_form, }, context_instance=RequestContext(request))
   else:
     return HttpResponse("userprofile.userSearch: the request does not contain POST")
 

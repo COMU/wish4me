@@ -1,0 +1,28 @@
+{% load comments %}
+
+<div class="span5 columns">
+
+       <div class="navbar navbar-static" id="commentBar">
+            <div class="navbar-inner">
+              <div style="width: auto;" class="container">
+                <a href="#" class="brand">Comments</a>
+                <ul class="nav">
+                  {% get_comment_count for wish as comment_count %}
+                  <li class=""><a href="#comment">{{ comment_count }} comments have been posted.</a></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+       
+        <div class="scrollspy-example" data-offset="0" data-target="#commentBar" data-spy="scroll">
+            {% get_comment_list for wish as comment_list %}
+            {% for comment in comment_list %}
+                      <h4 id="comment">Posted by: {{ comment.user_name }} on {{ comment.submit_date }}</h4>
+                      <p>Comment: {{ comment.comment }}</p>
+            {% endfor %}
+        </div> 
+  
+  </div>
+
+
+

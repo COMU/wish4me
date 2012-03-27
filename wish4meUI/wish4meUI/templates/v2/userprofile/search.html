@@ -1,14 +1,33 @@
 {% extends "base/layout2.html" %}
 {% load list %}
 {% block right %}
-  <h2> User Search </h2>
   <div class="row">
-    <table class="table table-striped">
-      <tbody>
-        {% for user in users_list %}
-          {% include "userprofile/_search.html" %}
-        {% endfor %}
-      </tbody>
-    </table>
+    <div class="span9">
+      {% if form %}
+        <h2>Search Users or Wishes</h2>
+        <div class="row">
+          <div class="span9" style='height:50px'>
+            <i>* fields are required. </i>
+          </div>
+        </div>
+        <form class="form-Horizontal" action="{% url user_search %}" method="POST">
+          {% csrf_token %}
+          {% include "_form.html" %}
+        </form>
+      {% else %}
+        <h2>Matching Users</h2>
+        <div class="row well">
+          <table class="table table-striped">
+            <tbody>
+              {% for user in users_list %}
+                {% include "userprofile/_search.html" %}
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        <h2>Matching Wishes</h2>
+        {% include "wish/_result_wish_table.html" %}
+      {% endif%}
+    </div>
   </div>
 {% endblock %}

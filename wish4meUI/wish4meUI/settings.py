@@ -2,6 +2,8 @@ import os
 
 # Django settings for wish4meUI project.
 
+PROJECT_NAME = 'Wish4Me'
+
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
@@ -122,8 +124,10 @@ INSTALLED_APPS = (
     'wish4meUI.google',
     'facebook',
     'wish',
+    'wishlist',
     'friend',
     'ajax_select',
+    'contact_importer',
     # Uncomment the next line to enable the admin:
     'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
@@ -132,7 +136,7 @@ INSTALLED_APPS = (
 
 FACEBOOK_APP_ID = "255768354473895"
 FACEBOOK_APP_SECRET = "b8f0ef66e6e88951311ea2e70dccf4fa"
-FACEBOOK_SCOPE = 'email,publish_stream'
+FACEBOOK_SCOPE = 'email,publish_stream,friends_about_me'
 
 AUTH_PROFILE_MODULE = 'userprofile.UserProfile'
 
@@ -169,3 +173,4 @@ AJAX_LOOKUP_CHANNELS = {
 # magically include jqueryUI/js/css
 AJAX_SELECT_BOOTSTRAP = True
 AJAX_SELECT_INLINES = 'inline'
+

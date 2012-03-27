@@ -2,6 +2,7 @@
 
 from django.db import models
 from django.contrib.auth.models import User
+from wish4meUI.wishlist.models import Wishlist
 
 import random
 import string
@@ -9,19 +10,11 @@ import os
 
 # Create your models here.
 
-class Wishlist(models.Model):
-  owner = models.ForeignKey(User, related_name="owner")
-  title = models.CharField(max_length=140)
-  is_hidden = models.BooleanField(default = False)
-
-  def __unicode__(self):
-    return self.title
-
 class Wish(models.Model):
   wish_for = models.ForeignKey(User)
   description = models.TextField()
   category = models.ForeignKey('WishCategory')
-  related_list = models.ForeignKey('Wishlist')
+  related_list = models.ForeignKey(Wishlist)
 
   brand = models.CharField(max_length=100)
   name = models.CharField(max_length=100)

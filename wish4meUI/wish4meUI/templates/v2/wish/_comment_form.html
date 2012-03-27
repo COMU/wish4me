@@ -1,0 +1,31 @@
+{% load comments %}
+
+<div id="comments">
+  {% include "wish/_comments.html" %}
+</div>
+
+<div class="row">
+    <div class="span5">
+      <div id="comment_status">
+      </div>
+    </div>
+</div>
+
+{% get_comment_form for wish as form %}
+  <div class="row">
+      <div class="span5" id="comment_form">
+        <form class="well">
+          {% csrf_token %}
+          {% for field in form %}
+            {% ifequal field.name "comment" %}
+                <p>{{ field.label }}</p>
+                <p>{{ field }}</p>
+            {% endifequal %}
+             {% if field.is_hidden %}
+                <p>{{ field }}</p>
+             {% endif %}
+          {% endfor %}
+          <input type="submit" name="submit" value="Post" class="btn btn-primary .btn-large">
+        </form>
+      </div>
+   </div>
