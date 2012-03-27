@@ -18,8 +18,8 @@
             </ul>
             <form class="navbar-search pull-right" action="{% url user_search %}" method="POST">
               {% csrf_token %}
-              <input type="text" class="search-query"
-                     placeholder="Search wishes or users...">
+              <input type="text" class="search-query" name="search_query"
+                       placeholder="Search wishes or users...">
             </form>
           </div><!--/.nav-collapse -->
         </div>

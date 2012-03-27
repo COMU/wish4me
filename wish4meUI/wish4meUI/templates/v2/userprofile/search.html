@@ -1,4 +1,4 @@
-{% extends "base/layout2.html" %}
+  {% extends extended_page %}
 {% load list %}
 {% block right %}
   <div class="row">
@@ -19,7 +19,7 @@
         <div class="row well">
           <table class="table table-striped">
             <tbody>
-              {% for user in users_list %}
+              {% for resulting_user in users_list %}
                 {% include "userprofile/_search.html" %}
               {% endfor %}
             </tbody>
