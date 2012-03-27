@@ -3,10 +3,10 @@
     <ul class="thumbnails">
       <li class="span2">
         <a href="#" class="thumbnail">
-          {% if user.photo  %}
-            <img alt="{{ user.user.username }}" src="{{ MEDIA_URL }}{{ user.photo }}">
+          {% if resulting_user.photo  %}
+            <img alt="{{ resulting_user.user.username }}" src="{{ MEDIA_URL }}{{ resulting_user.photo }}">
           {% else %}
-            <img alt="{{ user.user.username }}" src="{{ MEDIA_URL }}{{ DEFAULT_PROFILE_PICTURE }}">
+            <img alt="{{ resulting_user.user.username }}" src="{{ MEDIA_URL }}{{ DEFAULT_PROFILE_PICTURE }}">
           {% endif %}
         </a>
       </li>
@@ -14,7 +14,7 @@
   </td>
   <td class="span2">
     <blockquote>
-      {{ user.user.username }}
+      {{ resulting_user.user.username }}
     </blockquote>
   </td>
   <td class="span2">
@@ -24,14 +24,18 @@
   </td>
   <td class="span2">
     <blockquote>
-      {% if user.is_following %}
-      <!-- you are following this user -->
-      {% else %}
-        {% if user.is_followed %}
-          <a href="{% url friend_accept user.invite %}">follow back</a>
+      {% if user.is_authenticated %}
+        {% if resulting_user.is_following %}
+        <!-- you are following this user -->
         {% else %}
-          <a href="{% url friend_follow user.user.id %}">follow</a></p>
+          {% if resulting_user.is_followed %}
+            <a href="{% url friend_accept resulting_user.invite %}">follow back</a>
+          {% else %}
+            <a href="{% url friend_follow resulting_user.user.id %}">follow</a></p>
+          {% endif %}
         {% endif %}
+      {% else %}
+        login to follow
       {% endif %}
     </blockquote>
   </td>
