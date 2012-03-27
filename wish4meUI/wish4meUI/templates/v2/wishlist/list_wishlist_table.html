@@ -48,6 +48,10 @@
               <form class="form-inline" method="POST" action="{% url wishlist-rename wishlist.id %}" style="margin-bottom: 0px;">
                 {% csrf_token %}
                 <input type="text" name="new_title"placeholder="Rename" style="width: 100px; height: 13px;">
+                <button class="btn btn-info" data-toggle="button" value="is_private" type="button" name="is_private-button-{{ wishlist.id }}" style="padding: 2px 5px;" 
+                                                                                                          onclick="setPrivacy({{ wishlist.id }}, '{% url wishlist-setPrivacy wishlist.id %}');">
+                  <i class="icon-ban-circle"></i>
+                </button>
               </form>
             </div>
           </div>
