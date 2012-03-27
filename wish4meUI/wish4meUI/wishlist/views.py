@@ -104,6 +104,10 @@ def setPrivacy(request, wishlist_id):
     return HttpResponse("public")
   else:
     wishlist.is_private = True
+    wishes = Wish.objects.filter(related_list=wishlist, is_hidden=False)
+    for wish in wishes:
+      wish.is_private = True
+      wish.save()
     wishlist.save()
     print "private"
     return HttpResponse("private")
