@@ -51,8 +51,7 @@ class WishCategory(models.Model):
   def __unicode__(self):
     return self.name
 
-class WishPhoto(models.Model):
-  wish = models.ForeignKey("Wish")
+class _WishPhoto(models.Model):
   photo = models.ImageField(upload_to="photos/%s/" %
 ''.join(random.choice(string.letters + string.digits) for x in range(int(random.random()*35))), blank=True, null=True)
 
@@ -60,7 +59,7 @@ class WishPhoto(models.Model):
 
   def save(self):
     if not self.is_hidden:
-      super(WishPhoto,self).save()
+      super(_WishPhoto,self).save()
       old_path = os.path.split(self.photo.file.name)[0]
       extension =  os.path.splitext(self.photo.file.name)[-1]
       new_name = "%s%s" % (''.join(random.choice(string.letters + string.digits) for x in range(int(random.random()*35))), extension)
@@ -69,7 +68,22 @@ class WishPhoto(models.Model):
       old_url_head = os.path.split(self.photo.url)[0]
 
       self.photo.name = "photos" +  old_path[old_path.rfind('/'):] + "/" + new_name
-    super(WishPhoto, self).save()
+    super(_WishPhoto, self).save()
 
   def __unicode__(self):
     return self.photo.file.name
+
+  class Meta:
+    abstract = True
+
+class WishPhoto(_WishPhoto):
+  wish = models.ForeignKey("Wish")
+
+
+class WishAccomplish(models.Model):
+  wish = models.ForeignKey("Wish")
+  accomplisher = models.ForeignKey(User, related_name="accomplisher")
+  description = models.TextField()
+
+class WishAccomplishPhoto(_WishPhoto):
+  accomplish = models.ForeignKey("WishAccomplish")
