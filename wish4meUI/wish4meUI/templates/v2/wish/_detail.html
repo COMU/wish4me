@@ -1,55 +1,59 @@
-    <div class="row" style="">
-      <div class="pull-right label span1 offset9"><a href="#">{{wish.related_list.title }}</a></div>
+<div class="row well">
+  <div class="row" style="">
+    <div class="pull-right label span1 offset9"><a href="#">{{wish.related_list.title }}</a></div>
+  </div>
+  <div class="row">
+    <div class="span5"><h3><a href="{% url show-wish wish.id %}">{{wish.brand.title }} - {{ wish.name.title }}</a></h3></div>
+    <div class="span4">
+      <span class="pull-right">
+        <i>created by <a href=#>{{wish.related_list.owner}}</a></i><i> to <a href=#>{{ wish.wish_for }}</a></i>
+      </span>
     </div>
-    <div class="row">
-      <div class="span5"><h3><a href="{% url show-wish wish.id %}">{{wish.brand.title }} - {{ wish.name.title }}</a></h3></div>
-      <div class="span4">
-        <span class="pull-right">
-          <i>created by <a href=#>{{wish.related_list.owner}}</a></i><i> to <a href=#>{{ wish.wish_for }}</a></i>
-        </span>
-      </div>
-    </div>
+  </div>
 
-    <div class="row">
-      <div class="span3">
-        <ul class="thumbnails" id="gallery" data-toggle="modal-gallery" data-target="#modal-gallery">
+  <div class="row">
+    <div class="span3">
+      <ul class="thumbnails" id="gallery" data-toggle="modal-gallery" data-target="#modal-gallery">
 
-          {% if not wish.getPhotos %}
-            <li class="span3">
-              <div class="thumbnail" title="No images defined">
-                <img src="/site_media/images/no-image.gif" alt="#{{ forloop.counter }} {{ wish.description }}"></img>
-              </div>
-            </li>
-          {% endif %}
+        {% if not wish.getPhotos %}
+          <li class="span3">
+            <div class="thumbnail" title="No images defined">
+              <img src="/site_media/images/no-image.gif" alt="#{{ forloop.counter }} {{ wish.description }}"></img>
+            </div>
+          </li>
+        {% endif %}
 
-          {% for photo in wish.getPhotos %}
-            <li class="span{% if forloop.first %}3{% else %}1{% endif %}">
+        {% for photo in wish.getPhotos %}
+          <li class="span{% if forloop.first %}3{% else %}1{% endif %}">
             <a href="{{ photo.photo.url }}" class="thumbnail" rel="gallery" title="{{ forloop.counter}} {{ wish.description }}">
               <img src="{{ photo.photo.url }}" alt="#{{ forloop.counter}} {{ wish.description }}" /></img>
-              </a>
-            </li>
-          {% endfor %}
-        </ul>
-      </div>
-      <div class="span6"><p>{{ wish.description }}</p></div>
-      <div class="span6"><p>Display the location with a map here</p></div>
+            </a>
+          </li>
+        {% endfor %}
+      </ul>
     </div>
+    <div class="span6"><p>{{ wish.description }}</p></div>
+    <div class="span6"><p>Display the location with a map here</p></div>
+  </div>
 
-    <div class="span4 offset8">
-      {% if not wish.is_accomplished %}
-        <a href="{% url wish_accomplish_wish wish.id %}" class="btn btn-success" type="button"><i class="icon-ok"></i>Accomplish</a>
-      {% else %}
-        Accomplished
-      {% endif %}
+  <div class="span4 offset8">
+    {% if not wish.is_accomplished %}
+      <a href="{% url wish_accomplish_wish wish.id %}" class="btn btn-success" type="button"><i class="icon-ok"></i>Accomplish</a>
+    {% else %}
+      <span class="label label-success">Accomplished</span>
+    {% endif %}
+  </div>
+  {% load comments %}
+  <div class="row">
+    <div class="span3">
+      {% get_comment_count for wish as comment_count %}
+      <p><a href="{{ BASE_URL }}/wish/{{ wish.id }}/show#comment">{{ comment_count }} comments have been posted.</a></p>
     </div>
-{% load comments %}
-    <div class="row">
-      <div class="span3">
-                  {% get_comment_count for wish as comment_count %}
-                  <p><a href="{{ BASE_URL }}/wish/{{ wish.id }}/show#comment">{{ comment_count }} comments have been posted.</a></p>
-      </div>
-    </div>
+  </div>
+</div>
 
-{% if user == wish.related_list.owner %}
-this wish is yours.
+{% if user == wish.related_list.owner and not wish.is_accomplished %}
+  {% for accomplish in wish.accomplishes %}
+    {% include "wish/_accomplish.html" %}
+  {% endfor %}
 {% endif %}

@@ -10,7 +10,6 @@ urlpatterns = patterns('',
     url(r'^add$', add, name='add-wish'),
     url(r'^(?P<wish_id>\d+)/show$', show, name='show-wish'),
     url(r'^(?P<wish_id>\d+)/edit$', edit, name='edit-wish'),
-    url(r'^(?P<wish_id>\d+)/delete$', delete, name='delete-wish'),
     url(r'^(?P<wish_id>\d+)/change-status$', changeStatus, name='change-wish-status'),
     url(r'^wish/list/(?P<wishlist_id>\d+)$', view=list, name='wish-list'),
     #TODO(orc.avs) Remove below
@@ -18,6 +17,8 @@ urlpatterns = patterns('',
     url(r'^wish/show/(?P<wish_id>\d+)$', view=show, name="wish_show_wish_alone"),
     url(r'^accomplish/(?P<wish_id>\d+)$', view=accomplish, name="wish_accomplish_wish"),
     url(r'^remove/(?P<wish_id>\d+)$', view=remove, name="wish_remove_wish"),
+    url(r'^respond/(?P<accomplish_id>\d+)/(?P<response>.*)$', view=respondAccomplish, name="wish_respond_accomplish"),
+#url(r'^order/(?P<order>.*)/filter/(?P<filter_by>.*)/(?P<filter>.*)/(?P<page_number>\d+)/$', 'main',name='main_page'),
 )
 
 #TODO(orc.avs): Remove below

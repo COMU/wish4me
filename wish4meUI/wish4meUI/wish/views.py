@@ -12,13 +12,14 @@ from django.contrib.auth.models import User
 from datetime import datetime
 
 from wish4meUI.wish.forms import WishForm, WishCategoryForm, WishPhotoForm, AccomplishForm
-from wish4meUI.wish.models import Wish, WishCategory, WishPhoto
+from wish4meUI.wish.models import Wish, WishCategory, WishPhoto, WishAccomplish
 from wish4meUI.friend.models import Following
 from wish4meUI.wishlist.models import Wishlist
-
+from wish4meUI.wish.utils import addAccomplishesToWishes
 
 def myActivity(request):
   wishes = Wish.objects.filter(related_list__owner=request.user, is_hidden=False).order_by("-request_date")
+  addAccomplishesToWishes(wishes)
   context = {'wishes': wishes,
              'page_title': "My wish activity"}
   return render_to_response('wish/activity.html', context, context_instance=RequestContext(request))
@@ -33,6 +34,7 @@ def friendActivity(request):
   wishes_from_following = Wish.objects.filter(related_list__owner__in = following_list, is_hidden = False, is_private = False)
   wishes = wishes_from_friends | wishes_from_following
   wishes = wishes.order_by("-request_date")[:5]
+  addAccomplishesToWishes(wishes)
   #wishes = Wish.objects.filter(related_list__owner__in = following_list, is_hidden = False).order_by("-request_date")[:5]
   context = {'wishes': wishes,
              'page_title': 'Friend activity'}
@@ -111,24 +113,13 @@ def remove(request, wish_id):
 
   return HttpResponseRedirect(reverse('wishlist-home'))
 
-
-def delete(request, wish_id):
-  wish = get_object_or_404(Wish, pk=wish_id)
-  if wish.accomplish_date is None:
-    wish.accomplish_date = datetime.now()
-  else:
-    wish.accomplish_date = None
-  wish.save()
-
-  return HttpResponseRedirect(reverse('wish-list', args=[wish.related_list.id]))
-
-
 def changeStatus(request, wish_id):
   pass
 
 
 def listAllWishes(request):
   wish_list = Wish.objects.filter(related_list__owner=request.user, is_hidden=False)
+  addAccomplishesToWishes(wish_list)
   return render_to_response('wish/list_wishes.html',
                             {'wish_list': wish_list, 'wishlist_id': 1,
                              'page_title': 'List all wishes'},
@@ -136,6 +127,7 @@ def listAllWishes(request):
 
 def list(request, wishlist_id=0):
   wishes = Wish.objects.filter(related_list__owner=request.user, related_list__id=wishlist_id, is_hidden=False).order_by("-request_date")
+  addAccomplishesToWishes(wishes)
   wishlist = Wishlist.objects.get(pk = wishlist_id)
   title = "Wishes in \"" + wishlist.title + "\" list"
   return render_to_response('wish/activity.html', {'wishes': wishes, 'page_title': title}, context_instance=RequestContext(request))
@@ -156,6 +148,7 @@ def listWishCategory(request):
 
 def showWishAlone(request, wish_id):
   wish = get_object_or_404(Wish, is_hidden = False,  pk = wish_id)
+  addAccomplishesToWishes(wish)
   photos = WishPhoto.objects.filter(is_hidden = False, wish__id = wish_id)
 
   return render_to_response('wish/show_wish_alone.html',
@@ -183,12 +176,13 @@ def accomplish(request, wish_id):
                             context_instance=RequestContext(request))
 
 def respondAccomplish(request, accomplish_id, response):
-  accomplish = get_object_or_404(Accomplish,  pk = accomplish_id)
+  accomplish = get_object_or_404(WishAccomplish,  pk = accomplish_id)
   if response == "accept":
     accomplish.status = 2
     accomplish.wish.is_accomplished = True
+    accomplish.wish.accomplish_date = datetime.now()
     accomplish.wish.save()
   if response == "decline":
     accomplish.status = 3
   accomplish.save()
-  return HttpResponseRedirect(reverse('show-wish', args=[wish_id]))
+  return HttpResponseRedirect(reverse('show-wish', args=[accomplish.wish.id]))

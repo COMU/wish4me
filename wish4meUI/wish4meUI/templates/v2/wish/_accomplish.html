@@ -1,0 +1,25 @@
+<div class="row">
+  <div class="span5 offset2">
+    <div class="row well" style="border-top-width: 0px; background-color:#DDFFDD">
+      <div class="row">
+        <div class="span5">
+          <span class="pull-right">
+            <i>by <a href=#>{{ accomplish.accomplisher }}</a></i>
+          </span>
+        </div>
+      </div>
+      <div class="row">
+        <div class="span5">
+          <p>{{ accomplish.description }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="span1">
+    <a href="{% url wish_respond_accomplish accomplish.id 'accept' %}" class="btn btn-success" type="button" 
+       style="padding-left: 5px; padding-right: 7px; margin-top: 10px; margin-bottom: 3px;"><i class="icon-ok"></i>Accept</a>
+    <br/>
+    <a href="{% url wish_respond_accomplish accomplish.id 'decline' %}" class="btn btn-danger" type="button"
+       style="padding-left: 5px; padding-right: 5px;"><i class="icon-remove"></i>Decline</a>
+  </div>
+</div>
