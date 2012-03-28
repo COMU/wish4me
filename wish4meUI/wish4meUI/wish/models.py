@@ -20,6 +20,7 @@ class Wish(models.Model):
   name = models.CharField(max_length=100)
 
   request_date = models.DateTimeField(auto_now=True, auto_now_add=True)
+  is_accomplished = models.BooleanField(default=False)
   accomplish_date = models.DateTimeField(blank=True, null=True)
 
   #location =

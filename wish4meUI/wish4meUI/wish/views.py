@@ -162,7 +162,7 @@ def showWishAlone(request, wish_id):
                             {'wish': wish, 'photos': photos, 'page_title': 'Show wish'},
                             context_instance=RequestContext(request))
 
-def Accomplish(request, wish_id):
+def accomplish(request, wish_id):
   wish = get_object_or_404(Wish, is_hidden = False,  pk = wish_id)
   if request.POST:
     accomplishForm = AccomplishForm(request.POST)
@@ -181,3 +181,14 @@ def Accomplish(request, wish_id):
     return render_to_response('wish/accomplish.html',
                             {'form': accomplishForm,'wish' : wish, 'page_title': 'Accomplish wish'},
                             context_instance=RequestContext(request))
+
+def respondAccomplish(request, accomplish_id, response):
+  accomplish = get_object_or_404(Accomplish,  pk = accomplish_id)
+  if response == "accept":
+    accomplish.status = 2
+    accomplish.wish.is_accomplished = True
+    accomplish.wish.save()
+  if response == "decline":
+    accomplish.status = 3
+  accomplish.save()
+  return HttpResponseRedirect(reverse('show-wish', args=[wish_id]))

@@ -36,12 +36,20 @@
     </div>
 
     <div class="span4 offset8">
-      <a href="{% url wish_accomplish_wish wish.id %}" class="btn btn-success" type="button"><i class="icon-ok"></i>Accomplish</a>
+      {% if not wish.is_accomplished %}
+        <a href="{% url wish_accomplish_wish wish.id %}" class="btn btn-success" type="button"><i class="icon-ok"></i>Accomplish</a>
+      {% else %}
+        Accomplished
+      {% endif %}
     </div>
 {% load comments %}
     <div class="row">
       <div class="span3">
                   {% get_comment_count for wish as comment_count %}
-                  <p><a href="{{ BASE_URL }}/wish/{{ wish.id }}/show#comment">{{ comment_count }} comments have been posted.</p>
+                  <p><a href="{{ BASE_URL }}/wish/{{ wish.id }}/show#comment">{{ comment_count }} comments have been posted.</a></p>
       </div>
     </div>
+
+{% if user == wish.related_list.owner %}
+this wish is yours.
+{% endif %}

@@ -23,7 +23,7 @@
       <td>{{ wish.category }}</td>
       <td>{{ wish.request_date }}</td>
       <td>{{ wish.accomplish_date }}</td>
-      <td><a href="{% url wish_accomplish_wish wish.id %}"><i class="icon-ok"></i></a></td>
+      <td>{% if not wish.is_accomplished %}<a href="{% url wish_accomplish_wish wish.id %}"><i class="icon-ok"></i></a>{% endif %}</td>
       <td><a href="{% url wish_edit_wish wish.id %}">X</a></td>
       <td><a href="{% url wish_remove_wish wish.id %}">X</a></td>
 
