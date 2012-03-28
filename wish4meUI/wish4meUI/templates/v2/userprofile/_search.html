@@ -24,7 +24,7 @@
   </td>
   <td class="span2">
     <blockquote>
-      {% if user.is_authenticated %}
+      {% if resulting_user.user.is_authenticated %}
         {% if resulting_user.is_following %}
         <!-- you are following this user -->
         {% else %}
