@@ -1,0 +1,16 @@
+{% extends "base/layout2.html" %}
+{% block right %}
+  <div class="row" style='height:50px'>
+    <i>* fields are required. </i>
+  </div>
+  <form class="form-vertical" action="{% url wish_accomplish_wish wish.id %}" enctype="multipart/form-data" method="POST">
+  <div class="container">
+    <div class="span4">
+      {% csrf_token %}
+      {% include "_form.html" %}
+    </div>
+  </div>
+  <input class="btn btn-primary" type="submit" value="Submit" />
+  </form>
+{% include "wish/_detail.html" %}
+{% endblock %}

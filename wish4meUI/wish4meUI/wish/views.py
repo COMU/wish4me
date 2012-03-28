@@ -11,7 +11,7 @@ from django.contrib.auth.models import User
 
 from datetime import datetime
 
-from wish4meUI.wish.forms import WishForm, WishCategoryForm, WishPhotoForm
+from wish4meUI.wish.forms import WishForm, WishCategoryForm, WishPhotoForm, AccomplishForm
 from wish4meUI.wish.models import Wish, WishCategory, WishPhoto
 from wish4meUI.friend.models import Following
 from wish4meUI.wishlist.models import Wishlist
@@ -160,4 +160,24 @@ def showWishAlone(request, wish_id):
 
   return render_to_response('wish/show_wish_alone.html',
                             {'wish': wish, 'photos': photos, 'page_title': 'Show wish'},
+                            context_instance=RequestContext(request))
+
+def Accomplish(request, wish_id):
+  wish = get_object_or_404(Wish, is_hidden = False,  pk = wish_id)
+  if request.POST:
+    accomplishForm = AccomplishForm(request.POST)
+    if accomplishForm.is_valid():
+      accomplish = accomplishForm.save(commit=False)
+      accomplish.accomplisher = request.user
+      accomplish.wish = wish
+      print accomplish
+      accomplish.save()
+      print "saved"
+      return HttpResponseRedirect(reverse('show-wish', args=[wish_id]))
+    else:
+      return HttpResponse('Accomplish Form is not valid')
+  else:
+    accomplishForm = AccomplishForm()
+    return render_to_response('wish/accomplish.html',
+                            {'form': accomplishForm,'wish' : wish, 'page_title': 'Accomplish wish'},
                             context_instance=RequestContext(request))

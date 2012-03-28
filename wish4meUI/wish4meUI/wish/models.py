@@ -79,11 +79,19 @@ class _WishPhoto(models.Model):
 class WishPhoto(_WishPhoto):
   wish = models.ForeignKey("Wish")
 
+ACCOMPLISH_STATUS = (
+    ("1", "Sent"),
+    ("2", "Accepted"),
+    ("3", "Declined")
+)
+
 
 class WishAccomplish(models.Model):
   wish = models.ForeignKey("Wish")
   accomplisher = models.ForeignKey(User, related_name="accomplisher")
   description = models.TextField()
+  status = models.CharField(max_length=1, choices=ACCOMPLISH_STATUS, default="1")
+  response = models.TextField(blank=True, null=True)
 
 class WishAccomplishPhoto(_WishPhoto):
   accomplish = models.ForeignKey("WishAccomplish")

@@ -34,7 +34,7 @@
     <div class="span5">
       <div class="row">
         <div class="span3">
-          <div class="row well" style="border-width: 5px 1px 0px 5px; border-radius: 40px 10px 0px 0px; margin-bottom: 0px;">
+          <div class="row well" style="border-width: 5px 1px 0px 5px; border-radius: 40px 10px 0px 0px; margin-bottom: 0px; height: 40px;">
             <div class="span3">
               <h2>
                 <a href="{% url wish-list wishlist.id %}">{{ wishlist.title }}</a>
@@ -65,7 +65,6 @@
         </div>
         <div class="span2">
           <div class="row well" style="padding-top: 1px; padding-bottom: 1px; margin-bottom: 2px; padding-left: 0px; border-left-width: 0px; border-bottom-width: 3px; border-right-width: 3px; border-radius: 0px 0px 10px 0px;">
-            <div class="span2">
                 <a data-toggle="modal" href="#myModal" onClick="$('#removeWishlistForm').attr('action', '{% url wishlist-remove wishlist.id %}');
                                                                 {% if wishlist.wish_count < 1 %}
                                                                   $('#removeHelp').attr('hidden', 'true');
@@ -73,9 +72,7 @@
                                                                   $('#removeHelp').removeAttr('hidden');
                                                                 {% endif %}
                                                                 $('#removeSelection-{{ wishlist.id}}').attr('selected', 'selected');
-              ">{% if not is_last_wishes %}Remove</a>
-              {% endif %}
-            </div>
+              ">{% if not is_last_wishes %}Remove{% endif %}</a>
           </div>
         </div>
       </div>
