@@ -8,5 +8,7 @@ urlpatterns = patterns('',
   url(r'^(?P<wishlist_id>\d+)/show$', show, name='wishlist-show'),
   url(r'^(?P<wishlist_id>\d+)/rename$', rename, name='wishlist-rename'),
   url(r'^(?P<wishlist_id>\d+)/remove$', remove, name='wishlist-remove'),
+  url(r'^(?P<wishlist_id>\d+)/setPrivacy$', setPrivacy, name='wishlist-setPrivacy'),
+  url(r'^(?P<wishlist_id>\d+)/getPrivacy$', getPrivacy, name='wishlist-getPrivacy'),
 )
 

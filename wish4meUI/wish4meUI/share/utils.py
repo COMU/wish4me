@@ -5,9 +5,10 @@ from django.http import HttpResponseRedirect
 from twitter_app.utils import *
 from facebook.models import FacebookProfile
 from wish4meUI.wish.models import Wish
+from django.conf import settings
 
 def facebook_share(request, id):
-    thing = 'http://127.0.0.1:8000/share/show/{}'.format(id)
+    thing = BASE_URL + '/share/show/{}'.format(id)
     user = request.user
     profile = user.get_profile()
     fb_id = profile.facebook_profile_id

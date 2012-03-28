@@ -3,9 +3,10 @@
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template.context import RequestContext
 from django.core.urlresolvers import reverse
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.forms.formsets import formset_factory
 from django.contrib import messages
+from django.views.decorators.csrf import csrf_exempt
 
 from wish4meUI.wishlist.forms import Wishlist, WishlistForm
 from wish4meUI.wish.models import Wish
@@ -92,3 +93,29 @@ def rename(request, wishlist_id):
     wishlist.save()
     return HttpResponseRedirect(reverse('wishlist-home'))
   return HttpResponse("wish.renameWisihlist: the request does not contain POST")
+
+@csrf_exempt
+def setPrivacy(request, wishlist_id):
+  wishlist = Wishlist.objects.get(pk = wishlist_id)
+  if wishlist.is_private:
+    wishlist.is_private = False
+    wishlist.save()
+    print "public"
+    return HttpResponse("public")
+  else:
+    wishlist.is_private = True
+    wishes = Wish.objects.filter(related_list=wishlist, is_hidden=False)
+    for wish in wishes:
+      wish.is_private = True
+      wish.save()
+    wishlist.save()
+    print "private"
+    return HttpResponse("private")
+ 
+@csrf_exempt
+def getPrivacy(request, wishlist_id):
+  wishlist = Wishlist.objects.get(pk = wishlist_id)
+  if wishlist.is_private:
+    return HttpResponse("private")
+  else:
+    return HttpResponse("public")
