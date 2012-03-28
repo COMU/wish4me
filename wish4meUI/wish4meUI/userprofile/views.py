@@ -14,7 +14,7 @@ from django.core.files.base import ContentFile
 from itertools import chain
 
 from userprofile.forms import UserSearchForm, UserInformationForm, UserPrivacyForm
-from wish4meUI.friend.utils import getFollowingWishes
+from wish4meUI.friend.utils import *
 from wish4meUI.wish.models import Wish
 from friend.models import Following, FriendshipInvitation
 from django.conf import settings
@@ -108,6 +108,7 @@ def userSearch(request):
               invite = FriendshipInvitation.objects.get(from_user=user, to_user=request.user)
               if invite.status == "1":
                 profile.invite = invite.id
+            profile.common_count = getCommonFriendCount(request, user)
             users_list.append(profile)
           except ObjectDoesNotExist:
             pass                                  #TODO better handling for admin needed, but this works for now.
