@@ -1,25 +1,31 @@
 {% extends "base/layout2.html" %}
 
-{% block right %}
+	{% block right %}
 
-<div class="row">
+	<div class="row">
 
-<div class="span8">
-<h1>Import Your Friends</h1>
-<br>
-<h2>Here comes your twitter friends:</h2>
-<ul>
-{% for json in imported_friends %}
-<li>
-<dt>Id</dt>
-<dd>{{ json|default:"Not specified" }}</dd>
-
-</li>
-{% endfor %}
-</ul>
-</div>
-<div class="span2">
-<div class="row">
+	  <div class="span8">
+	    <h1>Import Your Friends</h1>
+	      <br>
+	       <h2>Here comes your friends:</h2>
+              <table>
+               {% for data in friends_list %}
+               <tr>
+                 <td>
+                   <p>{{ data.user }}</p>
+                 </td>
+                  <td>
+                   {% if data.invite_id != "-1" %}
+                   {% endif %}
+                 </td>
+               </tr>
+               {% endfor %}
+              </table>
+          </div>
+    
+	</div>
+  <div class="span4">
+    <div class="row">
           <a href="javascript: openwindow('{% url facebook_login %}')">
             <img src="/site_media/images/social-logos/facebook.png"/>
           </a>
@@ -71,9 +77,8 @@
           {% endif %}
         </div>
       </div>
-</div>
-
-</div>
+    </div>
+  </div>
 
 
 {% endblock %}
