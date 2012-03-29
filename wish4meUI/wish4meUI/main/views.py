@@ -33,12 +33,11 @@ def welcome(request):
   context = {
       'page_title': 'Welcome to %s' % settings.PROJECT_NAME
   }
-  if request.user.is_authenticated():
-  	return render_to_response("home/home.html", context,
-        	                    context_instance=RequestContext(request))
-  else:
+  if not request.user.is_authenticated():
     recent_wishes = Wish.objects.all().order_by('request_date')
     context.update({"recent_wishes": recent_wishes})
     return render_to_response("home/welcome.html",
                             context_instance=RequestContext(request, context))
+  else:
+    return HttpResponseRedirect(reverse('friend-activity'))
 
