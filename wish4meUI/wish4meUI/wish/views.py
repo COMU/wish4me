@@ -8,6 +8,7 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.forms.formsets import formset_factory
 from django.contrib import messages
 from django.contrib.auth.models import User
+from django.core.paginator import Paginator, EmptyPage, InvalidPage
 
 from datetime import datetime
 
@@ -36,8 +37,21 @@ def friendActivity(request):
   wishes = wishes.order_by("-request_date")[:5]
   addAccomplishesToWishes(wishes)
   #wishes = Wish.objects.filter(related_list__owner__in = following_list, is_hidden = False).order_by("-request_date")[:5]
-  context = {'wishes': wishes,
-             'page_title': 'Friend activity'}
+
+  paginator = Paginator(wishes, 25)
+  try:
+    page = int(request.GET.get('page', '1'))
+  except ValueError:
+    page = 1
+
+  try:
+    wishes = paginator.page(page)
+  except (EmptyPage, InvalidPage):
+    wishes = paginator.page(paginator.num_pages)
+
+  context = {'wishes': wishes.object_list,
+             'page_title': 'Friend activity',
+             'paginator_objects': wishes}
   return render_to_response("wish/activity.html", context, context_instance=RequestContext(request))
 
 
