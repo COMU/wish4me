@@ -6,25 +6,20 @@
 
 	  <div class="span8">
 	    <h1>Import Your Friends</h1>
+             <h4>Here people you know</h4>
 	      <br>
-	       <h2>Here comes your friends:</h2>
-              <table>
-               {% for data in friends_list %}
-               <tr>
-                 <td>
-                   <p>{{ data.user }}</p>
-                 </td>
-                  <td>
-                   {% if data.invite_id != "-1" %}
-                   {% endif %}
-                 </td>
-               </tr>
-               {% endfor %}
-              </table>
+          <table class="table">
+            <tbody>
+              {% for resulting_user in friends_list %}
+                {% include "userprofile/_search.html" %}
+              {% endfor %}
+            </tbody>
+          </table>
+        
           </div>
     
-	</div>
-  <div class="span4">
+          <table class="table">
+  <div class="span2">
     <div class="row">
           <a href="javascript: openwindow('{% url facebook_login %}')">
             <img src="/site_media/images/social-logos/facebook.png"/>
@@ -80,6 +75,7 @@
     </div>
   </div>
 
+          </table>
 
 {% endblock %}
 

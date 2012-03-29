@@ -20,14 +20,14 @@ def contact_importer_home(request, importing_profile=0):
       print profile.facebook_profile and True or False
       if importing_profile == 'facebook':
         if profile.facebook_profile and True or False==True:
-          friends_list = ["601405488","313131313"]# friends_list = facebook_contact_import(request)
+          friends_list = ["100002619676018","111"]# friends_list = facebook_contact_import(request)
           for i in friends_list:
             try:
               fb_id = FacebookProfile.objects.get(facebook_id=i)
               user_id = fb_id.id
-              user_data = UserProfile.objects.filter(facebook_profile=user_id)
-              found_friends.append(user_data)
-              print "oldu"
+              user_data = UserProfile.objects.get(facebook_profile=user_id)
+              profile = user_data.user.get_profile()
+              found_friends.append(profile)
             except ObjectDoesNotExist:
               pass    
       elif importing_profile == 'foursquare':
@@ -63,7 +63,7 @@ def contact_importer_home(request, importing_profile=0):
       'google_profile_activated': profile.google_profile and True or False,
       'twitter_profile_activated': profile.twitter_profile and True or False,
       'foursq_profile_activated': profile.foursq_profile and True or False,
-      'friends_list' : found_friends_profile,
+      'friends_list' : found_friends,
       
       }
       
