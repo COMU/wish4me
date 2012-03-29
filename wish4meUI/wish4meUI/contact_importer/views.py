@@ -20,7 +20,7 @@ def contact_importer_home(request, importing_profile=0):
       print profile.facebook_profile and True or False
       if importing_profile == 'facebook':
         if profile.facebook_profile and True or False==True:
-          friends_list = ["100002619676018","111"]# friends_list = facebook_contact_import(request)
+          friends_list = facebook_contact_import(request)
           for i in friends_list:
             try:
               fb_id = FacebookProfile.objects.get(facebook_id=i)
