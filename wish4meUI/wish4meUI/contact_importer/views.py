@@ -23,8 +23,8 @@ def contact_importer_home(request, importing_profile=0):
           friends_list = facebook_contact_import(request)
           for i in friends_list:
             try:
-              fb_id = FacebookProfile.objects.get(facebook_id=i)
-              user_id = fb_id.id
+              facebook_id = FacebookProfile.objects.get(facebook_id=i)
+              user_id = facebook_id.id
               user_data = UserProfile.objects.get(facebook_profile=user_id)
               profile = user_data.user.get_profile()
               found_friends.append(profile)
@@ -35,9 +35,11 @@ def contact_importer_home(request, importing_profile=0):
           friends_list = foursquare_contact_import(request)
           for i in friends_list:
             try:
-              fb_id = FoursqProfile.objects.get(foursq_id=i)
+              fousquare_id = FoursqProfile.objects.get(foursq_id=i)
               user_id = query.id
-              found_friends.append(user_id)
+              user_data = UserProfile.objects.get(foursq_profile=user_id)
+              profile = user_data.user.get_profile()
+              found_friends.append(profile)
             except ObjectDoesNotExist:
               pass    
       elif importing_profile == 'twitter':
@@ -45,9 +47,11 @@ def contact_importer_home(request, importing_profile=0):
           friends_list = twitter_contact_import(request)
           for i in friends_list:
             try:
-              fb_id = TwitterProfile.objects.get(twitter_id=i)
-              user_id = query.id
-              found_friends.append(user_id)
+              twitter_id = TwitterProfile.objects.get(twitter_id=i)
+              user_id = twitter_id.id
+              user_data = UserProfile.objects.get(twitter_profile=user_id)
+              profile = user_data.user.get_profile()
+              found_friends.append(profile)
             except ObjectDoesNotExist:
               pass    
       elif importing_profile == 'google':
