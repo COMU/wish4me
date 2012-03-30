@@ -34,7 +34,6 @@ def facebook_contact_import(request):
       friends_list.append(i)
     return friends_list
 
-    return response
 
 def twitter_contact_import(request):
     friends_list = []
@@ -57,6 +56,7 @@ def twitter_contact_import(request):
           if friends == '[]': break
     json = simplejson.loads(friends)
     for i in json.get('ids','0'):
+      print i
       friends_list.append(i)
     return friends_list
     
@@ -65,6 +65,7 @@ def google_contact_import(request):
     
     
 def foursquare_contact_import(request):
+    friends_list=[]
     user = request.user
     profile = user.get_profile()
     foursq_id = profile.foursq_profile_id
@@ -75,7 +76,14 @@ def foursquare_contact_import(request):
     url_values = urllib.urlencode(values)
     url = 'https://api.foursquare.com/v2/users/self/friends'
     full_url = url + '?' + url_values
-    response = urllib2.urlopen(full_url)
-    response = response.read()
-    return response
+    friends = urllib2.urlopen(full_url)
+    friends = friends.read()
+    json = simplejson.loads(friends)
+    json=json.get('response','0')
+    json=json.get('friends','0')
+    json=json.get('items','0')
+    for i in json:
+      i=i.get('id','0')
+      friends_list.append(i)
+    return friends_list
     

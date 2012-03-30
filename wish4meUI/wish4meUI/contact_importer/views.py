@@ -35,8 +35,8 @@ def contact_importer_home(request, importing_profile=0):
           friends_list = foursquare_contact_import(request)
           for i in friends_list:
             try:
-              fousquare_id = FoursqProfile.objects.get(foursq_id=i)
-              user_id = query.id
+              foursquare_id = FoursqProfile.objects.get(foursq_id=i)
+              user_id = foursquare_id.id
               user_data = UserProfile.objects.get(foursq_profile=user_id)
               profile = user_data.user.get_profile()
               found_friends.append(profile)
