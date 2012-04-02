@@ -44,13 +44,16 @@ class FacebookBackend:
                                              access_token=access_token)
           facebook_profile.save()
         backend = facebook_profile.getLoginBackend(request)
-        
         try:
-          fb_username = fb_profile['username'] 
+          fb_username=fb_profile['username']
+        except:
+          fb_username=fb_profile['email']
+
+        try:
           fb_mail = fb_profile['email']
           user = backend.login(
             facebook_profile, related_name='facebook_profile',
-            username=fb_profile['username'], email=fb_profile['email'])
+            username=fb_username, email=fb_profile['email'])
         except:
           import sys
           print "error ", sys.exc_info()[0]
