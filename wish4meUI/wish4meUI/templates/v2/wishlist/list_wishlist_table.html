@@ -59,12 +59,7 @@
                     <i class="icon-ban-circle"></i>
                   </button>
                 </span>
-              </form>
-            </div>
-          </div>
-        </div>
-        <div class="span2">
-          <div class="row well" style="padding-top: 1px; padding-bottom: 1px; margin-bottom: 2px; padding-left: 0px; border-left-width: 0px; border-bottom-width: 3px; border-right-width: 3px; border-radius: 0px 0px 10px 0px;">
+                  
                 <a data-toggle="modal" href="#myModal" onClick="$('#removeWishlistForm').attr('action', '{% url wishlist-remove wishlist.id %}');
                                                                 {% if wishlist.wish_count < 1 %}
                                                                   $('#removeHelp').attr('hidden', 'true');
@@ -72,7 +67,17 @@
                                                                   $('#removeHelp').removeAttr('hidden');
                                                                 {% endif %}
                                                                 $('#removeSelection-{{ wishlist.id}}').attr('selected', 'selected');
-              ">{% if not is_last_wishes %}Remove{% endif %}</a>
+              ">{% if not is_last_wishes %}
+                  <button class="btn btn-danger" type="button" style="padding:2px 5px;">
+                     <i class="close">x</i>
+                  </button>
+                {% endif %}</a>
+              </form>
+            </div>
+          </div>
+        </div>
+        <div class="span2">
+          <div class="row well" style="padding-top: 1px; padding-bottom: 1px; margin-bottom: 2px; padding-left: 0px; border-left-width: 0px; border-bottom-width: 3px; border-right-width: 3px; border-radius: 0px 0px 10px 0px;">
           </div>
         </div>
       </div>
