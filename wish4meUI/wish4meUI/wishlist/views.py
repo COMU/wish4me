@@ -14,7 +14,7 @@ from wish4meUI.wish.models import Wish
 def addDefaultWishlist(user):
   wishlist = Wishlist()
   wishlist.owner = user
-  wishlist.title = "My wishes"
+  wishlist.title = "My wishlist"
   wishlist.save()
   return wishlist
 
