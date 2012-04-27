@@ -72,4 +72,4 @@ class AccomplishForm(forms.ModelForm):
   
   class Meta:
     model = WishAccomplish
-    fields = ( 'description',)
+    fields = ( 'comment',)

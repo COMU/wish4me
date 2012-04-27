@@ -90,7 +90,7 @@ ACCOMPLISH_STATUS = (
 class WishAccomplish(models.Model):
   wish = models.ForeignKey("Wish")
   accomplisher = models.ForeignKey(User, related_name="accomplisher")
-  description = models.TextField()
+  comment = models.TextField()
   status = models.CharField(max_length=1, choices=ACCOMPLISH_STATUS, default="1")
   response = models.TextField(blank=True, null=True)
 
