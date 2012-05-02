@@ -23,37 +23,46 @@ def getCommonFriendCount(request, friend_id):
   if len(_this_friendship) != 0:
     this_friendship = _this_friendship[0]
 
-  user_followers = user_follower | user_followed
+  _user_followers = user_follower | user_followed
 
   if len(_this_friendship) != 0:
-    user_followers = user_followers.exclude(pk = this_friendship.id)
+	  _user_followers = _user_followers.exclude(pk = this_friendship.id)
+
+  user_followers = set()
+
+  for i in _user_followers:
+		if i.from_user == request.user:
+		  user_followers.add(i.to_user)
+		else:
+			user_followers.add(i.from_user)
 
   friend_follower = Following.objects.filter(from_user = friend_id, is_hidden = False)
   friend_followed = Following.objects.filter(to_user = friend_id, is_hidden = False)
 
-  friend_followers = friend_follower | friend_followed
+  _friend_followers = friend_follower | friend_followed
 
   if len(_this_friendship) != 0:
-    friend_followers = friend_followers.exclude(pk = this_friendship.id)
+	  _friend_followers = _friend_followers.exclude(pk = this_friendship.id)
+
+  friend_followers = set()
+
+  for i in _friend_followers:
+		if i.from_user == friend_id:
+		  friend_followers.add(i.to_user)
+		else:
+			friend_followers.add(i.from_user)
+
+
 
   common_friends = []
 
-
   for user_follow in user_followers:
-    if user_follow.from_user == request.user:
-      _user = user_follow.to_user
-    else:
-      _user = user_follow.from_user
 
     for friend_follow in friend_followers:
-      if friend_follow.from_user == friend_id:
-        _friend = friend_follow.to_user
-      else:
-        _friend = friend_follow.from_user
-      if user_follow.from_user.get_profile().is_private == True:
-        if user_follow.to_user == request.user and _user == _friend:
+      if user_follow.get_profile().is_private == True:
+        if user_follow == request.user and user_follow == friend_follow:
           common_friends.append(user_follow)
-      if _user == _friend:
+      if user_follow == friend_follow:
         common_friends.append(user_follow)
 
   return len(common_friends)
