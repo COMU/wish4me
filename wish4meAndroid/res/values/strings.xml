@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="hello">Hello World, Wish4meAndroidActivity!</string>
+    <string name="app_name">Wish4meAndroid</string>
+    <string name="press">Press Me!</string>
+
+</resources>
