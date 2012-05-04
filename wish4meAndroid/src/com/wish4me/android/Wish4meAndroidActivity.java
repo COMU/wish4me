@@ -20,6 +20,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -47,6 +48,7 @@ public class Wish4meAndroidActivity extends Activity {
 	
 	Facebook facebook = new Facebook("255768354473895");
 	private SharedPreferences mPrefs;
+	private ProgressDialog progressDialog;
 	
     /** Called when the activity is first created. */
     @Override
@@ -69,7 +71,22 @@ public class Wish4meAndroidActivity extends Activity {
 		    try {
 			    
 			    if(facebookLogin()) {
-				  postFacebookID();
+			    	progressDialog = ProgressDialog.show(Wish4meAndroidActivity.this, "", "Loading...");
+			    	new Thread() {
+			    		public void run() {
+				    		try{
+				    			postFacebookID();
+				    			//sleep(4000);
+				    		} catch (Exception e) {
+				    			Log.e("tag", e.getMessage());
+				    		}
+				    		// dismiss the progress dialog
+				    		progressDialog.dismiss();
+			    		}
+
+		    		}.start();
+
+				  
 			    }
 		    } catch (Exception ex) {
 			    Context context = getApplicationContext();
@@ -127,15 +144,9 @@ public class Wish4meAndroidActivity extends Activity {
 
     	    // Execute HTTP Post Request
     	    HttpResponse response = httpclient.execute(httppost);
-        	Context context = getApplicationContext();
+        	
         	String responseText = responseToString(response);
-		    CharSequence text = "answer returned : "+ response;
 		    Log.i("wish4me-engin", responseText);
-		    int duration = Toast.LENGTH_LONG;
-		    Toast toast = Toast.makeText(context, text, duration);
-		    toast.show();
-		    
-		    
 
     	} catch (ClientProtocolException e) {
         	Context context = getApplicationContext();
