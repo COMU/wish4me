@@ -7,9 +7,16 @@
   </div>
   <div class="row" style="height:10px">
   </div>
+  {% if activity_state %}
+    <div class="span5 offset2">
+    <img src="{{ MEDIA_URL }}{{ activity_state }}">
+    </div>
+  {% else %}
   {% for wish in wishes %}
     {% include "wish/_gallery_snippet.html" %}
     {% include "wish/_detail.html" %}
   {% endfor %}
+  {% endif %}
+
 
 {% endblock %}

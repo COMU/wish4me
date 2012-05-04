@@ -11,6 +11,7 @@ from django.contrib.auth.models import User
 from django.core.paginator import Paginator, EmptyPage, InvalidPage
 
 from datetime import datetime
+from random import randint
 
 from wish4meUI.wish.forms import WishForm, WishCategoryForm, WishPhotoForm, AccomplishForm
 from wish4meUI.wish.models import Wish, WishCategory, WishPhoto, WishAccomplish
@@ -21,8 +22,14 @@ from wish4meUI.wish.utils import addAccomplishesToWishes
 def myActivity(request):
   wishes = Wish.objects.filter(related_list__owner=request.user, is_hidden=False).order_by("-request_date")
   addAccomplishesToWishes(wishes)
+
+  activity_state = None
+
+  if not len(wishes):
+    activity_state = 'images/noWish_%s.jpg' % randint(1,1)
+
   context = {'wishes': wishes,
-             'page_title': "My wish activity"}
+             'page_title': "My wish activity", 'activity_state': activity_state}
   return render_to_response('wish/activity.html', context, context_instance=RequestContext(request))
 
 
@@ -38,6 +45,14 @@ def friendActivity(request):
   addAccomplishesToWishes(wishes)
   #wishes = Wish.objects.filter(related_list__owner__in = following_list, is_hidden = False).order_by("-request_date")[:5]
 
+  activity_state = None
+
+  if not len(friends_list) and not len(following_list):
+    activity_state = 'images/noFriend_%s.jpg' % randint(1,2)
+
+  if not len(wishes_from_following) and not len(wishes_from_friends) and not activity_state:
+    activity_state = 'images/noFriendWish_%s.jpg' % randint(1,1)
+
   paginator = Paginator(wishes, 25)
   try:
     page = int(request.GET.get('page', '1'))
@@ -51,7 +66,7 @@ def friendActivity(request):
 
   context = {'wishes': wishes.object_list,
              'page_title': 'Friend activity',
-             'paginator_objects': wishes}
+             'paginator_objects': wishes, 'activity_state': activity_state}
   return render_to_response("wish/activity.html", context, context_instance=RequestContext(request))
 
 
