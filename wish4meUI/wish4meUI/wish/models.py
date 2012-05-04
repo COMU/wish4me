@@ -24,11 +24,10 @@ class Wish(models.Model):
   accomplish_date = models.DateTimeField(blank=True, null=True)
 
   #location
-  location = models.ForeignKey('WishLocation')
+  location = models.ForeignKey('WishLocation', null=True, blank=True)
 
   is_hidden = models.BooleanField(default = False)
   is_private = models.BooleanField(default = False)
-
 
   def __unicode__(self):
     return '%s %s' % (self.related_list.owner, self.description)
@@ -78,11 +77,13 @@ class WishPhoto(models.Model):
     return self.photo.file.name
 
 class WishLocation(models.Model):
-
-    name = models.CharField(max_length=100)
-    address = models.CharField(max_length=200)
-    latitude = models.FloatField()
+    name = models.CharField(max_length=100, null=True, blank=True)
+    address = models.CharField(max_length=200, null=True, blank=True)
+    latitude = models.FloatField(null=True, blank=True)
     longitude = models.FloatField()
-    city = models.CharField(max_length=100)
-    state = models.CharField(max_length=100)
-    country = CountryField()
+    city = models.CharField(max_length=100, null=True, blank=True)
+    state = models.CharField(max_length=100, null=True, blank=True)
+    country = CountryField(null=True, blank=True)
+
+    def __unicode__(self):
+        return self.name
