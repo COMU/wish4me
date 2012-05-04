@@ -24,6 +24,10 @@ function checkEnter(e){
              //$('#location').typeahead({
              //  source:list
              //});
+            $('#location')
+                .append($("<option></option>")
+                           .attr("value","")
+                                    .text("")); 
              $.each(html, function(key, value) {   
                     $('#location')
                         .append($("<option></option>")
