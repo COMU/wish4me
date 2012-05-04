@@ -9,6 +9,12 @@
         <div class="span4">
           <label class="control-label" for="searchTextField">City name:</label>
           <input id="searchTextField" type="text" class="span3" onkeypress="return checkEnter(event)" name="city">
+
+          <div id="loading"><img src="{{ MEDIA_URL }}images/ajax-loader.gif" /></div>
+
+          <label class="control-label" for="location">Location:</label>
+          <select name="location" id="location">
+          </select>
         </div>
       </div>
       <!-- map&textfield part ends -->
