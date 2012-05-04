@@ -22,8 +22,14 @@ from wish4meUI.wish.utils import addAccomplishesToWishes
 def myActivity(request):
   wishes = Wish.objects.filter(related_list__owner=request.user, is_hidden=False).order_by("-request_date")
   addAccomplishesToWishes(wishes)
+
+  activity_state = None
+
+  if not len(wishes):
+    activity_state = 'images/noWish_%s.jpg' % randint(1,1)
+
   context = {'wishes': wishes,
-             'page_title': "My wish activity"}
+             'page_title': "My wish activity", 'activity_state': activity_state}
   return render_to_response('wish/activity.html', context, context_instance=RequestContext(request))
 
 
