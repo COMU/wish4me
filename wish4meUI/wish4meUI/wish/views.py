@@ -165,8 +165,10 @@ def showWishAlone(request, wish_id):
                             context_instance=RequestContext(request))
 
 def getLocations(request):
+    print "get location is called"
     #location operations
-    location_address = urllib.quote(request.POST.get('city', False))
+    city = request.POST.get('city', False)
+    location_address = urllib.quote(city.encode("utf-8"))
     #sending to the google_maps api to get the latitude and longitude
     google_api_url = "".join(["http://maps.googleapis.com/maps/api/geocode/json?address=",location_address,"&sensor=false"])
     response = urllib2.urlopen(google_api_url)
@@ -177,9 +179,11 @@ def getLocations(request):
     longitude = geometry['lng']
     # get the the environments aroun the location
     oauth_token = settings.LOCATION_SEARCH_OAUTH_TOKEN
+    print "oauth token:", oauth_token
     now = datetime.datetime.now()
     v = now.strftime("%Y%m%d")
     foursquare_api_url = "".join(["https://api.foursquare.com/v2/", "venues/search?ll=", ",".join([str(latitude),str(longitude)]),"&oauth_token=", oauth_token, "&v=", v, "&intent=checkin"])
+    print "foursquare url called:", foursquare_api_url
     response = urllib2.urlopen(foursquare_api_url)
     response = response.read()
     result = json.loads(response)
@@ -197,6 +201,7 @@ def getLocations(request):
         #  u'id',
         #  u'categories']
         name = venue['name']
+        id = venue['id']
         #location = venue['location']
         #example location output
         #{u'address': u'180 Maiden Lane',
@@ -208,7 +213,8 @@ def getLocations(request):
         #  u'lng': -73.99964860547712,
         #  u'postalCode': u'10038',
         #  u'state': u'NY'}
-        response_data.append(name)
+        response_data.append((id,name))
+    print response_data
     return HttpResponse(json.dumps(response_data), mimetype="application/json")
 
 
