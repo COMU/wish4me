@@ -17,6 +17,8 @@ class WishForm(forms.ModelForm):
     self.fields["wish_for_text"].label = "Wish for"
     if not self.fields["wish_for_text"].initial:
       self.fields["wish_for_text"].initial = requested_user.username
+    #self.fields['location'].widget.attrs['id'] = "location"
+    #self.fields['location'].required = False
 
   #End of __init__
 
@@ -25,11 +27,12 @@ class WishForm(forms.ModelForm):
 
   #location_widget = forms.TextInput(attrs={'data-items': 4, 'data-provide': 'typeahead', 'autocomplete': 'off', 'id':'location'})
   #location = forms.CharField(widget=location_widget)
-  location_widget = forms.Select(attrs={'id':'location'})
-  location = forms.ChoiceField(choices=[], widget=location_widget)
+  #location_widget = forms.Select(attrs={'id':'location'})
+  #location = forms.ChoiceField(widget=location_widget)
 
   def clean(self):
     cleaned_data = self.cleaned_data
+    print "cleaned data:", cleaned_data
 
     wish_for_text = cleaned_data.get('wish_for_text')
     related_list= cleaned_data.get('related_list')
@@ -57,7 +60,7 @@ class WishForm(forms.ModelForm):
 
   class Meta:
     model = Wish
-    fields = ('location', 'wish_for_text', 'description', 'category', 'related_list', 'brand', 'name', 'is_private' )
+    fields = ('wish_for_text', 'description', 'category', 'related_list', 'brand', 'name', 'is_private' )
 
     #exclude = ('request_date', 'accomplish_date', 'is_hidden', 'wish_for')
 
