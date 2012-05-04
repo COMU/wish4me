@@ -1,4 +1,4 @@
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.core.urlresolvers import reverse
 from django.views.decorators.csrf import csrf_exempt
 
@@ -10,7 +10,9 @@ def facebook_login(request):
     print "id = " + facebookID
     facebookEmail = request.POST['email']
     print "email = " + facebookEmail
-    return HttpResponse("facebook data came")
+    response =  HttpResponse("facebook data came", content_type="text/plain")
+    print "response is \n", response
+    return response
   else:
     print "facebook login hit"
   return HttpResponseRedirect(reverse('homePage'))

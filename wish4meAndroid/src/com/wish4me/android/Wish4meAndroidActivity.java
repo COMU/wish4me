@@ -1,8 +1,9 @@
 package com.wish4me.android;
 
-import java.io.FileNotFoundException;
+import java.io.BufferedReader;
 import java.io.IOException;
-import java.net.MalformedURLException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,6 +24,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -36,7 +38,6 @@ import com.facebook.android.DialogError;
 import com.facebook.android.Facebook;
 import com.facebook.android.Facebook.DialogListener;
 import com.facebook.android.FacebookError;
-import com.facebook.android.AsyncFacebookRunner.RequestListener;
 
 
 
@@ -66,19 +67,10 @@ public class Wish4meAndroidActivity extends Activity {
 		    long id = 0;
 		    // do something when the button is clicked
 		    try {
-			    name = (EditText)findViewById(R.id.name);
-			    Context context = getApplicationContext();
-			    CharSequence text = "Hello " + name.getText() + "!";
+			    
 			    if(facebookLogin()) {
-			    	postFacebookID();
+				  postFacebookID();
 			    }
-			    
-			    int duration = Toast.LENGTH_LONG;
-			    Toast toast = Toast.makeText(context, text, duration);
-			    toast.show();
-			    
-			    
-			    
 		    } catch (Exception ex) {
 			    Context context = getApplicationContext();
 			    CharSequence text = ex.toString() + "ID = " + id;
@@ -89,6 +81,24 @@ public class Wish4meAndroidActivity extends Activity {
 	    }
     };
     
+    public static String responseToString(HttpResponse response){
+        String result = "";
+        try{
+            InputStream in = response.getEntity().getContent();
+            BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+            StringBuilder str = new StringBuilder();
+            String line = null;
+            while((line = reader.readLine()) != null){
+                str.append(line + "\n");
+            }
+            in.close();
+            result = str.toString();
+        }catch(Exception ex){
+            result = "Error";
+        }
+        return result;
+    }
+    
     private void postFacebookID() {
     	// Create a new HttpClient and Post Header
     	HttpClient httpclient = new DefaultHttpClient();
@@ -96,7 +106,7 @@ public class Wish4meAndroidActivity extends Activity {
 
     	try {
     	    // Add your data
-		    
+
 	    	JSONObject jObject = new JSONObject(facebook.request("me"));    
 	    	String facebookID =jObject.getString("id");
 	    	String facebookEmail =jObject.getString("email");
@@ -106,8 +116,8 @@ public class Wish4meAndroidActivity extends Activity {
 			} catch (JSONException e) {
 				//in case no username, just pass 
 			}
-    
 		    
+
     	    List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
     	    nameValuePairs.add(new BasicNameValuePair("id", facebookID));
     	    nameValuePairs.add(new BasicNameValuePair("email", facebookEmail));
@@ -118,7 +128,9 @@ public class Wish4meAndroidActivity extends Activity {
     	    // Execute HTTP Post Request
     	    HttpResponse response = httpclient.execute(httppost);
         	Context context = getApplicationContext();
-		    CharSequence text = "answer returned : "+ response.getEntity().toString();
+        	String responseText = responseToString(response);
+		    CharSequence text = "answer returned : "+ response;
+		    Log.i("wish4me-engin", responseText);
 		    int duration = Toast.LENGTH_LONG;
 		    Toast toast = Toast.makeText(context, text, duration);
 		    toast.show();

@@ -10,15 +10,11 @@
         android:layout_height="wrap_content" 
         android:text="@string/hello" 
         />
-	<EditText 
-	    android:id="@+id/name" 
-	    android:layout_width="fill_parent" 
-	    android:layout_height="wrap_content" 
-	    />
-	<Button 
-	    android:id="@+id/go" 
-	    android:layout_width="fill_parent" 
-	    android:layout_height="wrap_content" 
-	    android:text="@string/press" 
-	    />
+
+	<Button
+	    android:id="@+id/go"
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    android:text="@string/press" />
+
   </LinearLayout>
