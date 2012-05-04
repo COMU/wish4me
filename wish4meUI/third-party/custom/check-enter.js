@@ -1,3 +1,8 @@
+$("#loading").hide();
+$("#loading").ajaxStart(function(){
+     $(this).show();
+});
+
 function checkEnter(e){
   var check=((e.keyCode || 0) !== 13);
   if (!check) {
@@ -25,6 +30,8 @@ function checkEnter(e){
                                    .attr("value",value[0])
                                             .text(value[1])); 
              });
+          
+          $("#loading").hide();
 
           },
           error: function (XMLHttpRequest, textStatus, errorThrown) {
