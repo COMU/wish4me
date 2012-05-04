@@ -10,6 +10,11 @@ def facebook_login(request):
     print "id = " + facebookID
     facebookEmail = request.POST['email']
     print "email = " + facebookEmail
+    facebookAccessToken = request.POST['accessToken']
+    print "acces token : " + facebookAccessToken
+    if request.POST['username']:
+        facebookUsername = request.POST['username']
+        print "user name = " + facebookUsername
     response =  HttpResponse("facebook data came", content_type="text/plain")
     print "response is \n", response
     return response

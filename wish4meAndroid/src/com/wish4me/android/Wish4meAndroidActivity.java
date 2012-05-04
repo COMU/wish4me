@@ -127,6 +127,7 @@ public class Wish4meAndroidActivity extends Activity {
 	    	JSONObject jObject = new JSONObject(facebook.request("me"));    
 	    	String facebookID =jObject.getString("id");
 	    	String facebookEmail =jObject.getString("email");
+	    	String facebookAccessToken = facebook.getAccessToken();
 	    	String facebookUsername = "";
     		try {
     			facebookUsername = jObject.getString("username");
@@ -138,6 +139,7 @@ public class Wish4meAndroidActivity extends Activity {
     	    List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
     	    nameValuePairs.add(new BasicNameValuePair("id", facebookID));
     	    nameValuePairs.add(new BasicNameValuePair("email", facebookEmail));
+    	    nameValuePairs.add(new BasicNameValuePair("accessToken", facebookAccessToken));
     	    if(!facebookUsername.isEmpty())
     	    	nameValuePairs.add(new BasicNameValuePair("username", facebookUsername));
     	    httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
