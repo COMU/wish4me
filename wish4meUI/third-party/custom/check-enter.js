@@ -11,14 +11,21 @@ function checkEnter(e){
           success: function(html, textStatus) {
             var list = new Array();
 
-             $.each(html, function(index, value) {
+             //$.each(html, function(index, value) {
 
-               list.push(value);
+             //  list.push(value[1]);
 
+             //});
+             //$('#location').typeahead({
+             //  source:list
+             //});
+             $.each(html, function(key, value) {   
+                    $('#location')
+                        .append($("<option></option>")
+                                   .attr("value",value[0])
+                                            .text(value[1])); 
              });
-             $('#location').typeahead({
-               source:list
-             });
+
           },
           error: function (XMLHttpRequest, textStatus, errorThrown) {
               console.log("error")
