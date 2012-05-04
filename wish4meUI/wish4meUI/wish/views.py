@@ -12,7 +12,7 @@ from django.contrib.auth.models import User
 from datetime import datetime
 
 from wish4meUI.wish.forms import WishForm, WishCategoryForm, WishPhotoForm
-from wish4meUI.wish.models import Wish, WishCategory, WishPhoto
+from wish4meUI.wish.models import Wish, WishCategory, WishPhoto, WishLocation
 from wish4meUI.friend.models import Following
 from wish4meUI.wishlist.models import Wishlist
 
@@ -56,7 +56,52 @@ def add(request):
       wish.brand = wish_form.cleaned_data['brand']
       wish.category = wish_form.cleaned_data['category']
       wish.related_list = wish_form.cleaned_data['related_list']
-      wish.request_date = datetime.now()
+      wish.request_date = datetime.datetime.now()
+
+      # get the location details from Foursquare
+      location_id = request.POST.get('location', False)
+      if location_id:
+        # https://api.foursquare.com/v2/venues/40a55d80f964a52020f31ee3?oauth_token=AK5N2LRQLI5ELG25THGKETHDFEPY2LXNTANXFJIHEJWWQRRS&v=20120504
+        oauth_token = settings.LOCATION_SEARCH_OAUTH_TOKEN
+        url = "https://api.foursquare.com/v2/venues"
+        now = datetime.datetime.now()
+        v = now.strftime("%Y%m%d")
+        oauth_string = "=".join(["oauth_token", oauth_token])
+        date_string = "=".join(["v", v])
+        foursquare_api_url = "/".join([url, "/", location_id]) + "?" + "&".join([oauth_string, date_string])
+        response = urllib2.urlopen(foursquare_api_url)
+        response = response.read()
+        result = json.loads(response)
+        venue = result['response']['venue']
+        name = venue['name']
+        location = venue['location']
+        if location.has_key('address'):
+            address = location['address']
+        else:
+            address = None
+        if location.has_key('lat'):
+            latitude = location['lat']
+        else:
+            latitude = None
+        if location.has_key('lng'):
+            longitude = location['lng']
+        else:
+            longitude = None
+        if location.has_key('city'):
+            city = location['city']
+        else:
+            city = None
+        if location.has_key('state'):
+            state = location['state']
+        else:
+            state = None
+        if location.has_key('country'):
+            country = location['country']
+        else:
+            country = None
+
+        wish_location, created = WishLocation.objects.get_or_create(name=name, address=address, latitude=latitude, longitude=longitude, city=city, state=state, country=country)
+        wish.location = wish_location
       wish.save()
       try:
         for photoform in wish_photo_set_form.forms:
@@ -165,7 +210,7 @@ def showWishAlone(request, wish_id):
                             context_instance=RequestContext(request))
 
 def getLocations(request):
-    print "get location is called"
+    #print "get location is called"
     #location operations
     city = request.POST.get('city', False)
     location_address = urllib.quote(city.encode("utf-8"))
@@ -179,11 +224,11 @@ def getLocations(request):
     longitude = geometry['lng']
     # get the the environments aroun the location
     oauth_token = settings.LOCATION_SEARCH_OAUTH_TOKEN
-    print "oauth token:", oauth_token
+    #print "oauth token:", oauth_token
     now = datetime.datetime.now()
     v = now.strftime("%Y%m%d")
     foursquare_api_url = "".join(["https://api.foursquare.com/v2/", "venues/search?ll=", ",".join([str(latitude),str(longitude)]),"&oauth_token=", oauth_token, "&v=", v, "&intent=checkin"])
-    print "foursquare url called:", foursquare_api_url
+    #print "foursquare url called:", foursquare_api_url
     response = urllib2.urlopen(foursquare_api_url)
     response = response.read()
     result = json.loads(response)
