@@ -9,25 +9,38 @@ from facebook.models import FacebookProfile
 
 class FacebookBackend:
 
-    def authenticate(self, request=None, token=None):
-        """ Reads in a Facebook code and asks Facebook if it's valid and what user it points to. """
-        args = {
-            'client_id': settings.FACEBOOK_APP_ID,
-            'client_secret': settings.FACEBOOK_APP_SECRET,
-            'redirect_uri': request.build_absolute_uri(
-                reverse('facebook_login_callback')),
-            'code': token,
-        }
+    def authenticate(self, request, **kwargs):
+        """ if used with a token parameter, Reads in a Facebook code and asks Facebook if it's valid and what user it points to. 
+            if used with id and email,(optional username) creates the proper database entities."""
+        if "token" in kwargs:
 
-        # Get a legit access token
-        target = urllib.urlopen('https://graph.facebook.com/oauth/access_token?' + urllib.urlencode(args)).read()
-        response = cgi.parse_qs(target)
-        access_token = response['access_token'][-1]
-
-        # Read the user's profile information
-        fb_profile = urllib.urlopen(
-          'https://graph.facebook.com/me?access_token=%s' % access_token)
-        fb_profile = json.load(fb_profile)
+            args = {
+                'client_id': settings.FACEBOOK_APP_ID,
+                'client_secret': settings.FACEBOOK_APP_SECRET,
+                'redirect_uri': request.build_absolute_uri(
+                    reverse('facebook_login_callback')),
+                'code': token,
+            }
+    
+            # Get a legit access token
+            target = urllib.urlopen('https://graph.facebook.com/oauth/access_token?' + urllib.urlencode(args)).read()
+            response = cgi.parse_qs(target)
+            access_token = response['access_token'][-1]
+    
+            # Read the user's profile information
+            fb_profile = urllib.urlopen(
+              'https://graph.facebook.com/me?access_token=%s' % access_token)
+            fb_profile = json.load(fb_profile)
+        else:
+            if "id" in kwargs and "email" in kwargs:
+                print "android authenticate func"
+                if "username" in kwargs:
+                    fb_profile = {'id' : kwargs['id'], 'email' : kwargs['email'], 'username' : kwargs['username']}
+                else:
+                    fb_profile = {'id' : kwargs['id'], 'email' : kwargs['email'], 'username' : kwargs['username']}
+                    
+            if "access_token" in kwargs:
+                access_token = kwargs['access_token']
 
         try:
           # Try and find existing user
@@ -58,7 +71,6 @@ class FacebookBackend:
           import sys
           print "error ", sys.exc_info()[0]
         return user
-
 
     def get_user(self, user_id):
         """ Just returns the user of a given ID. """
