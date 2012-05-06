@@ -1,11 +1,11 @@
 package com.wish4me.android;
 
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.net.MalformedURLException;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,10 +17,8 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.NameValuePair;
-
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -30,8 +28,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 
 import android.widget.Toast;
 
@@ -60,9 +58,9 @@ public class Wish4meAndroidActivity extends Activity {
         setContentView(R.layout.main);
         
         // Capture our button from layout
-        Button button = (Button)findViewById(R.id.go);
+        ImageButton fbloginButton = (ImageButton)findViewById(R.id.go);
         // Register the onClick listener with the implementation above
-        button.setOnClickListener(mAddListener);
+        fbloginButton.setOnClickListener(mAddListener);
       
     }
     
@@ -79,9 +77,8 @@ public class Wish4meAndroidActivity extends Activity {
 			    		public void run() {
 				    		try{
 				    			postFacebookID();
-				    			//sleep(4000);
 				    		} catch (Exception e) {
-				    			Log.e("tag", e.getMessage());
+				    			Log.e("Wish4me-secondThread", e.getMessage());
 				    		}
 				    		// dismiss the progress dialog
 				    		progressDialog.dismiss();
