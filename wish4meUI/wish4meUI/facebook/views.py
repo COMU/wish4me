@@ -25,6 +25,13 @@ def login(request):
     }
     return HttpResponseRedirect('https://www.facebook.com/dialog/oauth?' + urllib.urlencode(args))
 
+def androidLogin(request, facebookID, facebookEmail, access_token, facebookUsername=None):
+    print "android logon try"
+    user = authenticate(request=request, id=facebookID, email=facebookEmail, username=facebookUsername, access_token = access_token)
+    print "android logged in"
+    if user.is_authenticated():
+      auth_login(request, user)
+    return request.user
 
 def loginCallback(request):
     code = request.GET.get('code')

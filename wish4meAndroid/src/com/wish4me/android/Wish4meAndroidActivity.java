@@ -1,9 +1,11 @@
 package com.wish4me.android;
 
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,6 +37,7 @@ import android.widget.Toast;
 
 import com.wish4me.android.R;
 
+
 import com.facebook.android.DialogError;
 import com.facebook.android.Facebook;
 import com.facebook.android.Facebook.DialogListener;
@@ -43,13 +46,13 @@ import com.facebook.android.FacebookError;
 
 
 public class Wish4meAndroidActivity extends Activity {
-	
+	private static String SERVERIP = "192.168.1.40";
 	EditText name;
 	
-	Facebook facebook = new Facebook("255768354473895");
+	Facebook facebook = new Facebook("408993659121861");
 	private SharedPreferences mPrefs;
 	private ProgressDialog progressDialog;
-	
+	String responseText;
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -119,7 +122,7 @@ public class Wish4meAndroidActivity extends Activity {
     private void postFacebookID() {
     	// Create a new HttpClient and Post Header
     	HttpClient httpclient = new DefaultHttpClient();
-    	HttpPost httppost = new HttpPost("http://192.168.1.40/android/flogin");
+    	HttpPost httppost = new HttpPost("http://"+SERVERIP+"/android/flogin");
 
     	try {
     	    // Add your data
@@ -233,4 +236,27 @@ public class Wish4meAndroidActivity extends Activity {
         facebook.authorizeCallback(requestCode, resultCode, data);
 
     }
+    /*
+    public void facebookLogout(){
+    	AsyncFacebookRunner asFace = new AsyncFacebookRunner(facebook);
+    	asFace.logout(getApplicationContext(), new RequestListener() {
+    		  public void onComplete(String response, Object state) {}
+    		  public void onIOException(IOException e, Object state) {}
+    		  public void onFileNotFoundException(FileNotFoundException e,
+    		        Object state) {}
+    		  public void onMalformedURLException(MalformedURLException e,
+    		        Object state) {}
+    		  public void onFacebookError(FacebookError e, Object state) {}
+    		});
+    	
+    	String method = "DELETE";
+        Bundle params = new Bundle();
+        /*
+         * this will revoke 'publish_stream' permission
+         * Note: If you don't specify a permission then this will de-authorize the application completely.
+         * /
+        params.putString("permission", "publish_stream");
+        asFace.request("/me/permissions", params, method, new RevokePermissionListener(), null);
+    }
+*/
 }

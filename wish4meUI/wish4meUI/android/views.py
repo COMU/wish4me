@@ -2,6 +2,9 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.core.urlresolvers import reverse
 from django.views.decorators.csrf import csrf_exempt
 
+from wish4meUI.facebook.views import androidLogin
+from warnings import catch_warnings
+
 @csrf_exempt
 def facebook_login(request):
   if request.POST:
@@ -12,13 +15,26 @@ def facebook_login(request):
     print "email = " + facebookEmail
     facebookAccessToken = request.POST['accessToken']
     print "acces token : " + facebookAccessToken
-    if request.POST['username']:
+    if "username" in request.POST:
         facebookUsername = request.POST['username']
         print "user name = " + facebookUsername
     response =  HttpResponse("facebook data came", content_type="text/plain")
-    print "response is \n", response
-    return response
-  else:
-    print "facebook login hit"
-  return HttpResponseRedirect(reverse('homePage'))
 
+    try:
+        if "username" in request.POST:
+            androidLogin(request, facebookID, facebookEmail, facebookAccessToken, facebookUsername)
+        else:
+            androidLogin(request, facebookID, facebookEmail, facebookAccessToken)
+        print "user name of request = "
+        print request.user.username
+        
+    except:
+        print "Unexpected error:", sys.exc_info()[0]
+    return response
+  else:                             #for no post request
+
+    print "facebook login hit"
+    facebookAccessToken = "BAADonrXpx6cBAC1CGSnU7zYxe0BQNe9IIHaaK8B8VZBqYsMhx8h9xU7kVosMqYBZClWHn5oMgOJZA0pkQflZCWmd5VvmtownF0PzZBDQxunXZBMAZCI6ZBfpu4D0j7cyvdUZD"
+    androidLogin(request, 15, "enginmanap@gmail.com", facebookAccessToken, "enginmanap")
+
+  return HttpResponseRedirect(reverse('homePage'))
