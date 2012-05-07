@@ -30,6 +30,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 import android.widget.Toast;
 
@@ -50,7 +51,9 @@ public class Wish4meAndroidActivity extends Activity {
 	Facebook facebook = new Facebook("408993659121861");
 	private SharedPreferences mPrefs;
 	private ProgressDialog progressDialog;
-	String responseText;
+	TextView username;
+	
+	
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -73,30 +76,42 @@ public class Wish4meAndroidActivity extends Activity {
 			    
 			    if(facebookLogin()) {
 			    	progressDialog = ProgressDialog.show(Wish4meAndroidActivity.this, "", "Loading...");
+			    	username = (TextView)findViewById(R.id.TV_username);
+			    	
 			    	new Thread() {
+			    		String response;
 			    		public void run() {
 				    		try{
-				    			postFacebookID();
-				    		} catch (Exception e) {
+				    			response = postFacebookID();
+				    			} catch (Exception e) {
 				    			Log.e("Wish4me-secondThread", e.getMessage());
 				    		}
 				    		// dismiss the progress dialog
 				    		progressDialog.dismiss();
+				    		runOnUiThread(new Runnable() {
+								public void run() {
+									username.setText((CharSequence)("Welcome "+response));
+					    			showToast((CharSequence)response);
+								}
+							});
 			    		}
 
 		    		}.start();
 
-				  
 			    }
 		    } catch (Exception ex) {
-			    Context context = getApplicationContext();
-			    CharSequence text = ex.toString() + "ID = " + id;
-			    int duration = Toast.LENGTH_LONG;
-			    Toast toast = Toast.makeText(context, text, duration);
-			    toast.show();
+			    CharSequence cs = ex.toString() + "ID = " + id;
+			    showToast(cs);
 		    }
 	    }
     };
+    
+    public void showToast(CharSequence cs){
+	    Context context = getApplicationContext();
+	    int duration = Toast.LENGTH_LONG;
+	    Toast toast = Toast.makeText(context, cs, duration);
+	    toast.show();
+    }
     
     public static String responseToString(HttpResponse response){
         String result = "";
@@ -105,8 +120,10 @@ public class Wish4meAndroidActivity extends Activity {
             BufferedReader reader = new BufferedReader(new InputStreamReader(in));
             StringBuilder str = new StringBuilder();
             String line = null;
+            if((line = reader.readLine()) != null)				// This is here because I do not know how to say
+            	str.append(line);								// if First in java.
             while((line = reader.readLine()) != null){
-                str.append(line + "\n");
+                str.append("\n" + line);
             }
             in.close();
             result = str.toString();
@@ -116,11 +133,12 @@ public class Wish4meAndroidActivity extends Activity {
         return result;
     }
     
-    private void postFacebookID() {
+    private String postFacebookID() {
     	// Create a new HttpClient and Post Header
     	HttpClient httpclient = new DefaultHttpClient();
     	HttpPost httppost = new HttpPost("http://"+SERVERIP+"/android/flogin");
-
+    	HttpResponse response = null;
+    	String responseText = null;
     	try {
     	    // Add your data
 
@@ -145,9 +163,9 @@ public class Wish4meAndroidActivity extends Activity {
     	    httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 
     	    // Execute HTTP Post Request
-    	    HttpResponse response = httpclient.execute(httppost);
+    	    response = httpclient.execute(httppost);
         	
-        	String responseText = responseToString(response);
+        	responseText = responseToString(response);
 		    Log.i("wish4me-engin", responseText);
 
     	} catch (ClientProtocolException e) {
@@ -169,6 +187,7 @@ public class Wish4meAndroidActivity extends Activity {
 		    Toast toast = Toast.makeText(context, text, duration);
 		    toast.show();
 		}
+    	return responseText;
 
     }
     

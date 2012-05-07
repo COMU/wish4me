@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Wish4meAndroid</string>
-    <string name="press">Login via Facebook</string>
+    <string name="welcome">Welcome to Wish4me!</string>
+    <string name="facebookLogin">Login via Facebook</string>
 
 </resources>
