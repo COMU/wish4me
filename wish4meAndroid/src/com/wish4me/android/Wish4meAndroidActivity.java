@@ -90,6 +90,8 @@ public class Wish4meAndroidActivity extends Activity {
 				    		progressDialog.dismiss();
 				    		runOnUiThread(new Runnable() {
 								public void run() {
+									Intent userHome = new Intent(Wish4meAndroidActivity.this, UserHomeActivity.class);
+									startActivity(userHome);
 									username.setText((CharSequence)("Welcome "+response));
 					    			showToast((CharSequence)response);
 								}
