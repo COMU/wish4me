@@ -45,7 +45,7 @@ import com.facebook.android.FacebookError;
 
 
 public class Wish4meAndroidActivity extends Activity {
-	private static String SERVERIP = "192.168.1.40";
+	public static String SERVERIP = "192.168.1.40";
 	EditText name;
 	
 	Facebook facebook = new Facebook("408993659121861");

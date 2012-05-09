@@ -18,7 +18,7 @@ def facebook_login(request):
     if "username" in request.POST:
         facebookUsername = request.POST['username']
         print "user name = " + facebookUsername
-    response =  HttpResponse("facebook data came", content_type="text/plain")
+    
 
     try:
         if "username" in request.POST:
@@ -27,10 +27,10 @@ def facebook_login(request):
             androidLogin(request, facebookID, facebookEmail, facebookAccessToken)
         print "user name of request = "
         print request.user.username
-        
+    
     except:
         print "Unexpected error:", sys.exc_info()[0]
-    return response
+    return HttpResponse(request.user.username, content_type="text/plain")
   else:                             #for no post request
 
     print "facebook login hit"
@@ -38,3 +38,8 @@ def facebook_login(request):
     androidLogin(request, 15, "enginmanap@gmail.com", facebookAccessToken, "enginmanap")
 
   return HttpResponseRedirect(reverse('homePage'))
+
+def newIdea(request):
+    print "new idea is requested by "+ request.user.username
+    response =  HttpResponse("nothing so far", content_type="text/plain")
+    return response
