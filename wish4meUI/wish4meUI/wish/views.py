@@ -107,7 +107,7 @@ def add(request):
   followed_relation = Following.objects.filter(from_user = request.user, is_hidden = False).values('to_user')
   followed = User.objects.filter(id__in = followed_relation)
   users_self = User.objects.filter(id = request.user.id)
-  people_to_list = followers | followed | users_self
+  people_to_list = (followers & followed) | users_self
   #Bootstrap typeahead is pretty strict, creating list in here is much cleaner.
   typeahead_source = "["
   for friend in people_to_list:
