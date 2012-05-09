@@ -68,6 +68,8 @@ class WishPhotoForm(forms.ModelForm):
     model = WishPhoto
     fields = ('photo', )
 
+  url = forms.CharField(max_length=200, required=False)
+
 class AccomplishForm(forms.ModelForm):
   
   class Meta:

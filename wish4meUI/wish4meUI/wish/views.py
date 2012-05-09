@@ -1,5 +1,6 @@
 #! -*- coding: utf-8 -*-
 # Create your views here.
+from django.core.files.base import ContentFile
 
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template.context import RequestContext
@@ -9,9 +10,10 @@ from django.forms.formsets import formset_factory
 from django.contrib import messages
 from django.contrib.auth.models import User
 from django.core.paginator import Paginator, EmptyPage, InvalidPage
-
 from datetime import datetime
 from random import randint
+import urllib2
+from urlparse import urlparse
 
 from wish4meUI.wish.forms import WishForm, WishCategoryForm, WishPhotoForm, AccomplishForm
 from wish4meUI.wish.models import Wish, WishCategory, WishPhoto, WishAccomplish
@@ -88,11 +90,21 @@ def add(request):
       wish.request_date = datetime.now()
       wish.save()
       try:
-        for photoform in wish_photo_set_form.forms:
-          photo = photoform.save(commit = False)
-          if photo.photo:
-            photo.wish = wish
-            photo.save()
+				for photoform in wish_photo_set_form.forms:
+					photo = photoform.save(commit = False)
+					try:
+						if photoform.cleaned_data['url'] != '':
+							photo.wish = wish
+							photo_name = urlparse(photoform.cleaned_data['url']).path.split('/')[-1][0:20]
+							photo_content = ContentFile(urllib2.urlopen(photoform.cleaned_data['url']).read())
+							photo.photo.save(photo_name, photo_content, save=False)
+							photo.save()
+						elif photo.photo:
+							photo.wish = wish
+							photo.save()
+					except urllib2.HTTPError:
+						continue
+
       except:
         pass
 
