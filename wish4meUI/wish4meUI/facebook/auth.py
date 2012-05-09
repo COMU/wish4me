@@ -19,7 +19,7 @@ class FacebookBackend:
                 'client_secret': settings.FACEBOOK_APP_SECRET,
                 'redirect_uri': request.build_absolute_uri(
                     reverse('facebook_login_callback')),
-                'code': token,
+                'code': kwargs['token'],
             }
     
             # Get a legit access token
