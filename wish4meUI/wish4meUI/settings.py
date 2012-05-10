@@ -81,6 +81,7 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
+
 )
 
 ROOT_URLCONF = 'wish4meUI.urls'
@@ -138,6 +139,11 @@ FACEBOOK_APP_ID = "255768354473895"
 FACEBOOK_APP_SECRET = "b8f0ef66e6e88951311ea2e70dccf4fa"
 FACEBOOK_SCOPE = 'email,publish_stream,friends_about_me'
 
+#for android app testing:
+#FACEBOOK_APP_ID = "408993659121861"
+#FACEBOOK_APP_SECRET = "36f0be90d364e91d732438b816daace4"
+#FACEBOOK_SCOPE = 'email,publish_stream,friends_about_me'
+
 AUTH_PROFILE_MODULE = 'userprofile.UserProfile'
 
 AUTHENTICATION_BACKENDS = (
@@ -173,4 +179,8 @@ AJAX_LOOKUP_CHANNELS = {
 # magically include jqueryUI/js/css
 AJAX_SELECT_BOOTSTRAP = True
 AJAX_SELECT_INLINES = 'inline'
+
+#Session settings:
+SESSION_ENGINE = "django.contrib.sessions.backends.db"
+SESSION_COOKIE_NAME = "sessionid"
 

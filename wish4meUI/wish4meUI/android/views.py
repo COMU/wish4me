@@ -3,6 +3,8 @@ from django.core.urlresolvers import reverse
 from django.views.decorators.csrf import csrf_exempt
 
 from wish4meUI.facebook.views import androidLogin
+from wish4meUI.decorators.cookieless_decorator  import session_from_http_params
+from wish4meUI import settings
 from warnings import catch_warnings
 
 @csrf_exempt
@@ -18,8 +20,6 @@ def facebook_login(request):
     if "username" in request.POST:
         facebookUsername = request.POST['username']
         print "user name = " + facebookUsername
-    
-
     try:
         if "username" in request.POST:
             androidLogin(request, facebookID, facebookEmail, facebookAccessToken, facebookUsername)
@@ -27,10 +27,10 @@ def facebook_login(request):
             androidLogin(request, facebookID, facebookEmail, facebookAccessToken)
         print "user name of request = "
         print request.user.username
-    
     except:
         print "Unexpected error:", sys.exc_info()[0]
-    return HttpResponse(request.user.username, content_type="text/plain")
+    print "request.cookies = \n", request.session.session_key
+    return HttpResponse(request.session.session_key, content_type="text/plain")
   else:                             #for no post request
 
     print "facebook login hit"
@@ -39,7 +39,11 @@ def facebook_login(request):
 
   return HttpResponseRedirect(reverse('homePage'))
 
+@csrf_exempt
+@session_from_http_params
 def newIdea(request):
+    print "engine = ", settings.SESSION_ENGINE
+    print " cookie name = ", settings.SESSION_COOKIE_NAME
     print "new idea is requested by "+ request.user.username
     response =  HttpResponse("nothing so far", content_type="text/plain")
     return response

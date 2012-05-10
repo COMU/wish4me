@@ -2,6 +2,7 @@
 <resources>
     <string name="app_name">Wish4meAndroid</string>
     <string name="welcome">Welcome to Wish4me!</string>
+    <string name="username">Username</string>
     <string name="facebookLogin">Login via Facebook</string>
 
 </resources>

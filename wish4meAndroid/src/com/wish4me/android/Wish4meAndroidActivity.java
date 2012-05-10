@@ -91,8 +91,10 @@ public class Wish4meAndroidActivity extends Activity {
 				    		runOnUiThread(new Runnable() {
 								public void run() {
 									Intent userHome = new Intent(Wish4meAndroidActivity.this, UserHomeActivity.class);
+									userHome.putExtra("session_id",response);
+
 									startActivity(userHome);
-									username.setText((CharSequence)("Welcome "+response));
+									//username.setText((CharSequence)("Welcome "+response));
 					    			showToast((CharSequence)response);
 								}
 							});
