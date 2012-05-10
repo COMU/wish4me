@@ -20,6 +20,8 @@ urlpatterns = patterns('',
     url(r'^remove/(?P<wish_id>\d+)$', view=remove, name="wish_remove_wish"),
     #location based
     url(r'^locations$', view=getLocations, name='get-locations'),
+    url(r'^add_location$', view=addLocation, name='new-location'),
+    url(r'^search_location$', view=searchLocation, name='search-location'),
 
 )
 
