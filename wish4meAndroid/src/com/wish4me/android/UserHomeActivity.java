@@ -38,6 +38,9 @@ import android.content.Context;
 import android.os.Bundle;
 
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -143,8 +146,12 @@ public class UserHomeActivity extends Activity {
       }
     
     public void updateView(){
-    	// All static variables
-    	
+    	setContentView(R.layout.mywishes);
+
+        ViewGroup parent = (ViewGroup) findViewById(R.id.mywishes_linear_layout);
+        
+        
+        
     	// XML node keys
     	final String KEY_WISH = "wish"; // parent node
     	final String KEY_NAME = "name";
@@ -162,15 +169,20 @@ public class UserHomeActivity extends Activity {
     	    String name = getValue(e, KEY_NAME); // name child value
     	    String brand = getValue(e, KEY_BRAND); // cost child value
     	    String description = getValue(e, KEY_DESC); // description child value
+    	    //LayoutInflater inflater = (LayoutInflater)getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     	    
-    	    TextView wishName = (TextView)findViewById(R.id.wish_name);
+    	    View view = View.inflate(this, R.layout.userhome,
+                    null);
+    	    
+    	    TextView wishName = (TextView)view.findViewById(R.id.wish_name);
     	    wishName.setText((CharSequence)name);
-    	    TextView wishBrand = (TextView)findViewById(R.id.wish_brand);
+    	    TextView wishBrand = (TextView)view.findViewById(R.id.wish_brand);
     	    wishBrand.setText((CharSequence)(brand+" "));
-    	    TextView wishDescription = (TextView)findViewById(R.id.wish_description);
+    	    TextView wishDescription = (TextView)view.findViewById(R.id.wish_description);
     	    wishDescription.setText((CharSequence)description);
+    	    
+    	    parent.addView(view);
     	}
     }
-    
-    
+ 
 }
