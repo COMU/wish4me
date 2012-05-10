@@ -9,6 +9,7 @@ from twitter_app.models import TwitterProfile
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.models import User
 from userprofile.models import *
+from wish4meUI.friend.models import *
 
 @login_required
 def contact_importer_home(request, importing_profile=0):
@@ -26,8 +27,12 @@ def contact_importer_home(request, importing_profile=0):
               facebook_id = FacebookProfile.objects.get(facebook_id=i)
               user_id = facebook_id.id
               user_data = UserProfile.objects.get(facebook_profile=user_id)
-              profile = user_data.user.get_profile()
-              found_friends.append(profile)
+              user_to_follow = User.objects.get(pk = user_data.user.id)
+              if Following.objects.filter(from_user=user, to_user=user_to_follow, is_hidden = False).count() > 0:
+                 pass
+              else:
+                 profile = user_data.user.get_profile()
+                 found_friends.append(profile)
             except ObjectDoesNotExist:
               pass    
       elif importing_profile == 'foursquare':
@@ -38,8 +43,12 @@ def contact_importer_home(request, importing_profile=0):
               foursquare_id = FoursqProfile.objects.get(foursq_id=i)
               user_id = foursquare_id.id
               user_data = UserProfile.objects.get(foursq_profile=user_id)
-              profile = user_data.user.get_profile()
-              found_friends.append(profile)
+              user_to_follow = User.objects.get(pk = user_data.user.id)
+              if Following.objects.filter(from_user=user, to_user=user_to_follow, is_hidden = False).count() > 0:
+                 pass
+              else:
+                 profile = user_data.user.get_profile()
+                 found_friends.append(profile)
             except ObjectDoesNotExist:
               pass    
       elif importing_profile == 'twitter':
@@ -50,8 +59,12 @@ def contact_importer_home(request, importing_profile=0):
               twitter_id = TwitterProfile.objects.get(twitter_id=i)
               user_id = twitter_id.id
               user_data = UserProfile.objects.get(twitter_profile=user_id)
-              profile = user_data.user.get_profile()
-              found_friends.append(profile)
+              user_to_follow = User.objects.get(pk = user_data.user.id)
+              if Following.objects.filter(from_user=user, to_user=user_to_follow, is_hidden = False).count() > 0:
+                 pass
+              else:
+                 profile = user_data.user.get_profile()
+                 found_friends.append(profile)
             except ObjectDoesNotExist:
               pass    
       elif importing_profile == 'google':
