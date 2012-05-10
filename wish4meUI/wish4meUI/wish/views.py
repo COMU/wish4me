@@ -11,13 +11,13 @@ from django.contrib.auth.models import User
 
 from datetime import datetime
 
-from wish4meUI.wish.forms import WishForm, WishCategoryForm, WishPhotoForm
+from wish4meUI.wish.forms import WishForm, WishCategoryForm, WishPhotoForm, WishLocationForm
 from wish4meUI.wish.models import Wish, WishCategory, WishPhoto, WishLocation
 from wish4meUI.friend.models import Following
 from wish4meUI.wishlist.models import Wishlist
 
 from django.conf import settings
-import urllib, urllib2, json, datetime
+import urllib, urllib2, json, datetime, simplejson
 
 def myActivity(request):
   wishes = Wish.objects.filter(related_list__owner=request.user, is_hidden=False).order_by("-request_date")
@@ -262,7 +262,32 @@ def getLocations(request):
     print response_data
     return HttpResponse(json.dumps(response_data), mimetype="application/json")
 
+def addLocation(request):
+    if request.method == "POST":
+        form = WishLocationForm(request.POST)
+        if form.is_valid():
+           form.save()
+           return HttpResponse('''
+                    <script type="text/javascript">
+                            opener.dismissAddAnotherPopup(window);
+                    </script>'''
+                    )
+    else:
+        form = WishLocationForm()
+    return render_to_response('wish/add_location.html',
+                            {'form': form, 'page_title': 'Add a new location'},
+                            context_instance=RequestContext(request))
 
-
-
+def searchLocation(request):
+    results = []
+    print "searchLocation called"
+    if request.method == "GET":
+        if request.GET.has_key(u'q'):
+            value = request.GET[u'q']
+            # Ignore queries shorter than length 3
+            if len(value) > 2:
+                model_results = WishLocation.objects.filter(name__icontains=value)
+                results = [ (x.__unicode__(), x.id) for x in model_results ]
+    json = simplejson.dumps(results)
+    return HttpResponse(json, mimetype='application/json')
 
