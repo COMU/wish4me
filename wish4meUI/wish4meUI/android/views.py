@@ -1,11 +1,15 @@
 from django.http import HttpResponseRedirect, HttpResponse
 from django.core.urlresolvers import reverse
 from django.views.decorators.csrf import csrf_exempt
+from django.core.context_processors import csrf
+from warnings import catch_warnings
+from django.shortcuts import render_to_response
+from django.template.context import RequestContext
 
 from wish4meUI.facebook.views import androidLogin
 from wish4meUI.decorators.cookieless_decorator  import session_from_http_params
 from wish4meUI import settings
-from warnings import catch_warnings
+from wish4meUI.wish.models import Wish
 
 @csrf_exempt
 def facebook_login(request):
@@ -29,7 +33,7 @@ def facebook_login(request):
         print request.user.username
     except:
         print "Unexpected error:", sys.exc_info()[0]
-    print "request.cookies = \n", request.session.session_key
+
     return HttpResponse(request.session.session_key, content_type="text/plain")
   else:                             #for no post request
 
@@ -41,9 +45,14 @@ def facebook_login(request):
 
 @csrf_exempt
 @session_from_http_params
+def listMyWishes(request):
+    print "requested by : ",request.user.username
+    wish_list = Wish.objects.filter(related_list__owner=request.user, is_hidden=False).order_by("-request_date")
+    
+    return render_to_response("android/wishlist.xml", {'wish_list': wish_list,})
+
+@csrf_exempt
+@session_from_http_params
 def newIdea(request):
-    print "engine = ", settings.SESSION_ENGINE
-    print " cookie name = ", settings.SESSION_COOKIE_NAME
-    print "new idea is requested by "+ request.user.username
     response =  HttpResponse("nothing so far", content_type="text/plain")
     return response

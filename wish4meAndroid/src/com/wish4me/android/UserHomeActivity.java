@@ -2,8 +2,15 @@ package com.wish4me.android;
 
 
 import java.io.IOException;
+import java.io.StringReader;
+
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+
 
 import org.apache.http.HttpResponse;
 
@@ -18,12 +25,20 @@ import org.apache.http.client.methods.HttpPost;
 
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+
 
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 
 import android.util.Log;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class UserHomeActivity extends Activity {
@@ -33,19 +48,18 @@ public class UserHomeActivity extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 	    super.onCreate(savedInstanceState);
 	    setContentView(R.layout.userhome);
-	    // TODO Auto-generated method stub
 	    Bundle extras = getIntent().getExtras();
 	    if(extras !=null) {
 	    	session_id = extras.getString("session_id");
 	    }
-	    getNewIdeaForm();
+	    updateView();
 
 	}
 	
-    private String getNewIdeaForm() {
+    private String getMywishes() {
     	// Create a new HttpClient and Post Header
     	HttpClient httpclient = new DefaultHttpClient();
-    	HttpPost httppost = new HttpPost("http://"+Wish4meAndroidActivity.SERVERIP+"/android/newidea");
+    	HttpPost httppost = new HttpPost("http://"+Wish4meAndroidActivity.SERVERIP+"/android/listmywishes");
     	HttpResponse response = null;
     	String responseText = null;
     	try {
@@ -84,4 +98,79 @@ public class UserHomeActivity extends Activity {
 
     }
 
+    public Document getDomElement(String xml){
+        Document doc = null;
+        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+        try {
+ 
+            DocumentBuilder db = dbf.newDocumentBuilder();
+ 
+            InputSource is = new InputSource();
+                is.setCharacterStream(new StringReader(xml));
+                doc = db.parse(is);
+ 
+            } catch (ParserConfigurationException e) {
+                Log.e("Error: ", e.getMessage());
+                return null;
+            } catch (SAXException e) {
+                Log.e("Error: ", e.getMessage());
+                return null;
+            } catch (IOException e) {
+                Log.e("Error: ", e.getMessage());
+                return null;
+            }
+                // return DOM
+            return doc;
+    }
+    
+    public String getValue(Element item, String str) {
+        NodeList n = item.getElementsByTagName(str);
+        return this.getElementValue(n.item(0));
+    }
+     
+    public final String getElementValue( Node elem ) {
+             Node child;
+             if( elem != null){
+                 if (elem.hasChildNodes()){
+                     for( child = elem.getFirstChild(); child != null; child = child.getNextSibling() ){
+                         if( child.getNodeType() == Node.TEXT_NODE  ){
+                             return child.getNodeValue();
+                         }
+                     }
+                 }
+             }
+             return "";
+      }
+    
+    public void updateView(){
+    	// All static variables
+    	
+    	// XML node keys
+    	final String KEY_WISH = "wish"; // parent node
+    	final String KEY_NAME = "name";
+    	final String KEY_BRAND = "brand";
+    	final String KEY_DESC = "description";
+    	 
+    	String xml = getMywishes(); // getting XML
+    	Document doc = getDomElement(xml); // getting DOM element
+    	 
+    	NodeList nl = doc.getElementsByTagName(KEY_WISH);
+    	 
+    	// looping through all item nodes <item>
+    	for (int i = 0; i < nl.getLength(); i++) {
+    		Element e = (Element) nl.item(i);
+    	    String name = getValue(e, KEY_NAME); // name child value
+    	    String brand = getValue(e, KEY_BRAND); // cost child value
+    	    String description = getValue(e, KEY_DESC); // description child value
+    	    
+    	    TextView wishName = (TextView)findViewById(R.id.wish_name);
+    	    wishName.setText((CharSequence)name);
+    	    TextView wishBrand = (TextView)findViewById(R.id.wish_brand);
+    	    wishBrand.setText((CharSequence)(brand+" "));
+    	    TextView wishDescription = (TextView)findViewById(R.id.wish_description);
+    	    wishDescription.setText((CharSequence)description);
+    	}
+    }
+    
+    
 }

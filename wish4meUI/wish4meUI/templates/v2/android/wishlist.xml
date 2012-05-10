@@ -1,0 +1,5 @@
+<wishlist>
+{% for wish in wish_list %}
+	{% include "android/wish.xml" %}
+{% endfor %}
+</wishlist>

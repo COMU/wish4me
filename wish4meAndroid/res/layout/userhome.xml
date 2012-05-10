@@ -1,25 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical" >
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
 
-
+    <ImageView
+        android:id="@+id/wish_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:src="@drawable/wish_icon" />
+
     <TextView
-        android:id="@+id/textView1"
+        android:id="@+id/wish_description"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="right"
-        android:text="@string/username"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/wish_name"
+        android:layout_toRightOf="@+id/wish_image"
+        android:text="@string/wish_description"
         android:textAppearance="?android:attr/textAppearanceSmall" />
-
-    <ImageButton
-        android:id="@+id/imageButton1"
+
+    <TextView
+        android:id="@+id/wish_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_margin="0px"
-        android:padding="0px"
-        android:src="@drawable/add_new_wish" />
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginRight="28dp"
+        android:layout_toRightOf="@+id/wish_brand"
+        android:text="@string/wish_name"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <TextView
+        android:id="@+id/wish_brand"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/wish_description"
+        android:layout_alignParentTop="true"
+        android:text="@string/wish_brand"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
-</LinearLayout>
+</RelativeLayout>

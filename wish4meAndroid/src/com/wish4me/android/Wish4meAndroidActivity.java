@@ -70,7 +70,7 @@ public class Wish4meAndroidActivity extends Activity {
             facebook.setAccessExpires(expires);
         }
         if(facebook.isSessionValid()) {
-        	loginViaFacebook();
+        	//loginViaFacebook();
         }
         
         // Capture our button from layout
