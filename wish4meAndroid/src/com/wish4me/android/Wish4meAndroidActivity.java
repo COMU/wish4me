@@ -59,6 +59,19 @@ public class Wish4meAndroidActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
+
+        mPrefs = getPreferences(MODE_PRIVATE);
+        String access_token = mPrefs.getString("access_token", null);
+        long expires = mPrefs.getLong("access_expires", 0);
+        if(access_token != null) {
+            facebook.setAccessToken(access_token);
+        }
+        if(expires != 0) {
+            facebook.setAccessExpires(expires);
+        }
+        if(facebook.isSessionValid()) {
+        	loginViaFacebook();
+        }
         
         // Capture our button from layout
         ImageButton fbloginButton = (ImageButton)findViewById(R.id.go);
@@ -70,46 +83,49 @@ public class Wish4meAndroidActivity extends Activity {
     // Create an anonymous implementation of OnClickListener
     private OnClickListener mAddListener = new OnClickListener() {
     	public void onClick(View v) {
-		    long id = 0;
-		    // do something when the button is clicked
-		    try {
-			    
-			    if(facebookLogin()) {
-			    	progressDialog = ProgressDialog.show(Wish4meAndroidActivity.this, "", "Loading...");
-			    	username = (TextView)findViewById(R.id.TV_username);
-			    	
-			    	new Thread() {
-			    		String response;
-			    		public void run() {
-				    		try{
-				    			response = postFacebookID();
-				    			} catch (Exception e) {
-				    			Log.e("Wish4me-secondThread", e.getMessage());
-				    		}
-				    		// dismiss the progress dialog
-				    		progressDialog.dismiss();
-				    		runOnUiThread(new Runnable() {
-								public void run() {
-									Intent userHome = new Intent(Wish4meAndroidActivity.this, UserHomeActivity.class);
-									userHome.putExtra("session_id",response);
-
-									startActivity(userHome);
-									//username.setText((CharSequence)("Welcome "+response));
-					    			showToast((CharSequence)response);
-								}
-							});
-			    		}
-
-		    		}.start();
-
-			    }
-		    } catch (Exception ex) {
-			    CharSequence cs = ex.toString() + "ID = " + id;
-			    showToast(cs);
-		    }
+    		loginViaFacebook();
 	    }
     };
     
+    private void loginViaFacebook(){
+	    long id = 0;
+	    // do something when the button is clicked
+	    try {
+		    
+		    if(facebookLogin()) {
+		    	progressDialog = ProgressDialog.show(Wish4meAndroidActivity.this, "", "Loading...");
+		    	username = (TextView)findViewById(R.id.TV_username);
+		    	
+		    	new Thread() {
+		    		String response;
+		    		public void run() {
+			    		try{
+			    			response = postFacebookID();
+			    			} catch (Exception e) {
+			    			Log.e("Wish4me-secondThread", e.getMessage());
+			    		}
+			    		// dismiss the progress dialog
+			    		progressDialog.dismiss();
+			    		runOnUiThread(new Runnable() {
+							public void run() {
+								Intent userHome = new Intent(Wish4meAndroidActivity.this, UserHomeActivity.class);
+								userHome.putExtra("session_id",response);
+
+								startActivity(userHome);
+								//username.setText((CharSequence)("Welcome "+response));
+				    			showToast((CharSequence)response);
+							}
+						});
+		    		}
+
+	    		}.start();
+
+		    }
+	    } catch (Exception ex) {
+		    CharSequence cs = ex.toString() + "ID = " + id;
+		    showToast(cs);
+	    }
+    }
     public void showToast(CharSequence cs){
 	    Context context = getApplicationContext();
 	    int duration = Toast.LENGTH_LONG;
