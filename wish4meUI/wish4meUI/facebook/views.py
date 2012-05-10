@@ -10,11 +10,10 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.db import IntegrityError
 from django.core.urlresolvers import reverse
-
 from facebook.forms import NewsFeedForm
 from facebook.models import FacebookNewsFeed
 from facebook.models import FacebookProfile
-
+from django.core.files.base import ContentFile
 
 def login(request):
     args = {
@@ -38,14 +37,32 @@ def loginCallback(request):
     user = authenticate(request=request, token=code)
     if user.is_authenticated():
       auth_login(request, user)
+    try:
+      user = request.user
+      fb_id = user.get_profile().facebook_profile_id
+      facebook_profile = FacebookProfile.objects.get(id = fb_id)
+      facebook_id = facebook_profile.facebook_id
+      token = facebook_profile.access_token
+      photo_url = "https://graph.facebook.com/" + str(facebook_id)  +"/picture?type=large&access_token=" + token
+      photo_name = photo_url.split('/')[-1][0:20]
+      photo_content = ContentFile(urllib2.urlopen(photo_url).read())
+      profile = user.get_profile()
+      profile.photo.save(photo_name, photo_content)
+      profile.save()
+    except:
+      import sys
+      print "error ", sys.exc_info()[0]
     return HttpResponseRedirect(reverse('user_loginSuccess'))
 
 
 def home(request):
     try:
+      facebook_profile2 = request.user.get_profile()
+      print "up"
       facebook_profile = request.user.get_profile().get_facebook_profile()
+      print "profil yukarda"
     except:
-      facebook_profile = ""
+      facebook_profile = "test"
     return render_to_response('facebook/home.html',
     	                          { 'facebook_profile': facebook_profile, 'newsfeed_form': NewsFeedForm() },
     	                          context_instance=RequestContext(request))
