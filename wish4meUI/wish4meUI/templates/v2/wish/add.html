@@ -12,7 +12,7 @@
 
           <div id="loading"><img src="{{ MEDIA_URL }}images/ajax-loader.gif" /></div>
 
-          <label class="control-label" for="location">Location:</label>
+          <label class="control-label" for="location">Location:</label> <input class="btn btn-primary" type="button" value="Add New" name="new-location" onclick="openwindow('{% url new-location %}');" />
           <select name="location" id="location">
           </select>
         </div>
