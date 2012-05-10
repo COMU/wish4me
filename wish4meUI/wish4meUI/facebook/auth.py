@@ -10,7 +10,7 @@ from facebook.models import FacebookProfile
 class FacebookBackend:
 
     def authenticate(self, request, **kwargs):
-        """ if used with a token parameter, Reads in a Facebook code and asks Facebook if it's valid and what user it points to. 
+        """ if used with a token parameter, Reads in a Facebook code and asks Facebook if it's valid and what user it points to.
             if used with id and email,(optional username) creates the proper database entities."""
         if "token" in kwargs:
 
@@ -21,24 +21,25 @@ class FacebookBackend:
                     reverse('facebook_login_callback')),
                 'code': kwargs['token'],
             }
-    
+
             # Get a legit access token
             target = urllib.urlopen('https://graph.facebook.com/oauth/access_token?' + urllib.urlencode(args)).read()
             response = cgi.parse_qs(target)
             access_token = response['access_token'][-1]
-    
+
             # Read the user's profile information
             fb_profile = urllib.urlopen(
               'https://graph.facebook.com/me?access_token=%s' % access_token)
             fb_profile = json.load(fb_profile)
         else:
+            fb_profile = None
             if "id" in kwargs and "email" in kwargs:
                 print "android authenticate func"
                 if "username" in kwargs:
                     fb_profile = {'id' : kwargs['id'], 'email' : kwargs['email'], 'username' : kwargs['username']}
                 else:
                     fb_profile = {'id' : kwargs['id'], 'email' : kwargs['email'], 'username' : kwargs['username']}
-                    
+
             if "access_token" in kwargs:
                 access_token = kwargs['access_token']
 
