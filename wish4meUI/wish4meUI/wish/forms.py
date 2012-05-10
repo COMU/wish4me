@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 
 from ajax_select import make_ajax_field
 
-from wish4meUI.wish.models import Wish, WishCategory, WishPhoto
+from wish4meUI.wish.models import Wish, WishCategory, WishPhoto, WishLocation
 from wish4meUI.wishlist.models import Wishlist
 from wish4meUI.friend.models import Following
 
@@ -74,3 +74,9 @@ class WishPhotoForm(forms.ModelForm):
   class Meta:
     model = WishPhoto
     fields = ('photo', )
+
+class WishLocationForm(forms.ModelForm):
+    location_id = forms.IntegerField(widget=forms.HiddenInput())
+    class Meta:
+        model = WishLocation
+        fields = ('name', 'address', 'city', 'state', 'country')
