@@ -1,20 +1,16 @@
 <wish>
-	<name>
-		{{ wish.name }}
-	</name>
-	<brand>
-		{{wish.brand }}
-	</brand>
-	<description>
-		{{ wish.description }}
-	</description>
-	<wishowner>
-		{{wish.related_list.owner}}
-	</wishowner>
-	<wishfor>
-		{{ wish.wish_for }}
-	</wishfor>
-	<accomplished>
-		{% if not wish.is_accomplished %}false{% else %}true{% endif %}
-	</accomplished>
+	<name>{{ wish.name }}</name>
+	<brand>{{wish.brand }}</brand>
+	<description>{{ wish.description }}</description>
+	<wishowner>{{wish.related_list.owner}}</wishowner>
+	<wishfor>{{ wish.wish_for }}</wishfor>
+	<accomplished>{% if not wish.is_accomplished %}false{% else %}true{% endif %}</accomplished>
+	<photos>
+	{% if wish.getPhotos %}
+	{% for photo in wish.getPhotos %}
+		<photo>{{ photo.photo.url }}</photo>
+	{% endfor %}
+	{% endif %}
+	</photos>
+
 </wish>

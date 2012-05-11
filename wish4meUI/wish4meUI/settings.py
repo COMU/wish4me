@@ -8,7 +8,7 @@ DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
 PROJECT_PATH = os.path.dirname(os.path.abspath(__file__))
-BASE_URL = 'http://127.0.0.1:8000'
+BASE_URL = 'http://192.168.103.144'
 
 ADMINS = (
     ('Oguz Yarimtepe', 'oguzyarimtepe@gmail.com'),
@@ -58,7 +58,7 @@ MEDIA_ROOT = os.path.join(PROJECT_PATH, 'media')
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash if there is a path component (optional in other cases).
 # Examples: "http://media.lawrence.com", "http://example.com/media/"
-MEDIA_URL = 'http://127.0.0.1:8000/site_media/'
+MEDIA_URL = BASE_URL+'/site_media/'
 
 # URL prefix for admin media -- CSS, JavaScript and images. Make sure to use a
 # trailing slash.
