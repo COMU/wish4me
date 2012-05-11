@@ -18,6 +18,7 @@ urlpatterns = patterns('',
     url(r'^accomplish/(?P<wish_id>\d+)$', view=accomplish, name="wish_accomplish_wish"),
     url(r'^remove/(?P<wish_id>\d+)$', view=remove, name="wish_remove_wish"),
     url(r'^respond/(?P<accomplish_id>\d+)/(?P<response>.*)$', view=respondAccomplish, name="wish_respond_accomplish"),
+		url(r'^add_to_my_wishes/(?P<wish_id>\d+)$', view=add_to_my_wishes, name="wish_add_to_my_wishes"),
 #url(r'^order/(?P<order>.*)/filter/(?P<filter_by>.*)/(?P<filter>.*)/(?P<page_number>\d+)/$', 'main',name='main_page'),
 )
 

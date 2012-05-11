@@ -71,6 +71,18 @@ def friendActivity(request):
              'paginator_objects': wishes, 'activity_state': activity_state}
   return render_to_response("wish/activity.html", context, context_instance=RequestContext(request))
 
+def add_to_my_wishes(request, wish_id):
+	orig_wish = get_object_or_404(Wish, pk=wish_id)
+
+	new_wish = orig_wish
+
+	new_wish.pk = None
+	new_wish.related_list = Wishlist.objects.filter(owner=request.user)[0]
+	new_wish.wish_for = request.user
+
+	new_wish.save()
+
+	return HttpResponseRedirect(reverse('my-activity'))
 
 def add(request):
   WishPhotoSet = formset_factory(WishPhotoForm, extra=5, max_num=5)
