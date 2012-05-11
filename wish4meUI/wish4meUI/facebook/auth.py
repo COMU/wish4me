@@ -57,6 +57,8 @@ class FacebookBackend:
           facebook_profile = FacebookProfile(facebook_id=fb_profile['id'],
                                              access_token=access_token)
           facebook_profile.save()
+        except Exception:
+          return None
         backend = facebook_profile.getLoginBackend(request)
         try:
           fb_username=fb_profile['username']
