@@ -2,9 +2,11 @@ package com.wish4me.android;
 
 import java.io.BufferedReader;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.MalformedURLException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,12 +38,14 @@ import android.widget.Toast;
 
 import com.wish4me.android.R;
 
+import com.facebook.android.AsyncFacebookRunner;
+import com.facebook.android.AsyncFacebookRunner.RequestListener;
 import com.facebook.android.DialogError;
 import com.facebook.android.Facebook;
 import com.facebook.android.Facebook.DialogListener;
 import com.facebook.android.FacebookError;
 
-public class Wish4meAndroidActivity extends Activity {
+public class LoginActivity extends Activity {
 	public static String SERVERIP = "192.168.103.144";
 	EditText name;
 
@@ -66,7 +70,8 @@ public class Wish4meAndroidActivity extends Activity {
 			facebook.setAccessExpires(expires);
 		}
 		if (facebook.isSessionValid()) {
-			// loginViaFacebook();
+			//facebookLogout();
+			//loginViaFacebook();
 		}
 
 		// Capture our button from layout
@@ -90,7 +95,7 @@ public class Wish4meAndroidActivity extends Activity {
 
 			if (facebookLogin()) {
 				progressDialog = ProgressDialog.show(
-						Wish4meAndroidActivity.this, "", "Loading...");
+						LoginActivity.this, "", "Loading...");
 				username = (TextView) findViewById(R.id.TV_username);
 
 				new Thread() {
@@ -116,11 +121,12 @@ public class Wish4meAndroidActivity extends Activity {
 						    	    return;
 						    	}
 								Intent userHome = new Intent(
-										Wish4meAndroidActivity.this,
+										LoginActivity.this,
 										UserHomeActivity.class);
 								userHome.putExtra("session_id", response);
 
 								startActivity(userHome);
+								//finish();
 								// username.setText((CharSequence)("Welcome "+response));
 								showToast((CharSequence) response);
 							}
@@ -203,18 +209,21 @@ public class Wish4meAndroidActivity extends Activity {
 			Log.i("wish4me-engin", responseText);
 
 		} catch (ClientProtocolException e) {
+			Log.e("wish4me-postFacebookID", e.toString());
 			Context context = getApplicationContext();
 			CharSequence text = "Client protocol exception : " + e.toString();
 			int duration = Toast.LENGTH_LONG;
 			Toast toast = Toast.makeText(context, text, duration);
 			toast.show();
 		} catch (IOException e) {
+			Log.e("wish4me-postFacebookID", e.toString());
 			Context context = getApplicationContext();
 			CharSequence text = "io exception : " + e.toString();
 			int duration = Toast.LENGTH_LONG;
 			Toast toast = Toast.makeText(context, text, duration);
 			toast.show();
 		} catch (Exception e) {
+			Log.e("wish4me-postFacebookID", e.toString());
 			Context context = getApplicationContext();
 			CharSequence text = "General error occured : " + e.toString();
 			int duration = Toast.LENGTH_LONG;
@@ -236,7 +245,7 @@ public class Wish4meAndroidActivity extends Activity {
 		if (expires != 0) {
 			facebook.setAccessExpires(expires);
 		}
-		if (!facebook.isSessionValid()) {
+		if (facebook.isSessionValid()) {
 			facebook.authorize(this, new String[] { "email" },
 					new DialogListener() {
 						public void onComplete(Bundle values) {
@@ -294,20 +303,25 @@ public class Wish4meAndroidActivity extends Activity {
 		facebook.authorizeCallback(requestCode, resultCode, data);
 
 	}
-	/*
-	 * public void facebookLogout(){ AsyncFacebookRunner asFace = new
-	 * AsyncFacebookRunner(facebook); asFace.logout(getApplicationContext(), new
-	 * RequestListener() { public void onComplete(String response, Object state)
-	 * {} public void onIOException(IOException e, Object state) {} public void
-	 * onFileNotFoundException(FileNotFoundException e, Object state) {} public
-	 * void onMalformedURLException(MalformedURLException e, Object state) {}
-	 * public void onFacebookError(FacebookError e, Object state) {} });
-	 * 
-	 * String method = "DELETE"; Bundle params = new Bundle(); /* this will
-	 * revoke 'publish_stream' permission Note: If you don't specify a
-	 * permission then this will de-authorize the application completely. /
-	 * params.putString("permission", "publish_stream");
-	 * asFace.request("/me/permissions", params, method, new
-	 * RevokePermissionListener(), null); }
-	 */
+	
+	 public void facebookLogout(){ 
+		 AsyncFacebookRunner mAsyncRunner = new AsyncFacebookRunner(facebook);
+		 mAsyncRunner.logout(getApplicationContext(), new RequestListener() {
+			  
+			  public void onComplete(String response, Object state) {}
+			  
+			  
+			  public void onIOException(IOException e, Object state) {}
+			  
+			  
+			  public void onFileNotFoundException(FileNotFoundException e,
+			        Object state) {}
+			  
+			  
+			  public void onMalformedURLException(MalformedURLException e,
+			        Object state) {}
+			  
+			  public void onFacebookError(FacebookError e, Object state) {}
+			});
+	 }
 }

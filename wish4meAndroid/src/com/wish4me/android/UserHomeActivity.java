@@ -2,7 +2,6 @@ package com.wish4me.android;
 
 
 import java.io.IOException;
-import android.view.View.OnClickListener;
 
 import java.io.StringReader;
 
@@ -75,7 +74,7 @@ public class UserHomeActivity extends Activity {
     private String getMywishes() {
     	// Create a new HttpClient and Post Header
     	HttpClient httpclient = new DefaultHttpClient();
-    	HttpPost httppost = new HttpPost("http://"+Wish4meAndroidActivity.SERVERIP+"/android/listmywishes");
+    	HttpPost httppost = new HttpPost("http://"+LoginActivity.SERVERIP+"/android/listmywishes");
     	HttpResponse response = null;
     	String responseText = null;
     	try {
@@ -88,7 +87,7 @@ public class UserHomeActivity extends Activity {
     	    // Execute HTTP Post Request
     	    response = httpclient.execute(httppost);
         	
-        	responseText = Wish4meAndroidActivity.responseToString(response);
+        	responseText = LoginActivity.responseToString(response);
 		    Log.i("wish4me-engin", responseText);
 
     	} catch (ClientProtocolException e) {
@@ -225,7 +224,7 @@ public class UserHomeActivity extends Activity {
     	    toast.show();
     	    Intent intent = new Intent(
 					UserHomeActivity.this,
-					Wish4meAndroidActivity.class);
+					LoginActivity.class);
     	    startActivity(intent);
     	    finish();
     	    return;
