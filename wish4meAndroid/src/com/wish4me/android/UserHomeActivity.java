@@ -2,37 +2,20 @@ package com.wish4me.android;
 
 
 import java.io.IOException;
-
-import java.io.StringReader;
-
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-
-
 import org.apache.http.HttpResponse;
-
 import org.apache.http.NameValuePair;
-
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
-
 import org.apache.http.client.entity.UrlEncodedFormEntity;
-
 import org.apache.http.client.methods.HttpPost;
-
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
-
 
 import android.app.Activity;
 import android.content.Context;
@@ -42,14 +25,10 @@ import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-
 import android.util.Log;
-
 import android.view.View;
 import android.view.ViewGroup;
-
 import android.widget.ImageView;
-
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -62,7 +41,7 @@ public class UserHomeActivity extends Activity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 	    super.onCreate(savedInstanceState);
-	    setContentView(R.layout.userhome);
+	    setContentView(R.layout.mywishes);
 	    Bundle extras = getIntent().getExtras();
 	    if(extras !=null) {
 	    	session_id = extras.getString("session_id");
@@ -113,49 +92,6 @@ public class UserHomeActivity extends Activity {
 
     }
 
-    public Document getDomElement(String xml){
-        Document doc = null;
-        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-        try {
- 
-            DocumentBuilder db = dbf.newDocumentBuilder();
- 
-            InputSource is = new InputSource();
-                is.setCharacterStream(new StringReader(xml));
-                doc = db.parse(is);
- 
-            } catch (ParserConfigurationException e) {
-                Log.e("Error: ", e.getMessage());
-                return null;
-            } catch (SAXException e) {
-                Log.e("Error: ", e.getMessage());
-                return null;
-            } catch (IOException e) {
-                Log.e("Error: ", e.getMessage());
-                return null;
-            }
-                // return DOM
-            return doc;
-    }
-    
-    public String getValue(Element item, String str) {
-        NodeList n = item.getElementsByTagName(str);
-        return this.getElementValue(n.item(0));
-    }
-     
-    public final String getElementValue( Node elem ) {
-             Node child;
-             if( elem != null){
-                 if (elem.hasChildNodes()){
-                     for( child = elem.getFirstChild(); child != null; child = child.getNextSibling() ){
-                         if( child.getNodeType() == Node.TEXT_NODE  ){
-                             return child.getNodeValue();
-                         }
-                     }
-                 }
-             }
-             return "";
-      }
     
     private void scaleImage(ImageView view, int boundBoxInDp)
     {
@@ -229,26 +165,26 @@ public class UserHomeActivity extends Activity {
     	    finish();
     	    return;
     	}
-    	Document doc = getDomElement(xml); // getting DOM element
+    	Document doc = ParseXML.getDomElement(xml); // getting DOM element
     	 
     	NodeList nl = doc.getElementsByTagName(KEY_WISH);
     	 
     	// looping through all item nodes <item>
     	for (int i = 0; i < nl.getLength(); i++) {
     		Element e = (Element) nl.item(i);
-    	    String name = getValue(e, KEY_NAME); // name child value
-    	    String brand = getValue(e, KEY_BRAND); // cost child value
-    	    String description = getValue(e, KEY_DESC); // description child value
+    	    String name = ParseXML.getValue(e, KEY_NAME); // name child value
+    	    String brand = ParseXML.getValue(e, KEY_BRAND); // cost child value
+    	    String description = ParseXML.getValue(e, KEY_DESC); // description child value
     	    NodeList nPhoto = e.getElementsByTagName(KEY_PHOTO);
     	    List<String>photos = new ArrayList<String>();
     	    for (int j = 0; j < nPhoto.getLength(); j++) {
     	    	e = (Element) nPhoto.item(j);
-    	    	photos.add(getValue(e, KEY_PHOTO));
+    	    	photos.add(ParseXML.getValue(e, KEY_PHOTO));
     	    }
     	    //LayoutInflater inflater = (LayoutInflater)getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     	    
     	    //View view = LayoutInflater.from(getBaseContext()).inflate(R.layout.userhome, parent, true);
-    	    View view = View.inflate(this, R.layout.userhome, parent);
+    	    View view = View.inflate(this, R.layout.wish_as_list, parent);
     	    view = parent.getChildAt(parent.getChildCount()-1);
 
     	    view.setOnClickListener(new OnClickListenerWithInt(i));

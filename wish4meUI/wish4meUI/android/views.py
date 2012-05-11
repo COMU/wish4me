@@ -33,8 +33,9 @@ def facebook_login(request):
         print request.user.username
     except:
         print "Unexpected error:", sys.exc_info()[0]
-
-    return HttpResponse(request.session.session_key, content_type="text/plain")
+    response = "<login><username>"+request.user.username+"</username><session_id>"+request.session.session_key+"</session_id></login>"
+    print response
+    return HttpResponse(response, content_type="text/plain")
   else:                             #for no post request
 
     print "facebook login hit"

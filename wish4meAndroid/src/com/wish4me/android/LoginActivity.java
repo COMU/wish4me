@@ -21,6 +21,10 @@ import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.NameValuePair;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
+
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -46,7 +50,7 @@ import com.facebook.android.Facebook.DialogListener;
 import com.facebook.android.FacebookError;
 
 public class LoginActivity extends Activity {
-	public static String SERVERIP = "192.168.103.144";
+	public static String SERVERIP = "192.168.1.40";
 	EditText name;
 
 	Facebook facebook = new Facebook("408993659121861");
@@ -58,7 +62,7 @@ public class LoginActivity extends Activity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.main);
+		setContentView(R.layout.login);
 
 		mPrefs = getPreferences(MODE_PRIVATE);
 		String access_token = mPrefs.getString("access_token", null);
@@ -120,15 +124,20 @@ public class LoginActivity extends Activity {
 
 						    	    return;
 						    	}
+						    	Document doc = ParseXML.getDomElement(response);
+						    	NodeList nl = doc.getElementsByTagName("login");
+						    	Element e = (Element) nl.item(0);
+					    	    String username = ParseXML.getValue(e, "username"); // name child value
+					    	    String session_id = ParseXML.getValue(e, "session_id"); // cost child value
 								Intent userHome = new Intent(
 										LoginActivity.this,
 										UserHomeActivity.class);
-								userHome.putExtra("session_id", response);
+								showToast((CharSequence)("welcome "+username));
+								userHome.putExtra("session_id", session_id);
 
 								startActivity(userHome);
-								//finish();
+								finish();
 								// username.setText((CharSequence)("Welcome "+response));
-								showToast((CharSequence) response);
 							}
 						});
 					}
@@ -245,7 +254,7 @@ public class LoginActivity extends Activity {
 		if (expires != 0) {
 			facebook.setAccessExpires(expires);
 		}
-		if (facebook.isSessionValid()) {
+		if (!facebook.isSessionValid()) {
 			facebook.authorize(this, new String[] { "email" },
 					new DialogListener() {
 						public void onComplete(Bundle values) {
@@ -255,17 +264,10 @@ public class LoginActivity extends Activity {
 							editor.putLong("access_expires",
 									facebook.getAccessExpires());
 							editor.commit();
-
-							Context context = getApplicationContext();
-							CharSequence text = "Facebook success : "
-									+ facebook.getAccessToken();
-							int duration = Toast.LENGTH_LONG;
-							Toast toast = Toast.makeText(context, text,
-									duration);
-							toast.show();
 						}
 
 						public void onFacebookError(FacebookError error) {
+							Log.e("wish4me-facebookLogin", error.toString());
 							Context context = getApplicationContext();
 							CharSequence text = "Facebook error occured : "
 									+ error.toString();
@@ -276,6 +278,7 @@ public class LoginActivity extends Activity {
 						}
 
 						public void onError(DialogError e) {
+							Log.e("wish4me-facebookLogin", e.toString());
 							Context context = getApplicationContext();
 							CharSequence text = "dialog error occured";
 							int duration = Toast.LENGTH_LONG;
@@ -287,8 +290,6 @@ public class LoginActivity extends Activity {
 						public void onCancel() {
 						}
 					});
-		} else {
-			return true;
 		}
 		if (facebook.isSessionValid()) // if it is valid now,
 			return true;
@@ -301,10 +302,17 @@ public class LoginActivity extends Activity {
 		super.onActivityResult(requestCode, resultCode, data);
 
 		facebook.authorizeCallback(requestCode, resultCode, data);
+		if(facebook.isSessionValid())
+			loginViaFacebook();
 
 	}
 	
-	 public void facebookLogout(){ 
+	 public void facebookLogout(){
+		SharedPreferences.Editor editor = mPrefs.edit();
+		editor.remove("access_token");
+		editor.remove("access_expires");
+		editor.commit();
+
 		 AsyncFacebookRunner mAsyncRunner = new AsyncFacebookRunner(facebook);
 		 mAsyncRunner.logout(getApplicationContext(), new RequestListener() {
 			  
