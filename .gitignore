@@ -17,3 +17,10 @@
 /.settings
 \#*\#
 .\#*
+/com_facebook_android/bin/
+/com_facebook_android/gen/
+/wish4meAndroid/bin/
+/wish4meAndroid/gen/
+/UrlImageViewHelper/bin/
+/UrlImageViewHelper/gen/
+
