@@ -18,7 +18,7 @@
         {% if not wish.getPhotos %}
           <li class="span3">
             <div class="thumbnail" title="No images defined">
-              <img src="/site_media/images/no-image.gif" alt="#{{ forloop.counter }} {{ wish.description }}"></img>
+              <img src="/site_media/images/no-image.gif" alt="#{{ forloop.counter }} {{ wish.description }}" /></img>
             </div>
           </li>
         {% endif %}
@@ -36,7 +36,12 @@
     <div class="span6"><p>Display the location with a map here</p></div>
   </div>
 
-  <div class="span4 offset8">
+  {% if wish.wish_for != user %}
+  <div class="span4 offset7">
+    <a href="{% url wish_add_to_my_wishes wish.id %}" class="btn btn-primary" type="button"><i class="icon-ok"></i>Add to My Wishes</a>
+  {% else %}
+    <div class="span4 offset8">
+  {% endif %}
     {% if not wish.is_accomplished %}
       <a href="{% url wish_accomplish_wish wish.id %}" class="btn btn-success" type="button"><i class="icon-ok"></i>Accomplish</a>
     {% else %}
