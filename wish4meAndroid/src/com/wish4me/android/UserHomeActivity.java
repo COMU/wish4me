@@ -35,6 +35,7 @@ import org.xml.sax.SAXException;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 
 import android.util.Log;
@@ -159,6 +160,18 @@ public class UserHomeActivity extends Activity {
     	final String KEY_DESC = "description";
     	 
     	String xml = getMywishes(); // getting XML
+    	if(xml == null){
+    	    Context context = getApplicationContext();
+    	    int duration = Toast.LENGTH_LONG;
+    	    Toast toast = Toast.makeText(context, "connection failed, try again later...", duration);
+    	    toast.show();
+    	    Intent intent = new Intent(
+					UserHomeActivity.this,
+					Wish4meAndroidActivity.class);
+    	    startActivity(intent);
+    	    finish();
+    	    return;
+    	}
     	Document doc = getDomElement(xml); // getting DOM element
     	 
     	NodeList nl = doc.getElementsByTagName(KEY_WISH);
