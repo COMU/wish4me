@@ -6,7 +6,7 @@
     <div class="span5"><h3><a href="{% url show-wish wish.id %}">{{wish.brand.title }} - {{ wish.name.title }}</a></h3></div>
     <div class="span4">
       <span class="pull-right">
-        <i>created by <a href="{% url specific-friend-activity related_list.owner.id %}">{{wish.related_list.owner}}</a></i><i> to <a href="{% url specific-friend-activity wish.wish_for.id %}">{{ wish.wish_for }}</a></i>
+        <i>created by <a href="{% url specific-friend-activity wish.related_list.owner.id %}">{{wish.related_list.owner}}</a></i><i> to <a href="{% url specific-friend-activity wish.wish_for.id %}">{{ wish.wish_for }}</a></i>
       </span>
     </div>
   </div>
