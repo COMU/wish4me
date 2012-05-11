@@ -6,7 +6,8 @@
     android:layout_marginLeft="3dp"
     android:layout_marginRight="3dp"
     android:background="@drawable/wish_background" >
-
+
+
     <ImageView
         android:id="@+id/wish_image"
         android:layout_width="wrap_content"
@@ -15,6 +16,7 @@
         android:layout_alignParentTop="true"
         android:maxHeight="40dp"
         android:maxWidth="40dp"
+		android:contentDescription="@string/app_name"
         android:src="@drawable/wish_icon" />
 
     <TextView

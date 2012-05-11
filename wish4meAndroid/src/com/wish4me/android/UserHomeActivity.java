@@ -44,12 +44,12 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
 import android.util.Log;
-import android.view.LayoutInflater;
+
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewGroup.LayoutParams;
+
 import android.widget.ImageView;
-import android.widget.LinearLayout;
+
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -194,7 +194,8 @@ public class UserHomeActivity extends Activity {
         view.setLayoutParams(params);
     }
 
-    private int dpToPx(int dp)
+    @SuppressWarnings("unused")
+	private int dpToPx(int dp)
     {
         float density = getApplicationContext().getResources().getDisplayMetrics().density;
         return Math.round((float)dp * density);
@@ -212,7 +213,7 @@ public class UserHomeActivity extends Activity {
     	final String KEY_NAME = "name";
     	final String KEY_BRAND = "brand";
     	final String KEY_DESC = "description";
-    	final String KEY_PHOTOS = "photos";
+    	//final String KEY_PHOTOS = "photos";
     	final String KEY_PHOTO = "photo";
     	 
     	String xml = getMywishes(); // getting XML
@@ -246,9 +247,10 @@ public class UserHomeActivity extends Activity {
     	    }
     	    //LayoutInflater inflater = (LayoutInflater)getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     	    
-    	    View view = LayoutInflater.from(getBaseContext()).inflate(R.layout.userhome, parent, true);
-    	    //View view = View.inflate(this, R.layout.userhome, parent);
-    	    
+    	    //View view = LayoutInflater.from(getBaseContext()).inflate(R.layout.userhome, parent, true);
+    	    View view = View.inflate(this, R.layout.userhome, parent);
+    	    view = parent.getChildAt(parent.getChildCount()-1);
+    	    //View view = inflater.inflate(R.layout.userhome, parent); 
     	    TextView wishName = (TextView)view.findViewById(R.id.wish_name);
     	    wishName.setText((CharSequence)name);
     	    TextView wishBrand = (TextView)view.findViewById(R.id.wish_brand);
@@ -261,8 +263,8 @@ public class UserHomeActivity extends Activity {
     	    	scaleImage(wishPhoto, 100);
     	    	Log.e("wish4me-wishimage", "for wish named "+name+", photo is "+photos.get(0));
     	    }
-    	    
     	    //parent.addView(view);
+
     	}
     }
  
