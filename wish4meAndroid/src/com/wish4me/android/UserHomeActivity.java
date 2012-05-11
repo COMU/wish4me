@@ -2,6 +2,7 @@ package com.wish4me.android;
 
 
 import java.io.IOException;
+import android.view.View.OnClickListener;
 
 import java.io.StringReader;
 
@@ -250,6 +251,9 @@ public class UserHomeActivity extends Activity {
     	    //View view = LayoutInflater.from(getBaseContext()).inflate(R.layout.userhome, parent, true);
     	    View view = View.inflate(this, R.layout.userhome, parent);
     	    view = parent.getChildAt(parent.getChildCount()-1);
+
+    	    view.setOnClickListener(new OnClickListenerWithInt(i));
+			
     	    //View view = inflater.inflate(R.layout.userhome, parent); 
     	    TextView wishName = (TextView)view.findViewById(R.id.wish_name);
     	    wishName.setText((CharSequence)name);

@@ -5,6 +5,8 @@
     android:layout_marginBottom="3dp"
     android:layout_marginLeft="3dp"
     android:layout_marginRight="3dp"
+    android:clickable="true"
+    android:hapticFeedbackEnabled="true"
     android:background="@drawable/wish_background" >
 
 
@@ -29,7 +31,6 @@
         android:text="@string/wish_description"
         android:textAppearance="?android:attr/textAppearanceSmall" />
 
-
     <TextView
         android:id="@+id/wish_name"
         android:layout_width="wrap_content"
@@ -40,8 +41,6 @@
         android:layout_toRightOf="@+id/wish_brand"
         android:text="@string/wish_name"
         android:textAppearance="?android:attr/textAppearanceMedium" />
-
-
 
     <TextView
         android:id="@+id/wish_brand"
