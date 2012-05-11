@@ -134,15 +134,15 @@ INSTALLED_APPS = (
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
 )
-
-FACEBOOK_APP_ID = "255768354473895"
-FACEBOOK_APP_SECRET = "b8f0ef66e6e88951311ea2e70dccf4fa"
-FACEBOOK_SCOPE = 'email,publish_stream,friends_about_me'
+#for web development
+#FACEBOOK_APP_ID = "255768354473895"
+#FACEBOOK_APP_SECRET = "b8f0ef66e6e88951311ea2e70dccf4fa"
+#FACEBOOK_SCOPE = 'email,publish_stream,friends_about_me'
 
 #for android app testing:
-#FACEBOOK_APP_ID = "408993659121861"
-#FACEBOOK_APP_SECRET = "36f0be90d364e91d732438b816daace4"
-#FACEBOOK_SCOPE = 'email,publish_stream,friends_about_me'
+FACEBOOK_APP_ID = "408993659121861"
+FACEBOOK_APP_SECRET = "36f0be90d364e91d732438b816daace4"
+FACEBOOK_SCOPE = 'email,publish_stream,friends_about_me'
 
 AUTH_PROFILE_MODULE = 'userprofile.UserProfile'
 

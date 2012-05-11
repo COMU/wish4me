@@ -171,8 +171,7 @@ public class UserHomeActivity extends Activity {
     	    String description = getValue(e, KEY_DESC); // description child value
     	    //LayoutInflater inflater = (LayoutInflater)getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     	    
-    	    View view = View.inflate(this, R.layout.userhome,
-                    null);
+    	    View view = LayoutInflater.from(getBaseContext()).inflate(R.layout.userhome, parent, true);
     	    
     	    TextView wishName = (TextView)view.findViewById(R.id.wish_name);
     	    wishName.setText((CharSequence)name);
@@ -181,7 +180,7 @@ public class UserHomeActivity extends Activity {
     	    TextView wishDescription = (TextView)view.findViewById(R.id.wish_description);
     	    wishDescription.setText((CharSequence)description);
     	    
-    	    parent.addView(view);
+    	    //parent.addView(view);
     	}
     }
  
