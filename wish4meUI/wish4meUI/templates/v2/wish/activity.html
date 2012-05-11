@@ -1,10 +1,13 @@
 {% extends "base/layout2.html" %}
 {% block right %}
-  <div class="row well">
-    <div class="span5 offset3">
-      {% include "wish/_add_wish_button.html" %}
-    </div>
-  </div>
+  {% if dont_show_add_wish_button %}
+  {% else %}
+	  <div class="row well">
+	    <div class="span5 offset3">
+	      {% include "wish/_add_wish_button.html" %}
+	    </div>
+	  </div>
+  {% endif %}
   <div class="row" style="height:10px">
   </div>
   {% if activity_state %}
