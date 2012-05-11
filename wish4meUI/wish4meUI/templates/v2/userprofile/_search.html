@@ -14,7 +14,7 @@
   </td>
   <td class="span2">
     <blockquote>
-      {{ resulting_user.user.username }}
+      <a href="{% url specific-friend-activity resulting_user.user.id %}">{{ resulting_user.user.username }}</a>
     </blockquote>
   </td>
   <td class="span2">
