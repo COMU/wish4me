@@ -6,6 +6,8 @@ from django.conf.urls.defaults import *
 urlpatterns = patterns('',
     url(r'^home$', view=friendActivity, name='friend-activity'),
     url(r'^me$', myActivity, name='my-activity'),
+    url(r'^(?P<friend_id>\d+)$', view=specificFriendActivity, name='specific-friend-activity'),
+
 
     url(r'^add$', add, name='add-wish'),
     url(r'^(?P<wish_id>\d+)/show$', show, name='show-wish'),

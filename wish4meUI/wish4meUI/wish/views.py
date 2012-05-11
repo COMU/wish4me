@@ -5,7 +5,8 @@ from django.core.files.base import ContentFile
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template.context import RequestContext
 from django.core.urlresolvers import reverse
-from django.http import HttpResponseRedirect, HttpResponse
+from django.http import HttpResponseRedirect, HttpResponse,\
+  HttpResponseForbidden
 from django.forms.formsets import formset_factory
 from django.contrib import messages
 from django.contrib.auth.models import User
@@ -34,7 +35,39 @@ def myActivity(request):
              'page_title': "My wish activity", 'activity_state': activity_state}
   return render_to_response('wish/activity.html', context, context_instance=RequestContext(request))
 
-
+def specificFriendActivity(request, friend_id):
+  friend = get_object_or_404(User, id=friend_id)
+  if friend == request.user:
+    return HttpResponseRedirect(reverse("my-activity"))
+  
+  are_friends = Following.objects.areFriends(request.user, friend)
+  if are_friends or True:
+      
+    wishes = Wish.objects.filter(related_list__owner = friend, is_hidden = False, is_private=False)
+    wishes = wishes.order_by("-request_date")[:5]
+    addAccomplishesToWishes(wishes)
+    #wishes = Wish.objects.filter(related_list__owner__in = following_list, is_hidden = False).order_by("-request_date")[:5]
+  
+    paginator = Paginator(wishes, 25)
+    try:
+      page = int(request.GET.get('page', '1'))
+    except ValueError:
+      page = 1
+  
+    try:
+      wishes = paginator.page(page)
+    except (EmptyPage, InvalidPage):
+      wishes = paginator.page(paginator.num_pages)
+  
+    context = {'wishes': wishes.object_list,
+               'page_title': 'Friend activity',
+               'dont_show_add_wish_button': True,
+               'paginator_objects': wishes}
+    return render_to_response("wish/activity.html", context, context_instance=RequestContext(request))
+  else:
+    return HttpResponseForbidden("Not allowed")
+  
+  
 def friendActivity(request):
   following_list = Following.objects.filter(from_user = request.user).values('to_user_id')
   friends_list = Following.objects.filter(from_user__in = following_list, to_user = request.user).values('from_user_id')
