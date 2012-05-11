@@ -2,6 +2,7 @@ package com.wish4me.android;
 
 
 import java.io.IOException;
+
 import java.io.StringReader;
 
 import java.util.ArrayList;
@@ -36,14 +37,24 @@ import org.xml.sax.SAXException;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Matrix;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewGroup.LayoutParams;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.koushikdutta.urlimageviewhelper.UrlImageViewHelper;
 
 public class UserHomeActivity extends Activity {
 	private String session_id;
@@ -146,6 +157,49 @@ public class UserHomeActivity extends Activity {
              return "";
       }
     
+    private void scaleImage(ImageView view, int boundBoxInDp)
+    {
+        // Get the ImageView and its bitmap
+        Drawable drawing = view.getDrawable();
+        Bitmap bitmap = ((BitmapDrawable)drawing).getBitmap();
+
+        // Get current dimensions
+        int width = bitmap.getWidth();
+        int height = bitmap.getHeight();
+
+        // Determine how much to scale: the dimension requiring less scaling is
+        // closer to the its side. This way the image always stays inside your
+        // bounding box AND either x/y axis touches it.
+        float xScale = ((float) boundBoxInDp) / width;
+        float yScale = ((float) boundBoxInDp) / height;
+        float scale = (xScale <= yScale) ? xScale : yScale;
+
+        // Create a matrix for the scaling and add the scaling data
+        Matrix matrix = new Matrix();
+        matrix.postScale(scale, scale);
+
+        // Create a new bitmap and convert it to a format understood by the ImageView
+        Bitmap scaledBitmap = Bitmap.createBitmap(bitmap, 0, 0, width, height, matrix, true);
+        BitmapDrawable result = new BitmapDrawable(scaledBitmap);
+        width = scaledBitmap.getWidth();
+        height = scaledBitmap.getHeight();
+
+        // Apply the scaled bitmap
+        view.setImageDrawable(result);
+
+        // Now change ImageView's dimensions to match the scaled image
+        RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) view.getLayoutParams();
+        params.width = width;
+        params.height = height;
+        view.setLayoutParams(params);
+    }
+
+    private int dpToPx(int dp)
+    {
+        float density = getApplicationContext().getResources().getDisplayMetrics().density;
+        return Math.round((float)dp * density);
+    }
+    
     public void updateView(){
     	setContentView(R.layout.mywishes);
 
@@ -158,6 +212,8 @@ public class UserHomeActivity extends Activity {
     	final String KEY_NAME = "name";
     	final String KEY_BRAND = "brand";
     	final String KEY_DESC = "description";
+    	final String KEY_PHOTOS = "photos";
+    	final String KEY_PHOTO = "photo";
     	 
     	String xml = getMywishes(); // getting XML
     	if(xml == null){
@@ -182,9 +238,16 @@ public class UserHomeActivity extends Activity {
     	    String name = getValue(e, KEY_NAME); // name child value
     	    String brand = getValue(e, KEY_BRAND); // cost child value
     	    String description = getValue(e, KEY_DESC); // description child value
+    	    NodeList nPhoto = e.getElementsByTagName(KEY_PHOTO);
+    	    List<String>photos = new ArrayList<String>();
+    	    for (int j = 0; j < nPhoto.getLength(); j++) {
+    	    	e = (Element) nPhoto.item(j);
+    	    	photos.add(getValue(e, KEY_PHOTO));
+    	    }
     	    //LayoutInflater inflater = (LayoutInflater)getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     	    
     	    View view = LayoutInflater.from(getBaseContext()).inflate(R.layout.userhome, parent, true);
+    	    //View view = View.inflate(this, R.layout.userhome, parent);
     	    
     	    TextView wishName = (TextView)view.findViewById(R.id.wish_name);
     	    wishName.setText((CharSequence)name);
@@ -192,6 +255,12 @@ public class UserHomeActivity extends Activity {
     	    wishBrand.setText((CharSequence)(brand+" "));
     	    TextView wishDescription = (TextView)view.findViewById(R.id.wish_description);
     	    wishDescription.setText((CharSequence)description);
+    	    ImageView wishPhoto = (ImageView)view.findViewById(R.id.wish_image);
+    	    if(photos.size() > 0){
+    	    	UrlImageViewHelper.setUrlDrawable(wishPhoto,photos.get(0));
+    	    	scaleImage(wishPhoto, 100);
+    	    	Log.e("wish4me-wishimage", "for wish named "+name+", photo is "+photos.get(0));
+    	    }
     	    
     	    //parent.addView(view);
     	}
