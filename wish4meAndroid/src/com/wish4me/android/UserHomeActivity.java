@@ -2,6 +2,7 @@ package com.wish4me.android;
 
 
 import java.io.IOException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,6 +38,7 @@ import com.koushikdutta.urlimageviewhelper.UrlImageViewHelper;
 
 public class UserHomeActivity extends Activity {
 	private String session_id;
+	private String wish_xml;
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -97,6 +99,8 @@ public class UserHomeActivity extends Activity {
     {
         // Get the ImageView and its bitmap
         Drawable drawing = view.getDrawable();
+        if(drawing == null)
+        	Log.e("wish4me-scaleimage", "view has no drawable");
         Bitmap bitmap = ((BitmapDrawable)drawing).getBitmap();
 
         // Get current dimensions
@@ -141,8 +145,7 @@ public class UserHomeActivity extends Activity {
     	setContentView(R.layout.mywishes);
 
         ViewGroup parent = (ViewGroup) findViewById(R.id.mywishes_linear_layout);
-        
-        
+
         
     	// XML node keys
     	final String KEY_WISH = "wish"; // parent node
@@ -165,6 +168,7 @@ public class UserHomeActivity extends Activity {
     	    finish();
     	    return;
     	}
+    	wish_xml = xml;								//this is for sending next activity.
     	Document doc = ParseXML.getDomElement(xml); // getting DOM element
     	 
     	NodeList nl = doc.getElementsByTagName(KEY_WISH);
@@ -186,9 +190,27 @@ public class UserHomeActivity extends Activity {
     	    //View view = LayoutInflater.from(getBaseContext()).inflate(R.layout.userhome, parent, true);
     	    View view = View.inflate(this, R.layout.wish_as_list, parent);
     	    view = parent.getChildAt(parent.getChildCount()-1);
+    	    
+    	    Method createGalleryMethod = null;
+			try {
+				/*Class<?> c = Class.forName("UserHomeActivity");
+				Method  method = c.getDeclaredMethod ("createGalleryMethod", new Class[] {int.class});
+				method.invoke (objectToInvokeOn, params)
+				*/
+				createGalleryMethod = this.getClass().getMethod("createGalleryActivity", new Class[] {int.class});
+			    Log.e("wish4me-getMethod", "clicked "+ createGalleryMethod.getName() + " " + createGalleryMethod.getParameterTypes().toString());
+			    
+				
+			} catch (SecurityException e1) {
+				Log.e("wish4me-SecurityException", e1.toString());
+				e1.printStackTrace();
+			} catch (NoSuchMethodException e1) {
+				Log.e("wish4me-NoSuchMethodException", e1.toString());
+				e1.printStackTrace();
+			}
 
-    	    view.setOnClickListener(new OnClickListenerWithInt(i));
-			
+    	    view.setOnClickListener(new OnClickListenerWithInt(i, createGalleryMethod, this));
+
     	    //View view = inflater.inflate(R.layout.userhome, parent); 
     	    TextView wishName = (TextView)view.findViewById(R.id.wish_name);
     	    wishName.setText((CharSequence)name);
@@ -198,13 +220,30 @@ public class UserHomeActivity extends Activity {
     	    wishDescription.setText((CharSequence)description);
     	    ImageView wishPhoto = (ImageView)view.findViewById(R.id.wish_image);
     	    if(photos.size() > 0){
-    	    	UrlImageViewHelper.setUrlDrawable(wishPhoto,photos.get(0));
-    	    	scaleImage(wishPhoto, 100);
+    	    	UrlImageViewHelper.setUrlDrawable(wishPhoto, photos.get(0));
     	    	Log.e("wish4me-wishimage", "for wish named "+name+", photo is "+photos.get(0));
+    	    	while(wishPhoto.getDrawable() == null)
+    	    		android.os.SystemClock.sleep(200);	//TODO this is a bad way, but I am out of ideas.
+    	    	scaleImage(wishPhoto, 100);
     	    }
+    	    photos.clear();
     	    //parent.addView(view);
 
     	}
+    }
+    public void createGalleryActivity(int wishID) {
+    	Context context = getApplicationContext();
+		Intent wishGallery = new Intent(
+				context,
+				WishPhotoGalleryActivity.class);
+		wishGallery.putExtra("wish_xml", wish_xml);
+		wishGallery.putExtra("wish_index", wishID);
+	    
+	    int duration = Toast.LENGTH_SHORT;
+	    Toast toast = Toast.makeText(context, "called view "+wishID, duration);
+	    toast.show();
+	    
+		startActivity(wishGallery);
     }
  
 }

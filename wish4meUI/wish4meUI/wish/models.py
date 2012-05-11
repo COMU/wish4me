@@ -4,7 +4,7 @@ from django.db import models
 from django.contrib.auth.models import User
 
 from wish4meUI.wishlist.models import Wishlist
-
+from wish4meUI import settings
 import random
 import string
 import os
@@ -61,15 +61,18 @@ class _WishPhoto(models.Model):
 
   def save(self):
     if not self.is_hidden:
-      super(_WishPhoto,self).save()
-      old_path = os.path.split(self.photo.file.name)[0]
+      #super(_WishPhoto,self).save()
+      #old_path = os.path.split(self.photo.file.name)[0]
+      old_path = self.photo.path
       extension =  os.path.splitext(self.photo.file.name)[-1]
       new_name = "%s%s" % (''.join(random.choice(string.letters + string.digits) for x in range(int(random.random()*35))), extension)
-      os.rename(self.photo.file.name, old_path+"/"+new_name)
+      z = old_path+os.sep+new_name
+      self.photo.file.name = z
+      #os.rename(self.photo.file.name, z)
 
       old_url_head = os.path.split(self.photo.url)[0]
 
-      self.photo.name = "photos" +  old_path[old_path.rfind('/'):] + "/" + new_name
+      self.photo.name = "photos" +  old_path[old_path.rfind('/'):] + os.sep + new_name
     super(_WishPhoto, self).save()
 
   def __unicode__(self):
