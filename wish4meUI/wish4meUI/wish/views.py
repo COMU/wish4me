@@ -135,23 +135,29 @@ def add(request):
       wish.request_date = datetime.now()
       wish.save()
       try:
-				for photoform in wish_photo_set_form.forms:
-					photo = photoform.save(commit = False)
-					try:
-						if photoform.cleaned_data['url'] != '':
-							photo.wish = wish
-							photo_name = urlparse(photoform.cleaned_data['url']).path.split('/')[-1][0:20]
-							photo_content = ContentFile(urllib2.urlopen(photoform.cleaned_data['url']).read())
-							photo.photo.save(photo_name, photo_content, save=False)
-							photo.save()
-						elif photo.photo:
-							photo.wish = wish
-							photo.save()
-					except urllib2.HTTPError:
-						continue
+            for photoform in wish_photo_set_form.forms:
+                photo = photoform.save(commit = False)
+                print "z0"
+                try:
+                    print "z1"
+                    if photoform.cleaned_data['url'] != '':
+                        print "z-1"
+                    	photo.wish = wish
+                    	photo_name = urlparse(photoform.cleaned_data['url']).path.split('/')[-1][0:20]
+                    	photo_content = ContentFile(urllib2.urlopen(photoform.cleaned_data['url']).read())
+                    	photo.photo.save(photo_name, photo_content, save=False)
+                    	photo.save()
+                    elif photo.photo:
+                        print "z2"
+                    	photo.wish = wish
+                        photo.save()
+                except urllib2.HTTPError:
+                    print "z3"
+                    continue
 
-      except:
-        pass
+      except Exception as e:
+            print "z4", e
+            pass
 
       return HttpResponseRedirect(reverse('my-activity'))
     else:
