@@ -8,7 +8,7 @@ DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
 PROJECT_PATH = os.path.dirname(os.path.abspath(__file__))
-BASE_URL = 'http://192.168.103.144'
+BASE_URL = 'http://127.0.0.1'
 
 ADMINS = (
     ('Oguz Yarimtepe', 'oguzyarimtepe@gmail.com'),
@@ -135,14 +135,14 @@ INSTALLED_APPS = (
     # 'django.contrib.admindocs',
 )
 #for web development
-#FACEBOOK_APP_ID = "255768354473895"
-#FACEBOOK_APP_SECRET = "b8f0ef66e6e88951311ea2e70dccf4fa"
-#FACEBOOK_SCOPE = 'email,publish_stream,friends_about_me'
+FACEBOOK_APP_ID = "255768354473895"
+FACEBOOK_APP_SECRET = "b8f0ef66e6e88951311ea2e70dccf4fa"
+FACEBOOK_SCOPE = 'email,publish_stream,friends_about_me'
 
 #for android app testing:
-FACEBOOK_APP_ID = "408993659121861"
-FACEBOOK_APP_SECRET = "36f0be90d364e91d732438b816daace4"
-FACEBOOK_SCOPE = 'email,publish_stream,friends_about_me'
+#FACEBOOK_APP_ID = "408993659121861"
+#FACEBOOK_APP_SECRET = "36f0be90d364e91d732438b816daace4"
+#FACEBOOK_SCOPE = 'email,publish_stream,friends_about_me'
 
 AUTH_PROFILE_MODULE = 'userprofile.UserProfile'
 
