@@ -3,6 +3,9 @@ from django.contrib.auth.models import User
 from django.http import *
 from django.core.urlresolvers import reverse
 
+import urllib, hashlib, os
+import urllib2
+
 from django.contrib.auth import authenticate, login
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
@@ -49,17 +52,30 @@ def userInformationEdit(request):
     }
 
     if request.method == 'POST':
-        userForm = UserInformationForm(request.POST, instance=user, prefix = UserInformationForm.__class__.__name__)
-        profileForm = UserPrivacyForm(request.POST, instance=profile, prefix = UserPrivacyForm.__class__.__name__)
-        if userForm.is_valid():
-            if request.FILES.has_key(UserInformationForm.__class__.__name__+'-photo'):
-                img = request.FILES[UserInformationForm.__class__.__name__+'-photo']
-                profile = user.get_profile()
-                profile.photo.save(img.name, img)
-            
-            profile.save()
-            userForm.save()
-            profileForm.save()
+				userForm = UserInformationForm(request.POST, instance=user, prefix = UserInformationForm.__class__.__name__)
+				profileForm = UserPrivacyForm(request.POST, instance=profile, prefix = UserPrivacyForm.__class__.__name__)
+				try:
+					if request.FILES.has_key(UserInformationForm.__class__.__name__+'-photo'):
+						img = request.FILES[UserInformationForm.__class__.__name__+'-photo']
+						profile = user.get_profile()
+						profile.photo.save(img.name, img)
+
+					elif request.POST['gravatar_email'] != '':
+						email = request.POST['gravatar_email']
+						default = settings.MEDIA_ROOT + os.sep + 'images' + os.sep + 'defaultProfile.jpg'
+						gravatar_url = "http://www.gravatar.com/avatar/" + hashlib.md5(email.lower()).hexdigest() + "?"
+						gravatar_url += urllib.urlencode({'s':str(160)})
+						img = ContentFile(urllib2.urlopen(gravatar_url).read())
+						profile = user.get_profile()
+						profile.photo.save('gravatar_photo_%s' % user.username, img)
+
+
+				except:
+					pass
+
+				profile.save()
+				userForm.save()
+				profileForm.save()
     else:
         userForm = UserInformationForm(initial = {'username': user.username, 'first_name': user.first_name, 
                                                   'last_name': user.last_name, 'email': user.email, }, 
