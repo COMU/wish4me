@@ -134,30 +134,21 @@ def add(request):
       wish.related_list = wish_form.cleaned_data['related_list']
       wish.request_date = datetime.now()
       wish.save()
-      try:
-            for photoform in wish_photo_set_form.forms:
-                photo = photoform.save(commit = False)
-                print "z0"
-                try:
-                    print "z1"
-                    if photoform.cleaned_data['url'] != '':
-                        print "z-1"
-                    	photo.wish = wish
-                    	photo_name = urlparse(photoform.cleaned_data['url']).path.split('/')[-1][0:20]
-                    	photo_content = ContentFile(urllib2.urlopen(photoform.cleaned_data['url']).read())
-                    	photo.photo.save(photo_name, photo_content, save=False)
-                    	photo.save()
-                    elif photo.photo:
-                        print "z2"
-                    	photo.wish = wish
-                        photo.save()
-                except urllib2.HTTPError:
-                    print "z3"
-                    continue
+      for photoform in wish_photo_set_form.forms:
+          photo = photoform.save(commit = False)
+          try:
+              if photo.photo:
+                photo.wish = wish
+                photo.save()
+              elif photoform.cleaned_data['url'] != '':
+                photo.wish = wish
+                photo_name = urlparse(photoform.cleaned_data['url']).path.split('/')[-1][0:20]
+                photo_content = ContentFile(urllib2.urlopen(photoform.cleaned_data['url']).read())
+                photo.photo.save(photo_name, photo_content, save=False)
+                photo.save()
 
-      except Exception as e:
-            print "z4", e
-            pass
+          except:
+              pass
 
       return HttpResponseRedirect(reverse('my-activity'))
     else:
@@ -188,7 +179,106 @@ def add(request):
 
 
 def edit(request, wish_id):
-  return HttpResponseRedirect(reverse('wish_home'))
+	_wish = Wish.objects.get(pk=wish_id)
+	WishPhotoSet = formset_factory(WishPhotoForm, extra=5, max_num=5)
+	if request.POST:
+		wish_form = WishForm(request.user, request.POST, prefix=WishForm.__class__.__name__)
+		wish_photo_set_form = WishPhotoSet(request.POST, request.FILES, prefix=WishPhotoSet.__class__.__name__)
+		if wish_form.is_valid():
+			wish = get_object_or_404(Wish, pk=wish_id)
+			wish_for = wish_form.cleaned_data['wish_for_text']
+			wish.wish_for = User.objects.get(username = wish_for)
+			wish.description = wish_form.cleaned_data['description']
+			wish.name = wish_form.cleaned_data['name']
+			wish.brand = wish_form.cleaned_data['brand']
+			wish.category = wish_form.cleaned_data['category']
+			wish.related_list = wish_form.cleaned_data['related_list']
+			wish.save()
+
+			lc = 0
+			lc_1 = 0
+			wpl = WishPhoto.objects.filter(wish=_wish, is_hidden=False)
+			for photoform in wish_photo_set_form.forms:
+				try:
+					if request.POST['remove_photo_%s' % lc_1] == 'on':
+						wp = wpl[lc]
+						wp.is_hidden = True
+						wp.save()
+						lc_1 += 1
+						continue
+				except:
+					pass
+
+				photo = photoform.save(commit = False)
+				try:
+
+					if photo.photo:
+						try:
+							wp = wpl[lc]
+							wp.is_hidden = True
+							wp.save()
+							lc -= 1
+						except:
+							pass
+
+						photo.wish = wish
+						photo.save()
+
+
+
+					elif photoform.cleaned_data['url'] != '':
+
+
+						photo.wish = wish
+						photo_name = urlparse(photoform.cleaned_data['url']).path.split('/')[-1][0:20]
+						photo_content = ContentFile(urllib2.urlopen(photoform.cleaned_data['url']).read())
+						try:
+							wp = wpl[lc]
+							wp.is_hidden = True
+							wp.save()
+							lc -= 1
+						except:
+							pass
+						photo.photo.save(photo_name, photo_content, save=False)
+						photo.save()
+
+
+
+
+				except:
+					pass
+
+				lc += 1
+				lc_1 += 1
+
+		return HttpResponseRedirect(reverse('my-activity'))
+	else:
+
+
+		follower_relation = Following.objects.filter(to_user = request.user, is_hidden = False).values('from_user')
+		followers = User.objects.filter(id__in = follower_relation)
+		followed_relation = Following.objects.filter(from_user = request.user, is_hidden = False).values('to_user')
+		followed = User.objects.filter(id__in = followed_relation)
+		users_self = User.objects.filter(id = request.user.id)
+		people_to_list = (followers & followed) | users_self
+		#Bootstrap typeahead is pretty strict, creating list in here is much cleaner.
+		typeahead_source = "["
+		for friend in people_to_list:
+			typeahead_source += "\"" + friend.username + "\","
+		typeahead_source = typeahead_source[:-1]
+		typeahead_source += "]"
+		#friends_list = people_to_list.values('username')
+
+
+		wish_form = WishForm(request.user, instance = _wish, prefix=WishForm.__class__.__name__)
+		wish_form.fields['wish_for_text'].widget.attrs['data-source'] = typeahead_source
+		wish_photo_set_form = WishPhotoSet(prefix=WishPhotoSet.__class__.__name__)
+
+		photos = WishPhoto.objects.filter(wish=_wish, is_hidden=False)
+
+		details = { 'form': wish_form, 'wish_photo_set_form': wish_photo_set_form, 'photos': photos,
+		            'page_title': 'Edit wish', 'typeahead_source': typeahead_source, 'wish_id': wish_id,}
+		return render_to_response('wish/edit.html', details, context_instance=RequestContext(request))
 
 
 def show(request, wish_id):
