@@ -1,0 +1,32 @@
+{% extends "base/layout2.html" %}
+{% block scripts %}
+<script src="/site_media/js/wish.js" onload="setAutoChangePrivacy()"></script>
+{% endblock %}
+{% block right %}
+<div class="row" style='height:50px'><i>* fields are required. </i></div>
+<form class="form-vertical" action="{% url wish_edit_wish wish_id %}" enctype="multipart/form-data" method="POST">
+    <div class="container">
+        <div class="span4">
+            {% csrf_token %}
+            {% include "_form.html" %}
+            {{ wish_photo_set_form.management_form.as_table }}
+        </div>
+        <div class="span4 well">
+            <h3><i class="icon-picture"></i> Photos of wish </h3>
+            {% for form in wish_photo_set_form.forms %}
+                {% for phot in photos %}
+                {% if forloop.counter0 == forloop.parentloop.counter0 %}
+                     <img src="{{ phot.photo.url }}"/>
+                     <br>
+                     <input type="checkbox" name="remove_photo_{{ forloop.counter0 }}">Remove Photo
+                {% endif %}
+                {% endfor %}
+                {% include "_form.html" %}
+                <hr>
+            {% endfor %}
+        </div>
+    </div>
+    <hr>
+    <input class="btn btn-primary" type="submit" value="Submit" />
+</form>
+{% endblock %}
