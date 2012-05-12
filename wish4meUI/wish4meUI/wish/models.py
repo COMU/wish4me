@@ -61,14 +61,14 @@ class _WishPhoto(models.Model):
 
   def save(self):
     if not self.is_hidden:
-      #super(_WishPhoto,self).save()
-      #old_path = os.path.split(self.photo.file.name)[0]
-      old_path = self.photo.path
+      super(_WishPhoto,self).save()
+      old_path = os.path.split(self.photo.file.name)[0]
+      #old_path = self.photo.path
       extension =  os.path.splitext(self.photo.file.name)[-1]
       new_name = "%s%s" % (''.join(random.choice(string.letters + string.digits) for x in range(int(random.random()*35))), extension)
-      z = old_path+os.sep+new_name
-      self.photo.file.name = z
-      #os.rename(self.photo.file.name, z)
+      #z = old_path+os.sep+new_name
+      #self.photo.file.name = z
+      os.rename(self.photo.file.name, old_path+"/"+new_name )
 
       old_url_head = os.path.split(self.photo.url)[0]
 
