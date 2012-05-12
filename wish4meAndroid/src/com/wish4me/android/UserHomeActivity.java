@@ -312,6 +312,14 @@ public class UserHomeActivity extends Activity {
 				startActivity(userHome);
 				finish();
                 return true;
+            case R.id.menu_logout:
+				Intent loginActivity = new Intent(
+						UserHomeActivity.this,
+						LoginActivity.class);
+				loginActivity.putExtra("logout", "true");
+				startActivity(loginActivity);
+				finish();
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }

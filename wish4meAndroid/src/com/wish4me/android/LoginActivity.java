@@ -64,8 +64,19 @@ public class LoginActivity extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.login);
-
 		mPrefs = getPreferences(MODE_PRIVATE);
+	    Bundle extras = getIntent().getExtras();
+	    if(extras !=null) {
+	    	Log.e("wish4me-loginActivity", "there are extras.");
+	    	String logout = extras.getString("logout");
+	    	Log.e("wish4me-loginActivity", "logout is : \""+logout+"\"");
+	    	if(logout != null && logout.equals("true")){
+	    		Log.e("wish4me-loginActivity", "there is logout");
+	    		facebookLogout();
+	    	}
+		}
+
+		
 		String access_token = mPrefs.getString("access_token", null);
 		long expires = mPrefs.getLong("access_expires", 0);
 		if (access_token != null) {
@@ -76,7 +87,7 @@ public class LoginActivity extends Activity {
 		}
 		if (facebook.isSessionValid()) {
 			//facebookLogout();
-			//loginViaFacebook();
+			loginViaFacebook();
 		}
 
 		// Capture our button from layout
