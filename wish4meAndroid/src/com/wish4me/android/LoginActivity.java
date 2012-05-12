@@ -41,6 +41,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.wish4me.android.R;
+import com.wish4me.android.UserHomeActivity.wishes;
 
 import com.facebook.android.AsyncFacebookRunner;
 import com.facebook.android.AsyncFacebookRunner.RequestListener;
@@ -134,6 +135,8 @@ public class LoginActivity extends Activity {
 										UserHomeActivity.class);
 								showToast((CharSequence)("welcome "+username));
 								userHome.putExtra("session_id", session_id);
+								UserHomeActivity.wishes wishes_to_list = wishes.MYWISHES;
+								userHome.putExtra("wishes_to_list", wishes_to_list.ordinal());
 
 								startActivity(userHome);
 								finish();

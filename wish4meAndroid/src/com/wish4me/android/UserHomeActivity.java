@@ -46,9 +46,11 @@ public class UserHomeActivity extends Activity {
 	private String session_id;
 	private String wish_xml;
 	
-	private enum wishes {
+	public static enum wishes {
 		MYWISHES, FRIENDWISHES
 	}
+	
+	wishes currentWishes;
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -57,17 +59,22 @@ public class UserHomeActivity extends Activity {
 	    Bundle extras = getIntent().getExtras();
 	    if(extras !=null) {
 	    	session_id = extras.getString("session_id");
-	    }
+	    	int temp = extras.getInt("wishes_to_list");
+	    	if(temp >= 0 && temp < wishes.values().length)
+	    	    currentWishes = wishes.values()[temp];
+	    	else
+	    		Log.e("wish4me-userHome-oncreate","wishes_to_list value is not passed.");
+		}
 	    updateView();
 
 	}
 	
-    private String getMywishes(wishes wishFrom) {
+    private String getMywishes() {
     	// Create a new HttpClient and Post Header
     	HttpClient httpclient = new DefaultHttpClient();
     	HttpPost httppost = new HttpPost("http://"+LoginActivity.SERVERIP+"/android/listmywishes");	// list my wishes by default.
-    	if (wishFrom == wishes.FRIENDWISHES)
-    		httppost = new HttpPost("http://"+LoginActivity.SERVERIP+"/android/listmywishes");
+    	if (currentWishes == wishes.FRIENDWISHES)
+    		httppost = new HttpPost("http://"+LoginActivity.SERVERIP+"/android/listfollowingwishes");
     	HttpResponse response = null;
     	String responseText = null;
     	try {
@@ -167,7 +174,7 @@ public class UserHomeActivity extends Activity {
     	//final String KEY_PHOTOS = "photos";
     	final String KEY_PHOTO = "photo";
     	 
-    	String xml = getMywishes(wishes.MYWISHES); // getting XML
+    	String xml = getMywishes(); // getting XML
     	if(xml == null){
     	    Context context = getApplicationContext();
     	    int duration = Toast.LENGTH_LONG;
@@ -281,19 +288,29 @@ public class UserHomeActivity extends Activity {
     
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+    	Intent userHome;
+    	UserHomeActivity.wishes wishes_to_list;
         // Handle item selection
         switch (item.getItemId()) {
             case R.id.menu_listmywishes:
-            	Context context = getApplicationContext();
-    		    int duration = Toast.LENGTH_SHORT;
-    		    Toast toast = Toast.makeText(context, "listin my wishes", duration);
-    		    toast.show();
+				userHome = new Intent(
+						UserHomeActivity.this,
+						UserHomeActivity.class);
+				userHome.putExtra("session_id", session_id);
+				wishes_to_list = wishes.MYWISHES;
+				userHome.putExtra("wishes_to_list", wishes_to_list.ordinal());
+				startActivity(userHome);
+				finish();
                 return true;
             case R.id.menu_listfriendswishes:
-            	Context context2 = getApplicationContext();
-    		    int duration2 = Toast.LENGTH_SHORT;
-    		    Toast toast2 = Toast.makeText(context2, "listing friend wishes", duration2);
-    		    toast2.show();
+				userHome = new Intent(
+						UserHomeActivity.this,
+						UserHomeActivity.class);
+				userHome.putExtra("session_id", session_id);
+				wishes_to_list = wishes.FRIENDWISHES;
+				userHome.putExtra("wishes_to_list", wishes_to_list.ordinal());
+				startActivity(userHome);
+				finish();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

@@ -10,6 +10,7 @@ from wish4meUI.facebook.views import androidLogin
 from wish4meUI.decorators.cookieless_decorator  import session_from_http_params
 from wish4meUI import settings
 from wish4meUI.wish.models import Wish
+from wish4meUI.friend.utils import getFollowingWishes
 
 @csrf_exempt
 def facebook_login(request):
@@ -54,6 +55,7 @@ def listMyWishes(request):
 
 @csrf_exempt
 @session_from_http_params
-def newIdea(request):
-    response =  HttpResponse("nothing so far", content_type="text/plain")
-    return response
+def listFollowingWishes(request):
+    print "requested by : ",request.user.username
+    wish_list = getFollowingWishes(request)
+    return render_to_response("android/wishlist.xml", {'wish_list': wish_list,})
