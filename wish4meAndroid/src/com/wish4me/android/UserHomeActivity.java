@@ -19,7 +19,9 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
@@ -27,6 +29,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -296,5 +299,35 @@ public class UserHomeActivity extends Activity {
                 return super.onOptionsItemSelected(item);
         }
     }
-    
+ 
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        //Handle the back button
+        if(keyCode == KeyEvent.KEYCODE_BACK) {
+            //Ask the user if they want to quit
+            new AlertDialog.Builder(this)
+            .setIcon(android.R.drawable.ic_dialog_alert)
+            .setTitle(R.string.title_quit)
+            .setMessage(R.string.confirm_quit)
+            .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+
+                
+                public void onClick(DialogInterface dialog, int which) {
+
+                    //Stop the activity
+                    UserHomeActivity.this.finish();    
+                }
+
+            })
+            .setNegativeButton(R.string.no, null)
+            .show();
+
+            return true;
+        }
+        else {
+            return super.onKeyDown(keyCode, event);
+        }
+
+    }
+
 }
