@@ -230,18 +230,35 @@ public class UserHomeActivity extends Activity {
     	}
     }
     public void createGalleryActivity(int wishID) {
-    	Context context = getApplicationContext();
-		Intent wishGallery = new Intent(
-				context,
-				WishPhotoGalleryActivity.class);
-		wishGallery.putExtra("wish_xml", wish_xml);
-		wishGallery.putExtra("wish_index", wishID);
-	    
-	    int duration = Toast.LENGTH_SHORT;
-	    Toast toast = Toast.makeText(context, "called view "+wishID, duration);
-	    toast.show();
-	    
-		startActivity(wishGallery);
+    	
+    	String KEY_WISH = "wish";
+    	String KEY_PHOTO = "photo";
+    	
+    	Document doc = ParseXML.getDomElement(wish_xml);
+   	 
+    	NodeList nl = doc.getElementsByTagName(KEY_WISH);
+    	 
+    	// looping through all item nodes <item>
+    	if(wishID < nl.getLength()) {
+    		Element e = (Element) nl.item(wishID);
+    	    NodeList nPhoto = e.getElementsByTagName(KEY_PHOTO);
+        	Context context = getApplicationContext();
+    	    if(nPhoto.getLength() > 0){
+    			Intent wishGallery = new Intent(
+    					context,
+    					WishPhotoGalleryActivity.class);
+    			wishGallery.putExtra("wish_xml", wish_xml);
+    			wishGallery.putExtra("wish_index", wishID);
+    			startActivity(wishGallery);
+    			
+    	    } else {
+    		    int duration = Toast.LENGTH_SHORT;
+    		    Toast toast = Toast.makeText(context, "this wish has no image to show", duration);
+    		    toast.show();    	    	
+    	    }
+    	}
+
+
     }
  
 }
