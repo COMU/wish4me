@@ -27,6 +27,9 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -261,4 +264,31 @@ public class UserHomeActivity extends Activity {
 
     }
  
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.wishestoshow, menu);
+        return true;
+    }
+    
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+            case R.id.menu_listmywishes:
+            	Context context = getApplicationContext();
+    		    int duration = Toast.LENGTH_SHORT;
+    		    Toast toast = Toast.makeText(context, "listin my wishes", duration);
+    		    toast.show();
+                return true;
+            case R.id.menu_listfriendswishes:
+            	Context context2 = getApplicationContext();
+    		    int duration2 = Toast.LENGTH_SHORT;
+    		    Toast toast2 = Toast.makeText(context2, "listing friend wishes", duration2);
+    		    toast2.show();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+    
 }
