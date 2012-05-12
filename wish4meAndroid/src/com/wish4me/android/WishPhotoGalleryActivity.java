@@ -19,6 +19,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.BaseAdapter;
 import android.widget.Gallery;
 import android.widget.ImageView;
@@ -84,10 +85,6 @@ public class WishPhotoGalleryActivity extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 	    super.onCreate(savedInstanceState);
 	    setContentView(R.layout.wishphotos);
-	    Context context = getApplicationContext();
-	    int duration = Toast.LENGTH_LONG;
-	    Toast toast = Toast.makeText(context, "ehe ehe", duration);
-	    toast.show();
 	    Bundle extras = getIntent().getExtras();
 	    if(extras !=null) {
 	    	wish_xml = extras.getString("wish_xml");
@@ -97,7 +94,24 @@ public class WishPhotoGalleryActivity extends Activity {
 	    imageView = (ImageView)findViewById(R.id.wishImageSelected);
 	    Gallery gallery = (Gallery) findViewById(R.id.wishPhotoGallery);
 	    gallery.setAdapter(new ImageAdapter(this));
-	    
+	    gallery.setOnItemSelectedListener(new OnItemSelectedListener() {
+			public void onItemSelected(AdapterView<?> arg0, View arg1,
+					int arg2, long arg3) {
+				imageView.setImageDrawable(pics[arg2]);
+				}
+
+			public void onNothingSelected(AdapterView<?> arg0) {
+				if(pics.length == 0){
+					Context context = getApplicationContext();
+				    int duration = Toast.LENGTH_LONG;
+				    Toast toast = Toast.makeText(context, "this wish has no image", duration);
+				    toast.show();
+				    return;
+				}
+				imageView.setImageDrawable(pics[0]);
+			}
+	    	
+		});
         gallery.setOnItemClickListener(new OnItemClickListener() {
 
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
@@ -109,7 +123,6 @@ public class WishPhotoGalleryActivity extends Activity {
 
         	
         });
-	    
 	}
 	
     public class ImageAdapter extends BaseAdapter {
