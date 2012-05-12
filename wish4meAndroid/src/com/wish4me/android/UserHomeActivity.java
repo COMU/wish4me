@@ -42,6 +42,10 @@ import com.koushikdutta.urlimageviewhelper.UrlImageViewHelper;
 public class UserHomeActivity extends Activity {
 	private String session_id;
 	private String wish_xml;
+	
+	private enum wishes {
+		MYWISHES, FRIENDWISHES
+	}
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -55,10 +59,12 @@ public class UserHomeActivity extends Activity {
 
 	}
 	
-    private String getMywishes() {
+    private String getMywishes(wishes wishFrom) {
     	// Create a new HttpClient and Post Header
     	HttpClient httpclient = new DefaultHttpClient();
-    	HttpPost httppost = new HttpPost("http://"+LoginActivity.SERVERIP+"/android/listmywishes");
+    	HttpPost httppost = new HttpPost("http://"+LoginActivity.SERVERIP+"/android/listmywishes");	// list my wishes by default.
+    	if (wishFrom == wishes.FRIENDWISHES)
+    		httppost = new HttpPost("http://"+LoginActivity.SERVERIP+"/android/listmywishes");
     	HttpResponse response = null;
     	String responseText = null;
     	try {
@@ -158,7 +164,7 @@ public class UserHomeActivity extends Activity {
     	//final String KEY_PHOTOS = "photos";
     	final String KEY_PHOTO = "photo";
     	 
-    	String xml = getMywishes(); // getting XML
+    	String xml = getMywishes(wishes.MYWISHES); // getting XML
     	if(xml == null){
     	    Context context = getApplicationContext();
     	    int duration = Toast.LENGTH_LONG;
