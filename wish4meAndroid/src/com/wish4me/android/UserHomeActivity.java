@@ -46,11 +46,11 @@ public class UserHomeActivity extends Activity {
 	private String session_id;
 	private String wish_xml;
 	
-	public static enum wishes {
+	public static enum Wishes {
 		MYWISHES, FRIENDWISHES
 	}
 	
-	wishes currentWishes;
+	Wishes currentWishes;
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -60,8 +60,8 @@ public class UserHomeActivity extends Activity {
 	    if(extras !=null) {
 	    	session_id = extras.getString("session_id");
 	    	int temp = extras.getInt("wishes_to_list");
-	    	if(temp >= 0 && temp < wishes.values().length)
-	    	    currentWishes = wishes.values()[temp];
+	    	if(temp >= 0 && temp < Wishes.values().length)
+	    	    currentWishes = Wishes.values()[temp];
 	    	else
 	    		Log.e("wish4me-userHome-oncreate","wishes_to_list value is not passed.");
 		}
@@ -73,7 +73,7 @@ public class UserHomeActivity extends Activity {
     	// Create a new HttpClient and Post Header
     	HttpClient httpclient = new DefaultHttpClient();
     	HttpPost httppost = new HttpPost("http://"+LoginActivity.SERVERIP+"/android/listmywishes");	// list my wishes by default.
-    	if (currentWishes == wishes.FRIENDWISHES)
+    	if (currentWishes == Wishes.FRIENDWISHES)
     		httppost = new HttpPost("http://"+LoginActivity.SERVERIP+"/android/listfollowingwishes");
     	HttpResponse response = null;
     	String responseText = null;
@@ -289,7 +289,7 @@ public class UserHomeActivity extends Activity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
     	Intent userHome;
-    	UserHomeActivity.wishes wishes_to_list;
+    	UserHomeActivity.Wishes wishes_to_list;
         // Handle item selection
         switch (item.getItemId()) {
             case R.id.menu_listmywishes:
@@ -297,7 +297,7 @@ public class UserHomeActivity extends Activity {
 						UserHomeActivity.this,
 						UserHomeActivity.class);
 				userHome.putExtra("session_id", session_id);
-				wishes_to_list = wishes.MYWISHES;
+				wishes_to_list = Wishes.MYWISHES;
 				userHome.putExtra("wishes_to_list", wishes_to_list.ordinal());
 				startActivity(userHome);
 				finish();
@@ -307,7 +307,7 @@ public class UserHomeActivity extends Activity {
 						UserHomeActivity.this,
 						UserHomeActivity.class);
 				userHome.putExtra("session_id", session_id);
-				wishes_to_list = wishes.FRIENDWISHES;
+				wishes_to_list = Wishes.FRIENDWISHES;
 				userHome.putExtra("wishes_to_list", wishes_to_list.ordinal());
 				startActivity(userHome);
 				finish();
