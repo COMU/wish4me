@@ -35,12 +35,11 @@
     <div class="span6"><p>{{ wish.description }}</p></div>
     <div class="span6"><p>Display the location with a map here</p></div>
   </div>
-
-  {% if wish.wish_for != user %}
   <div class="span4 offset7">
+  {% if wish.wish_for != user %}
     <a href="{% url wish_add_to_my_wishes wish.id %}" class="btn btn-primary" type="button"><i class="icon-ok"></i>Add to My Wishes</a>
   {% else %}
-    <div class="span4 offset8">
+        <a href="{% url wish_edit_wish wish.id %}" class="btn btn-warning" type="button"><i class="icon-ok"></i>Edit</a>
   {% endif %}
     {% if not wish.is_accomplished %}
       <a href="{% url wish_accomplish_wish wish.id %}" class="btn btn-success" type="button"><i class="icon-ok"></i>Accomplish</a>

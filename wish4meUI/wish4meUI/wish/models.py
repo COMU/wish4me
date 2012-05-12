@@ -36,7 +36,7 @@ class Wish(models.Model):
     if hasattr(self, '_photos'):
       return self._photos
     else:
-      self._photos = WishPhoto.objects.filter(wish=self)
+      self._photos = WishPhoto.objects.filter(wish=self, is_hidden=False)
     return self._photos
 
 
