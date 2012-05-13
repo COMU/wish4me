@@ -63,9 +63,9 @@
 		        android:gravity="top"
 		        android:inputType="textMultiLine"
 		        android:lines="5" />
-		
+		
 		    <ImageButton
-		        android:id="@+id/capture_image_button"
+		        android:id="@+id/add_photo_button"
 		        android:layout_width="wrap_content"
 		        android:layout_height="wrap_content"
 		        android:layout_gravity="center_horizontal"

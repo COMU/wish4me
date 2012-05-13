@@ -31,7 +31,7 @@ import android.widget.Toast;
 
 public class AddWishActivity extends Activity{
 	private String session_id;
-	private Uri capturedImage;
+
 	
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -42,15 +42,19 @@ public class AddWishActivity extends Activity{
 	    	session_id = extras.getString("session_id");
 		}
 
-		ImageButton launchCameraButton = (ImageButton) findViewById(R.id.capture_image_button);
+		ImageButton addPhoto = (ImageButton) findViewById(R.id.add_photo_button);
 		// Register the onClick listener with the implementation above
-		launchCameraButton.setOnClickListener(new OnClickListener() {
+		addPhoto.setOnClickListener(new OnClickListener() {
 
 			public void onClick(View v) {
-			    Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
-			    intent.putExtra(MediaStore.EXTRA_OUTPUT, capturedImage);
-			    
-			    startActivityForResult(intent, 0);
+
+				Context context = getApplicationContext();
+    			Intent wishGallery = new Intent(
+    					context,
+    					WishPhotoGalleryActivity.class);
+    			wishGallery.putExtra("add_new_wish", "true");
+    			startActivity(wishGallery);
+    			
 				
 			}
 		});
@@ -70,16 +74,7 @@ public class AddWishActivity extends Activity{
 
 	}
 	
-	public void onActivityResult(int requestCode, int resultCode, Intent data) {
-		if (resultCode == Activity.RESULT_OK && requestCode == 0) {
-		String result = data.toURI();
-		Log.e("wish4me-capture", "result is "+result);
-		
-		ImageView capturedImageView = (ImageView) findViewById(R.id.captured_image);
-		capturedImageView.setImageURI(Uri.parse(result));
-		capturedImageView.setScaleType(ScaleType.CENTER_INSIDE);
-		}
-		}
+
 
 	private String postNewWish() {
 		// Create a new HttpClient and Post Header

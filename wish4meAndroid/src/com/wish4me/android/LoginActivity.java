@@ -52,6 +52,8 @@ import com.facebook.android.FacebookError;
 
 public class LoginActivity extends Activity {
 	public static String SERVERIP = "192.168.1.40";
+	public static int IMAGE_MAX_SIZE = 640;
+	public static int SCALE = 2;
 	EditText name;
 
 	Facebook facebook = new Facebook("408993659121861");
