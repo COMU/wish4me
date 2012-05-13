@@ -2,6 +2,8 @@ package com.wish4me.android;
 
 import java.io.InputStream;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -24,7 +26,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 public class WishPhotoGalleryActivity extends Activity {
-    Drawable[] pics;
+    List<Drawable> pics;
 	private String wish_xml;
 	private int wish_index;
 	ImageView imageView;
@@ -70,10 +72,10 @@ public class WishPhotoGalleryActivity extends Activity {
     		Element e = (Element) nl.item(wish_index);
     	    NodeList nPhoto = e.getElementsByTagName(KEY_PHOTO);
 
-    	    pics = new Drawable[nPhoto.getLength()];
+    	    pics = new ArrayList<Drawable>();
     	    for (int i = 0; i < nPhoto.getLength(); i++) {
     	    	e = (Element) nPhoto.item(i);
-    	    	pics[i] = LoadImageFromWebOperations(ParseXML.getValue(e, KEY_PHOTO));
+    	    	pics.add(LoadImageFromWebOperations(ParseXML.getValue(e, KEY_PHOTO)));
     	    }
     	    
 
@@ -95,18 +97,18 @@ public class WishPhotoGalleryActivity extends Activity {
 	    gallery.setOnItemSelectedListener(new OnItemSelectedListener() {
 			public void onItemSelected(AdapterView<?> arg0, View arg1,
 					int arg2, long arg3) {
-				imageView.setImageDrawable(pics[arg2]);
+				imageView.setImageDrawable(pics.get(arg2));
 				}
 
 			public void onNothingSelected(AdapterView<?> arg0) {
-				if(pics.length == 0){
+				if(pics.size() == 0){
 					Context context = getApplicationContext();
 				    int duration = Toast.LENGTH_LONG;
 				    Toast toast = Toast.makeText(context, "this wish has no image", duration);
 				    toast.show();
 				    return;
 				}
-				imageView.setImageDrawable(pics[0]);
+				imageView.setImageDrawable(pics.get(0));
 			}
 	    	
 		});
@@ -115,7 +117,7 @@ public class WishPhotoGalleryActivity extends Activity {
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
 					long arg3) {
 
-				imageView.setImageDrawable(pics[arg2]);
+				imageView.setImageDrawable(pics.get(arg2));
 				
 			}
 
@@ -137,7 +139,7 @@ public class WishPhotoGalleryActivity extends Activity {
 
 		public int getCount() {
     		
-    		return pics.length;
+    		return pics.size();
     	}
 
     	public Object getItem(int arg0) {
@@ -152,7 +154,7 @@ public class WishPhotoGalleryActivity extends Activity {
 
     	public View getView(int arg0, View arg1, ViewGroup arg2) {
     		ImageView iv = new ImageView(ctx);
-			iv.setImageDrawable(pics[arg0]);
+			iv.setImageDrawable(pics.get(arg0));
     		iv.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
     		iv.setLayoutParams(new Gallery.LayoutParams(150,120));
     		iv.setBackgroundResource(imageBackground);
