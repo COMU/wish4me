@@ -38,12 +38,8 @@ def facebook_login(request):
     print response
     return HttpResponse(response, content_type="text/plain")
   else:                             #for no post request
-
-    print "facebook login hit"
-    facebookAccessToken = "BAADonrXpx6cBAC1CGSnU7zYxe0BQNe9IIHaaK8B8VZBqYsMhx8h9xU7kVosMqYBZClWHn5oMgOJZA0pkQflZCWmd5VvmtownF0PzZBDQxunXZBMAZCI6ZBfpu4D0j7cyvdUZD"
-    androidLogin(request, 15, "enginmanap@gmail.com", facebookAccessToken, "enginmanap")
-
-  return HttpResponseRedirect(reverse('homePage'))
+    print "This url is for android app only."
+  return HttpResponse("This url is for android app only.")
 
 @csrf_exempt
 @session_from_http_params
