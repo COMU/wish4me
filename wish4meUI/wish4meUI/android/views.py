@@ -55,3 +55,28 @@ def listFollowingWishes(request):
     print "requested by : ",request.user.username
     wish_list = getFollowingWishes(request)
     return render_to_response("android/wishlist.xml", {'wish_list': wish_list,})
+
+"""
+            nameValuePairs.add(new BasicNameValuePair("sessionid", session_id));
+            nameValuePairs.add(new BasicNameValuePair("brand", newWishBrand.getText().toString()));
+            nameValuePairs.add(new BasicNameValuePair("name", newWishName.getText().toString()));
+            nameValuePairs.add(new BasicNameValuePair("description", newWishDescription.getText().toString()));
+"""
+
+@csrf_exempt
+@session_from_http_params
+def add_new_wish(request):
+  if request.POST:
+    print "post request"
+    wish_brand = request.POST['brand']
+    print "id = " + wish_brand
+    wish_name = request.POST['name']
+    print "email = " + wish_name
+    wish_description = request.POST['description']
+    print "acces token : " + wish_description
+    response = "<login><username>"+request.user.username+"</username><session_id>"+request.session.session_key+"</session_id></login>"
+    print response
+    return HttpResponse(response, content_type="text/plain")
+  else:                             #for no post request
+    print "This url is for android app only."
+  return HttpResponse("This url is for android app only.")
