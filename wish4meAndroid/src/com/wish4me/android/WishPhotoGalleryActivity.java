@@ -19,7 +19,9 @@ import com.koushikdutta.urlimageviewhelper.UrlImageViewHelper;
 import com.wish4me.android.R.drawable;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.TypedArray;
@@ -32,6 +34,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -64,6 +67,15 @@ public class WishPhotoGalleryActivity extends Activity {
 	    }
 	}
 
+	private void returnPictures(){
+		Intent intent = new Intent();
+		ArrayList<String> resultList = new ArrayList<String>();
+		for(int i = 0; i < picUris.size(); i++)
+			resultList.add(picUris.get(i).toString());
+		intent.putStringArrayListExtra("image_uris", resultList);
+		setResult(RESULT_OK, intent);
+		finish();
+	}
 	private void fillPicsFromXML(){
 		// XML node keys
     	String KEY_WISH = "wish"; // parent node
@@ -116,7 +128,6 @@ public class WishPhotoGalleryActivity extends Activity {
 		  try {
 			file.createNewFile();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		  return file;
@@ -308,29 +319,38 @@ public class WishPhotoGalleryActivity extends Activity {
 			        break;  
 			    }  
 		  }
-		/*
-		if (resultCode == Activity.RESULT_OK && requestCode == 0) {
-			String result = data.toURI();
-			Log.e("wish4me-capture", "result is "+result);
-			
-			pics.add(Drawable.createFromPath(Uri.parse(result).getPath()));
-			Gallery gallery = (Gallery) findViewById(R.id.wishPhotoGallery);
-			((BaseAdapter)gallery.getAdapter()).notifyDataSetChanged();
-			
-
-			//imageView.setImageURI(Uri.parse(result));
-			
-			imageView.setImageURI(capturedImage);
-			pics.add(imageView.getDrawable());
-			
-			Gallery gallery = (Gallery) findViewById(R.id.wishPhotoGallery);
-			
-			((BaseAdapter)gallery.getAdapter()).notifyDataSetChanged();
-			
-			capturedImageView.setImageURI(Uri.parse(result));
-			capturedImageView.setScaleType(ScaleType.CENTER_INSIDE);
-			
-		}
-		*/
 	}
+	
+	 @Override
+	    public boolean onKeyDown(int keyCode, KeyEvent event) {
+	        //Handle the back button
+	        if(keyCode == KeyEvent.KEYCODE_BACK) {
+	    	    Bundle extras = getIntent().getExtras();
+	    	    if(extras !=null) {
+	    	    	if(extras.getString("add_new_wish") != null) {
+	    	            //Ask the user if they want to quit
+	    	            new AlertDialog.Builder(this)
+	    	            .setIcon(android.R.drawable.ic_dialog_alert)
+	    	            .setTitle(R.string.title_quit)
+	    	            .setMessage(R.string.confirm_quit)
+	    	            .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+
+	    	                
+	    	                public void onClick(DialogInterface dialog, int which) {
+	    	                	returnPictures();
+	    	                }
+
+	    	            })
+	    	            .setNegativeButton(R.string.no, null)
+	    	            .show();
+
+	    	            return true;
+	    	        } else {
+	    	            return super.onKeyDown(keyCode, event);
+	    	        }
+    	    	}
+	        }
+			return false;
+
+	    }
 }

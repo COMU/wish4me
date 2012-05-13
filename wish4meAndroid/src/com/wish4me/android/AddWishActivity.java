@@ -53,11 +53,13 @@ public class AddWishActivity extends Activity{
     					context,
     					WishPhotoGalleryActivity.class);
     			wishGallery.putExtra("add_new_wish", "true");
-    			startActivity(wishGallery);
+    			startActivityForResult(wishGallery,0);
+    			//startActivity(wishGallery);
     			
 				
 			}
 		});
+
 
 
 		ImageButton addWishButton = (ImageButton) findViewById(R.id.addwish_button);
@@ -74,6 +76,19 @@ public class AddWishActivity extends Activity{
 
 	}
 	
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		if (requestCode == 0){
+			if (resultCode == RESULT_OK) {
+				List<String> result = data.getStringArrayListExtra("image_uris");
+				for(String s:result)
+					Log.e("wish4me-imageReturn", s);
+				}
+			else{
+				
+			}
+		}
+	}
 
 
 	private String postNewWish() {
