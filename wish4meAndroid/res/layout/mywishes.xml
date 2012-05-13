@@ -13,6 +13,6 @@
         android:layout_margin="10dp"
         android:padding="0px"
 		android:contentDescription="@string/app_name"
-        android:src="@drawable/add_new_wish" />
+        android:src="@drawable/addnewwish_button" />
 
 </LinearLayout>
