@@ -308,24 +308,38 @@ public class UserHomeActivity extends Activity {
         // Handle item selection
         switch (item.getItemId()) {
             case R.id.menu_listmywishes:
-				userHome = new Intent(
-						UserHomeActivity.this,
-						UserHomeActivity.class);
-				userHome.putExtra("session_id", session_id);
-				wishes_to_list = Wishes.MYWISHES;
-				userHome.putExtra("wishes_to_list", wishes_to_list.ordinal());
-				startActivity(userHome);
-				finish();
+            	if(currentWishes != Wishes.MYWISHES){
+					userHome = new Intent(
+							UserHomeActivity.this,
+							UserHomeActivity.class);
+					userHome.putExtra("session_id", session_id);
+					wishes_to_list = Wishes.MYWISHES;
+					userHome.putExtra("wishes_to_list", wishes_to_list.ordinal());
+					startActivity(userHome);
+					finish();
+				} else {
+					Context context = getApplicationContext();
+					int duration = Toast.LENGTH_LONG;
+					Toast toast = Toast.makeText(context, R.string.already_on_friend_wishes, duration);
+					toast.show();
+				}
                 return true;
             case R.id.menu_listfriendswishes:
-				userHome = new Intent(
-						UserHomeActivity.this,
-						UserHomeActivity.class);
-				userHome.putExtra("session_id", session_id);
-				wishes_to_list = Wishes.FRIENDWISHES;
-				userHome.putExtra("wishes_to_list", wishes_to_list.ordinal());
-				startActivity(userHome);
-				finish();
+            	if(currentWishes != Wishes.FRIENDWISHES){
+					userHome = new Intent(
+							UserHomeActivity.this,
+							UserHomeActivity.class);
+					userHome.putExtra("session_id", session_id);
+					wishes_to_list = Wishes.FRIENDWISHES;
+					userHome.putExtra("wishes_to_list", wishes_to_list.ordinal());
+					startActivity(userHome);
+					finish();
+            	} else {
+					Context context = getApplicationContext();
+					int duration = Toast.LENGTH_LONG;
+					Toast toast = Toast.makeText(context, R.string.already_on_friend_wishes, duration);
+					toast.show();
+            	}
                 return true;
             case R.id.menu_logout:
 				Intent loginActivity = new Intent(

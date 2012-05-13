@@ -18,6 +18,8 @@
     <string name="addWish_brand">Brand</string>
     <string name="addWish_name">Name</string>
     <string name="addWish_description">description</string>
+    <string name="already_on_my_wishes">You are viewing your wishes already.</string>
+    <string name="already_on_friend_wishes">You are viewing your friends wishes already.</string>
 
     
 </resources>
