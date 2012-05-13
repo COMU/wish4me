@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 
 from ajax_select import make_ajax_field
 
-from wish4meUI.wish.models import Wish, WishCategory, WishPhoto, WishAccomplish
+from wish4meUI.wish.models import Wish, WishCategory, WishPhoto, WishAccomplish, WishLocation
 from wish4meUI.wishlist.models import Wishlist
 from wish4meUI.friend.models import Following
 
@@ -17,16 +17,23 @@ class WishForm(forms.ModelForm):
     self.fields["wish_for_text"].label = "Wish for"
     if not self.fields["wish_for_text"].initial:
       self.fields["wish_for_text"].initial = requested_user.username
+    #self.fields['location'].widget.attrs['id'] = "location"
+    #self.fields['location'].required = False
 
   #End of __init__
 
   wish_for_widget = forms.TextInput(attrs={'data-items': 4, 'data-provide': 'typeahead', 'autocomplete': 'off'})
-  
   wish_for_text = forms.CharField(widget=wish_for_widget)
+
+  #location_widget = forms.TextInput(attrs={'data-items': 4, 'data-provide': 'typeahead', 'autocomplete': 'off', 'id':'location'})
+  #location = forms.CharField(widget=location_widget)
+  #location_widget = forms.Select(attrs={'id':'location'})
+  #location = forms.ChoiceField(widget=location_widget)
 
   def clean(self):
     cleaned_data = self.cleaned_data
-    
+    print "cleaned data:", cleaned_data
+
     wish_for_text = cleaned_data.get('wish_for_text')
     related_list= cleaned_data.get('related_list')
 
@@ -42,7 +49,7 @@ class WishForm(forms.ModelForm):
     print "wish for = ", wish_for_text, type(wish_for_text)
     if related_list.owner.username != wish_for_text:
       print "not equal"
-    if related_list.owner.username != wish_for_text: 
+    if related_list.owner.username != wish_for_text:
       if related_people.filter(username = wish_for_text).count() < 1:
         msg = u"Username does not match related people"
         self._errors['wish_for_text'] = self.error_class([msg])
@@ -54,7 +61,7 @@ class WishForm(forms.ModelForm):
   class Meta:
     model = Wish
     fields = ('wish_for_text', 'description', 'category', 'related_list', 'brand', 'name', 'is_private' )
-    
+
     #exclude = ('request_date', 'accomplish_date', 'is_hidden', 'wish_for')
 
   #wish_for  = make_ajax_field(User, 'username', 'user-channel', help_text='', label='Wish For')
@@ -75,3 +82,9 @@ class AccomplishForm(forms.ModelForm):
   class Meta:
     model = WishAccomplish
     fields = ( 'comment',)
+
+class WishLocationForm(forms.ModelForm):
+  location_id = forms.IntegerField(widget=forms.HiddenInput())
+  class Meta:
+    model = WishLocation
+    fields = ('name', 'address', 'city', 'state', 'country')

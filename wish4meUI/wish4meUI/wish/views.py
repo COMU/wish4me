@@ -16,11 +16,14 @@ from random import randint
 import urllib2
 from urlparse import urlparse
 
-from wish4meUI.wish.forms import WishForm, WishCategoryForm, WishPhotoForm, AccomplishForm
-from wish4meUI.wish.models import Wish, WishCategory, WishPhoto, WishAccomplish
+from wish4meUI.wish.forms import WishForm, WishCategoryForm, WishPhotoForm, AccomplishForm, WishLocationForm
+from wish4meUI.wish.models import Wish, WishCategory, WishPhoto, WishAccomplish, WishLocation
 from wish4meUI.friend.models import Following
 from wish4meUI.wishlist.models import Wishlist
 from wish4meUI.wish.utils import addAccomplishesToWishes
+
+from django.conf import settings
+import urllib, urllib2, json, datetime, simplejson
 
 def myActivity(request):
   wishes = Wish.objects.filter(related_list__owner=request.user, is_hidden=False).order_by("-request_date")
@@ -132,7 +135,52 @@ def add(request):
       wish.brand = wish_form.cleaned_data['brand']
       wish.category = wish_form.cleaned_data['category']
       wish.related_list = wish_form.cleaned_data['related_list']
-      wish.request_date = datetime.now()
+      wish.request_date = datetime.datetime.now()
+
+      # get the location details from Foursquare
+      location_id = request.POST.get('location', False)
+      if location_id:
+        # https://api.foursquare.com/v2/venues/40a55d80f964a52020f31ee3?oauth_token=AK5N2LRQLI5ELG25THGKETHDFEPY2LXNTANXFJIHEJWWQRRS&v=20120504
+        oauth_token = settings.LOCATION_SEARCH_OAUTH_TOKEN
+        url = "https://api.foursquare.com/v2/venues"
+        now = datetime.datetime.now()
+        v = now.strftime("%Y%m%d")
+        oauth_string = "=".join(["oauth_token", oauth_token])
+        date_string = "=".join(["v", v])
+        foursquare_api_url = "/".join([url, "/", location_id]) + "?" + "&".join([oauth_string, date_string])
+        response = urllib2.urlopen(foursquare_api_url)
+        response = response.read()
+        result = json.loads(response)
+        venue = result['response']['venue']
+        name = venue['name']
+        location = venue['location']
+        if location.has_key('address'):
+            address = location['address']
+        else:
+            address = None
+        if location.has_key('lat'):
+            latitude = location['lat']
+        else:
+            latitude = None
+        if location.has_key('lng'):
+            longitude = location['lng']
+        else:
+            longitude = None
+        if location.has_key('city'):
+            city = location['city']
+        else:
+            city = None
+        if location.has_key('state'):
+            state = location['state']
+        else:
+            state = None
+        if location.has_key('country'):
+            country = location['country']
+        else:
+            country = None
+
+        wish_location, created = WishLocation.objects.get_or_create(name=name, address=address, latitude=latitude, longitude=longitude, city=city, state=state, country=country)
+        wish.location = wish_location
       wish.save()
       for photoform in wish_photo_set_form.forms:
           photo = photoform.save(commit = False)
@@ -368,3 +416,87 @@ def respondAccomplish(request, accomplish_id, response):
     accomplish.status = 3
   accomplish.save()
   return HttpResponseRedirect(reverse('show-wish', args=[accomplish.wish.id]))
+
+
+def getLocations(request):
+	#print "get location is called"
+	#location operations
+	city = request.POST.get('city', False)
+	location_address = urllib.quote(city.encode("utf-8"))
+	#sending to the google_maps api to get the latitude and longitude
+	google_api_url = "".join(["http://maps.googleapis.com/maps/api/geocode/json?address=",location_address,"&sensor=false"])
+	response = urllib2.urlopen(google_api_url)
+	response = response.read()
+	result = json.loads(response)['results'][0]
+	geometry = result['geometry']['location']
+	latitude = geometry['lat']
+	longitude = geometry['lng']
+	# get the the environments aroun the location
+	oauth_token = settings.LOCATION_SEARCH_OAUTH_TOKEN
+	#print "oauth token:", oauth_token
+	now = datetime.datetime.now()
+	v = now.strftime("%Y%m%d")
+	foursquare_api_url = "".join(["https://api.foursquare.com/v2/", "venues/search?ll=", ",".join([str(latitude),str(longitude)]),"&oauth_token=", oauth_token, "&v=", v, "&intent=checkin"])
+	#print "foursquare url called:", foursquare_api_url
+	response = urllib2.urlopen(foursquare_api_url)
+	response = response.read()
+	result = json.loads(response)
+	venues = result['response']['venues']
+	response_data = []
+	for venue in venues:
+		#keys
+		#[u'verified',
+		#  u'name',
+		#  u'hereNow',
+		#  u'specials',
+		#  u'contact',
+		#  u'location',
+		#  u'stats',
+		#  u'id',
+		#  u'categories']
+		name = venue['name']
+		id = venue['id']
+		#location = venue['location']
+		#example location output
+		#{u'address': u'180 Maiden Lane',
+		#  u'city': u'New York',
+		#  u'country': u'United States',
+		#  u'crossStreet': u'Water Street',
+		#  u'distance': 36,
+		#  u'lat': 40.70019871930678,
+		#  u'lng': -73.99964860547712,
+		#  u'postalCode': u'10038',
+		#  u'state': u'NY'}
+		response_data.append((id,name))
+	print response_data
+	return HttpResponse(json.dumps(response_data), mimetype="application/json")
+
+def addLocation(request):
+	if request.method == "POST":
+		form = WishLocationForm(request.POST)
+		if form.is_valid():
+			form.save()
+			return HttpResponse('''
+                    <script type="text/javascript">
+                            opener.dismissAddAnotherPopup(window);
+                    </script>'''
+			)
+	else:
+		form = WishLocationForm()
+	return render_to_response('wish/add_location.html',
+			{'form': form, 'page_title': 'Add a new location'},
+		context_instance=RequestContext(request))
+
+def searchLocation(request):
+	results = []
+	print "searchLocation called"
+	if request.method == "GET":
+		if request.GET.has_key(u'q'):
+			value = request.GET[u'q']
+			# Ignore queries shorter than length 3
+			if len(value) > 2:
+				model_results = WishLocation.objects.filter(name__icontains=value)
+				results = [ (x.__unicode__(), x.id) for x in model_results ]
+	json = simplejson.dumps(results)
+	return HttpResponse(json, mimetype='application/json')
+

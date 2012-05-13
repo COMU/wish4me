@@ -22,6 +22,11 @@ urlpatterns = patterns('',
     url(r'^respond/(?P<accomplish_id>\d+)/(?P<response>.*)$', view=respondAccomplish, name="wish_respond_accomplish"),
 		url(r'^add_to_my_wishes/(?P<wish_id>\d+)$', view=add_to_my_wishes, name="wish_add_to_my_wishes"),
 #url(r'^order/(?P<order>.*)/filter/(?P<filter_by>.*)/(?P<filter>.*)/(?P<page_number>\d+)/$', 'main',name='main_page'),
+	#location based
+	url(r'^locations$', view=getLocations, name='get-locations'),
+	url(r'^add_location$', view=addLocation, name='new-location'),
+	url(r'^search_location$', view=searchLocation, name='search-location'),
+
 )
 
 #TODO(orc.avs): Remove below

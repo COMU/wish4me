@@ -26,6 +26,8 @@
       }
     </style>
     <link href="/site_media/bootstrap/assets/css/bootstrap-responsive.css" rel="stylesheet">
+    <!-- jquery autocomplete --> 
+    <link href="/site_media/custom/jquery-autocomplete/jquery.autocomplete.css">
 
     <!-- Le fav and touch icons -->
     <link rel="shortcut icon" href="images/favicon.ico">
@@ -60,9 +62,16 @@
     {% block scripts %}{% endblock %}
     <script language="JavaScript1.2">
       function openwindow(urlToOpen) {
-        window.open(urlToOpen,"mywindow","menubar=1,resizable=1,width=520,height=360");
+        window.open(urlToOpen,"mywindow","menubar=1,resizable=1,width=520,height=440");
       }
     </script>
+    <script src="/site_media/custom/jquery-autocomplete/jquery.autocomplete.min.js"></script>
     <script src="/site_media/custom/comment-post.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?sensor=false&libraries=places" type="text/javascript"></script>
+    <script src="/site_media/custom/map-autocomplete.js"></script>
+    <script src="/site_media/custom/cfsrf-protection.js"></script>
+    <script src="/site_media/custom/check-enter.js"></script>
+    <script src="/site_media/custom/window-close.js"></script>
+    <script src="/site_media/custom/location-autocomplete.js"></script>
   </body>
 </html>

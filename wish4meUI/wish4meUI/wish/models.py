@@ -2,6 +2,8 @@
 
 from django.db import models
 from django.contrib.auth.models import User
+from django_countries import CountryField
+
 
 from wish4meUI.wishlist.models import Wishlist
 from wish4meUI import settings
@@ -24,10 +26,11 @@ class Wish(models.Model):
   is_accomplished = models.BooleanField(default=False)
   accomplish_date = models.DateTimeField(blank=True, null=True)
 
-  #location =
+  #location
+  location = models.ForeignKey('WishLocation', null=True, blank=True)
+
   is_hidden = models.BooleanField(default = False)
   is_private = models.BooleanField(default = False)
-
 
   def __unicode__(self):
     return '%s %s' % (self.related_list.owner, self.description)
@@ -100,3 +103,15 @@ class WishAccomplish(models.Model):
 
 class WishAccomplishPhoto(_WishPhoto):
   accomplish = models.ForeignKey("WishAccomplish")
+
+class WishLocation(models.Model):
+  name = models.CharField(max_length=100, null=True, blank=True)
+  address = models.CharField(max_length=200, null=True, blank=True)
+  latitude = models.FloatField(null=True, blank=True)
+  longitude = models.FloatField()
+  city = models.CharField(max_length=100, null=True, blank=True)
+  state = models.CharField(max_length=100, null=True, blank=True)
+  country = CountryField(null=True, blank=True)
+
+  def __unicode__(self):
+    return self.name
