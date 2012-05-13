@@ -34,7 +34,9 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -65,6 +67,20 @@ public class UserHomeActivity extends Activity {
 	    	else
 	    		Log.e("wish4me-userHome-oncreate","wishes_to_list value is not passed.");
 		}
+	    
+		ImageButton addNewWishButton = (ImageButton) findViewById(R.id.add_new_wish_button);
+		// Register the onClick listener with the implementation above
+		addNewWishButton.setOnClickListener(new OnClickListener() {
+			
+			public void onClick(View v) {
+				Intent addNewWishActivity = new Intent(
+						UserHomeActivity.this,
+						AddWishActivity.class);
+				addNewWishActivity.putExtra("session_id", session_id);
+				startActivity(addNewWishActivity);
+			}
+		});
+	    
 	    updateView();
 
 	}
@@ -161,7 +177,6 @@ public class UserHomeActivity extends Activity {
     }
     
     public void updateView(){
-    	setContentView(R.layout.mywishes);
 
         ViewGroup parent = (ViewGroup) findViewById(R.id.mywishes_linear_layout);
 

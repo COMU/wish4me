@@ -67,11 +67,9 @@ public class LoginActivity extends Activity {
 		mPrefs = getPreferences(MODE_PRIVATE);
 	    Bundle extras = getIntent().getExtras();
 	    if(extras !=null) {
-	    	Log.e("wish4me-loginActivity", "there are extras.");
 	    	String logout = extras.getString("logout");
-	    	Log.e("wish4me-loginActivity", "logout is : \""+logout+"\"");
 	    	if(logout != null && logout.equals("true")){
-	    		Log.e("wish4me-loginActivity", "there is logout");
+	    		Log.i("wish4me-loginActivity", "Logout is called.");
 	    		facebookLogout();
 	    	}
 		}

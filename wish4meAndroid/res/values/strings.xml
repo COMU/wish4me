@@ -15,5 +15,9 @@
     <string name="yes">yes</string>
     <string name="no">no</string>
     <string name="logout">logout</string>
+    <string name="addWish_brand">Brand</string>
+    <string name="addWish_name">Name</string>
+    <string name="addWish_description">description</string>
 
+    
 </resources>
