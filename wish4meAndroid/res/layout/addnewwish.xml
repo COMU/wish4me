@@ -54,4 +54,16 @@
         android:inputType="textMultiLine"
         android:lines="5" />
 
+    <Button
+        android:id="@+id/capture_image_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="camera" />
+
+    <ImageView
+        android:id="@+id/captured_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/wish_icon" />
+
 </LinearLayout>
