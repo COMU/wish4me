@@ -1,0 +1,82 @@
+{% extends "base/layout2.html" %}
+
+{% load list %}
+
+{% block left %}
+    <div class="container">
+      <div class="row">
+          <div class="hero-unit">
+          <h2><img src="/site_media/images/gift.jpg"/>Wish4me, the best way to share your wishes</h2>
+          <br>
+          <h3>Show your friends' wishes</h3>
+          <p>To show your friends' wishes, all you need to do is clicking <a href="{% url friend-activity %}">Friend Activity</a> page. In that page, you can accomplish your
+             friends' wishes. Also you can wish your friends' wishes. It will copy the wish to your default (first) wishlist.
+          </p>
+          <br>
+          <h3>Share your wishes</h3>
+          <p>Wish4me offers you the best way to share your wishes.
+          </p>
+          <p>
+          In <a href="{% url my-activity %}">my wishes</a> page, you can create wish via clicking <a href="{% url add-wish %}">create a wish of yours</a>
+          button.
+          </p>
+          <p>
+          When creating, you must specify its description, category, wishlist, brand and name. You can also add photos about that wish.
+          You can also set your wish as private if you don't want other people to see your wishes.
+
+          </p>
+
+          <hr>
+          <h3>Show and edit your wishes</h3>
+          <p>
+           In <a href="{% url my-activity %}">my wishes</a> page, you can see your wishes. If you wish, you can edit your wishes. In edit page,
+              you can edit your wish's every attribute. You can also edit your wish's photos.
+          </p>
+
+
+          <hr>
+          <h3>Create wishlists</h3>
+          <p>
+              In <a href="{% url wishlist-home %}">manage wishlists</a> page, you can see all of your wishes in corresponding wishlist.
+          You can also edit your wishes here. This page allows you to create wishlists. You can edit them, make them private.
+          </p>
+
+          <hr>
+          <h3>Search wishes, friends</h3>
+          <p>
+              With the textbox at the right top of every page you can search wishes and friends. You can follow them in search page.
+          </p>
+
+          <hr>
+          <h3>Edit your profile</h3>
+          <p>
+              To edit your profile, click your name near search textbox and click profile. You will see your current <a href="{% url user_profile %}">profile</a>.
+              You can edit your profile via clicking <a href="{% url user_information_edit %}">edit profile</a> button.
+
+          </p>
+          <p>
+             In edit profile page, you can set your username, password, first name, last name, gender and photo.
+             You can set your photo from gravatar or from your computer.
+
+
+
+          </p>
+          <p>
+              Also you can activate your other social platform accounts at the right of the edit profile page.
+
+          </p>
+
+          <hr>
+          <h3>Find your friends</h3>
+          <p>
+              You can find your friends from other social platforms in Wish4meIn in <a href="contact_importer_home">find friends</a> page.
+              In that page, you can select the social platform to import friends and click follow. All you should do is that easy.
+          </p>
+
+
+      </div>
+
+        </div>
+
+    </div> <!-- /container -->
+{% endblock %}

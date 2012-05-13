@@ -41,3 +41,11 @@ def welcome(request):
   else:
     return HttpResponseRedirect(reverse('friend-activity'))
 
+def help(request):
+	context = {
+		'page_title': 'Help Page'
+	}
+
+	return render_to_response("home/help.html",
+                            context_instance=RequestContext(request, context))
+
