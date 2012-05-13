@@ -15,4 +15,17 @@
 		android:contentDescription="@string/app_name"
         android:src="@drawable/addnewwish_button" />
 
+    <ScrollView
+        android:id="@+id/scrollView1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <LinearLayout
+            android:id="@+id/layount_in_scroll"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical" >
+        </LinearLayout>
+    </ScrollView>
+
 </LinearLayout>

@@ -180,7 +180,7 @@ public class UserHomeActivity extends Activity {
     
     public void updateView(){
 
-        ViewGroup parent = (ViewGroup) findViewById(R.id.mywishes_linear_layout);
+        ViewGroup parent = (ViewGroup) findViewById(R.id.layount_in_scroll);
 
         
     	// XML node keys
