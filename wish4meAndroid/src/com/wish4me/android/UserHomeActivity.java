@@ -19,7 +19,9 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
@@ -27,8 +29,14 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -39,6 +47,12 @@ import com.koushikdutta.urlimageviewhelper.UrlImageViewHelper;
 public class UserHomeActivity extends Activity {
 	private String session_id;
 	private String wish_xml;
+	
+	public static enum Wishes {
+		MYWISHES, FRIENDWISHES
+	}
+	
+	Wishes currentWishes;
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -47,7 +61,28 @@ public class UserHomeActivity extends Activity {
 	    Bundle extras = getIntent().getExtras();
 	    if(extras !=null) {
 	    	session_id = extras.getString("session_id");
-	    }
+	    	int temp = extras.getInt("wishes_to_list");
+	    	if(temp >= 0 && temp < Wishes.values().length)
+	    	    currentWishes = Wishes.values()[temp];
+	    	else {
+	    		Log.e("wish4me-userHome-oncreate","wishes_to_list value is not passed.");
+	    		currentWishes = Wishes.FRIENDWISHES;								//this makes default.
+	    	}
+		}
+	    
+		ImageButton addNewWishButton = (ImageButton) findViewById(R.id.add_new_wish_button);
+		// Register the onClick listener with the implementation above
+		addNewWishButton.setOnClickListener(new OnClickListener() {
+			
+			public void onClick(View v) {
+				Intent addNewWishActivity = new Intent(
+						UserHomeActivity.this,
+						AddWishActivity.class);
+				addNewWishActivity.putExtra("session_id", session_id);
+				startActivity(addNewWishActivity);
+			}
+		});
+	    
 	    updateView();
 
 	}
@@ -55,7 +90,9 @@ public class UserHomeActivity extends Activity {
     private String getMywishes() {
     	// Create a new HttpClient and Post Header
     	HttpClient httpclient = new DefaultHttpClient();
-    	HttpPost httppost = new HttpPost("http://"+LoginActivity.SERVERIP+"/android/listmywishes");
+    	HttpPost httppost = new HttpPost("http://"+LoginActivity.SERVERIP+"/android/listmywishes");	// list my wishes by default.
+    	if (currentWishes == Wishes.FRIENDWISHES)
+    		httppost = new HttpPost("http://"+LoginActivity.SERVERIP+"/android/listfollowingwishes");
     	HttpResponse response = null;
     	String responseText = null;
     	try {
@@ -142,7 +179,6 @@ public class UserHomeActivity extends Activity {
     }
     
     public void updateView(){
-    	setContentView(R.layout.mywishes);
 
         ViewGroup parent = (ViewGroup) findViewById(R.id.mywishes_linear_layout);
 
@@ -220,10 +256,8 @@ public class UserHomeActivity extends Activity {
     	    wishDescription.setText((CharSequence)description);
     	    ImageView wishPhoto = (ImageView)view.findViewById(R.id.wish_image);
     	    if(photos.size() > 0){
-    	    	UrlImageViewHelper.setUrlDrawable(wishPhoto, photos.get(0));
+    	    	UrlImageViewHelper.setUrlDrawable(wishPhoto, photos.get(0),R.drawable.wish_icon);
     	    	Log.e("wish4me-wishimage", "for wish named "+name+", photo is "+photos.get(0));
-    	    	while(wishPhoto.getDrawable() == null)
-    	    		android.os.SystemClock.sleep(200);	//TODO this is a bad way, but I am out of ideas.
     	    	scaleImage(wishPhoto, 100);
     	    }
     	    photos.clear();
@@ -232,18 +266,124 @@ public class UserHomeActivity extends Activity {
     	}
     }
     public void createGalleryActivity(int wishID) {
-    	Context context = getApplicationContext();
-		Intent wishGallery = new Intent(
-				context,
-				WishPhotoGalleryActivity.class);
-		wishGallery.putExtra("wish_xml", wish_xml);
-		wishGallery.putExtra("wish_index", wishID);
-	    
-	    int duration = Toast.LENGTH_SHORT;
-	    Toast toast = Toast.makeText(context, "called view "+wishID, duration);
-	    toast.show();
-	    
-		startActivity(wishGallery);
+    	
+    	String KEY_WISH = "wish";
+    	String KEY_PHOTO = "photo";
+    	
+    	Document doc = ParseXML.getDomElement(wish_xml);
+   	 
+    	NodeList nl = doc.getElementsByTagName(KEY_WISH);
+    	 
+    	// looping through all item nodes <item>
+    	if(wishID < nl.getLength()) {
+    		Element e = (Element) nl.item(wishID);
+    	    NodeList nPhoto = e.getElementsByTagName(KEY_PHOTO);
+        	Context context = getApplicationContext();
+    	    if(nPhoto.getLength() > 0){
+    			Intent wishGallery = new Intent(
+    					context,
+    					WishPhotoGalleryActivity.class);
+    			wishGallery.putExtra("wish_xml", wish_xml);
+    			wishGallery.putExtra("wish_index", wishID);
+    			startActivity(wishGallery);
+    			
+    	    } else {
+    		    int duration = Toast.LENGTH_SHORT;
+    		    Toast toast = Toast.makeText(context, "this wish has no image to show", duration);
+    		    toast.show();    	    	
+    	    }
+    	}
+
+
     }
  
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.wishestoshow, menu);
+        return true;
+    }
+    
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+    	Intent userHome;
+    	UserHomeActivity.Wishes wishes_to_list;
+        // Handle item selection
+        switch (item.getItemId()) {
+            case R.id.menu_listmywishes:
+            	if(currentWishes != Wishes.MYWISHES){
+					userHome = new Intent(
+							UserHomeActivity.this,
+							UserHomeActivity.class);
+					userHome.putExtra("session_id", session_id);
+					wishes_to_list = Wishes.MYWISHES;
+					userHome.putExtra("wishes_to_list", wishes_to_list.ordinal());
+					startActivity(userHome);
+					finish();
+				} else {
+					Context context = getApplicationContext();
+					int duration = Toast.LENGTH_LONG;
+					Toast toast = Toast.makeText(context, R.string.already_on_friend_wishes, duration);
+					toast.show();
+				}
+                return true;
+            case R.id.menu_listfriendswishes:
+            	if(currentWishes != Wishes.FRIENDWISHES){
+					userHome = new Intent(
+							UserHomeActivity.this,
+							UserHomeActivity.class);
+					userHome.putExtra("session_id", session_id);
+					wishes_to_list = Wishes.FRIENDWISHES;
+					userHome.putExtra("wishes_to_list", wishes_to_list.ordinal());
+					startActivity(userHome);
+					finish();
+            	} else {
+					Context context = getApplicationContext();
+					int duration = Toast.LENGTH_LONG;
+					Toast toast = Toast.makeText(context, R.string.already_on_friend_wishes, duration);
+					toast.show();
+            	}
+                return true;
+            case R.id.menu_logout:
+				Intent loginActivity = new Intent(
+						UserHomeActivity.this,
+						LoginActivity.class);
+				loginActivity.putExtra("logout", "true");
+				startActivity(loginActivity);
+				finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+ 
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        //Handle the back button
+        if(keyCode == KeyEvent.KEYCODE_BACK) {
+            //Ask the user if they want to quit
+            new AlertDialog.Builder(this)
+            .setIcon(android.R.drawable.ic_dialog_alert)
+            .setTitle(R.string.title_quit)
+            .setMessage(R.string.confirm_quit)
+            .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+
+                
+                public void onClick(DialogInterface dialog, int which) {
+
+                    //Stop the activity
+                    UserHomeActivity.this.finish();    
+                }
+
+            })
+            .setNegativeButton(R.string.no, null)
+            .show();
+
+            return true;
+        }
+        else {
+            return super.onKeyDown(keyCode, event);
+        }
+
+    }
+
 }

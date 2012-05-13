@@ -41,6 +41,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.wish4me.android.R;
+import com.wish4me.android.UserHomeActivity.Wishes;
 
 import com.facebook.android.AsyncFacebookRunner;
 import com.facebook.android.AsyncFacebookRunner.RequestListener;
@@ -63,8 +64,17 @@ public class LoginActivity extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.login);
-
 		mPrefs = getPreferences(MODE_PRIVATE);
+	    Bundle extras = getIntent().getExtras();
+	    if(extras !=null) {
+	    	String logout = extras.getString("logout");
+	    	if(logout != null && logout.equals("true")){
+	    		Log.i("wish4me-loginActivity", "Logout is called.");
+	    		facebookLogout();
+	    	}
+		}
+
+		
 		String access_token = mPrefs.getString("access_token", null);
 		long expires = mPrefs.getLong("access_expires", 0);
 		if (access_token != null) {
@@ -75,7 +85,7 @@ public class LoginActivity extends Activity {
 		}
 		if (facebook.isSessionValid()) {
 			//facebookLogout();
-			//loginViaFacebook();
+			loginViaFacebook();
 		}
 
 		// Capture our button from layout
@@ -134,6 +144,8 @@ public class LoginActivity extends Activity {
 										UserHomeActivity.class);
 								showToast((CharSequence)("welcome "+username));
 								userHome.putExtra("session_id", session_id);
+								UserHomeActivity.Wishes wishes_to_list = Wishes.FRIENDWISHES;
+								userHome.putExtra("wishes_to_list", wishes_to_list.ordinal());
 
 								startActivity(userHome);
 								finish();

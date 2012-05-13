@@ -11,14 +11,13 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.TypedArray;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.BaseAdapter;
 import android.widget.Gallery;
 import android.widget.ImageView;
@@ -84,10 +83,6 @@ public class WishPhotoGalleryActivity extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 	    super.onCreate(savedInstanceState);
 	    setContentView(R.layout.wishphotos);
-	    Context context = getApplicationContext();
-	    int duration = Toast.LENGTH_LONG;
-	    Toast toast = Toast.makeText(context, "ehe ehe", duration);
-	    toast.show();
 	    Bundle extras = getIntent().getExtras();
 	    if(extras !=null) {
 	    	wish_xml = extras.getString("wish_xml");
@@ -97,7 +92,24 @@ public class WishPhotoGalleryActivity extends Activity {
 	    imageView = (ImageView)findViewById(R.id.wishImageSelected);
 	    Gallery gallery = (Gallery) findViewById(R.id.wishPhotoGallery);
 	    gallery.setAdapter(new ImageAdapter(this));
-	    
+	    gallery.setOnItemSelectedListener(new OnItemSelectedListener() {
+			public void onItemSelected(AdapterView<?> arg0, View arg1,
+					int arg2, long arg3) {
+				imageView.setImageDrawable(pics[arg2]);
+				}
+
+			public void onNothingSelected(AdapterView<?> arg0) {
+				if(pics.length == 0){
+					Context context = getApplicationContext();
+				    int duration = Toast.LENGTH_LONG;
+				    Toast toast = Toast.makeText(context, "this wish has no image", duration);
+				    toast.show();
+				    return;
+				}
+				imageView.setImageDrawable(pics[0]);
+			}
+	    	
+		});
         gallery.setOnItemClickListener(new OnItemClickListener() {
 
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
@@ -109,7 +121,6 @@ public class WishPhotoGalleryActivity extends Activity {
 
         	
         });
-	    
 	}
 	
     public class ImageAdapter extends BaseAdapter {
@@ -141,14 +152,8 @@ public class WishPhotoGalleryActivity extends Activity {
 
     	public View getView(int arg0, View arg1, ViewGroup arg2) {
     		ImageView iv = new ImageView(ctx);
-
-			Bitmap bitmap = ((BitmapDrawable) pics[arg0]).getBitmap();
-			// Scale it to 50 x 50
-			Drawable d = new BitmapDrawable(Bitmap.createScaledBitmap(bitmap, 50, 50, true));
-			// Set your new, scaled drawable "d"
-    		//iv.setImageDrawable(pics[arg0]);
-			iv.setImageDrawable(d);
-    		iv.setScaleType(ImageView.ScaleType.FIT_XY);
+			iv.setImageDrawable(pics[arg0]);
+    		iv.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
     		iv.setLayoutParams(new Gallery.LayoutParams(150,120));
     		iv.setBackgroundResource(imageBackground);
     		return iv;

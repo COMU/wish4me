@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/menu_wishestoshow"
+          android:title="@string/change_view" >        
+          <menu>
+            <item android:id="@+id/menu_listmywishes"
+                  android:title="@string/list_mywishes" />
+            <item android:id="@+id/menu_listfriendswishes"
+                  android:title="@string/list_friendwishes" />
+        </menu>
+    </item>
+    <item android:id="@+id/menu_logout"
+        android:title="@string/logout" >
+    </item>
+</menu>
