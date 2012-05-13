@@ -64,8 +64,10 @@ public class UserHomeActivity extends Activity {
 	    	int temp = extras.getInt("wishes_to_list");
 	    	if(temp >= 0 && temp < Wishes.values().length)
 	    	    currentWishes = Wishes.values()[temp];
-	    	else
+	    	else {
 	    		Log.e("wish4me-userHome-oncreate","wishes_to_list value is not passed.");
+	    		currentWishes = Wishes.FRIENDWISHES;								//this makes default.
+	    	}
 		}
 	    
 		ImageButton addNewWishButton = (ImageButton) findViewById(R.id.add_new_wish_button);

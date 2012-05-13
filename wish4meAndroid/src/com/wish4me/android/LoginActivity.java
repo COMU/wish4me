@@ -144,7 +144,7 @@ public class LoginActivity extends Activity {
 										UserHomeActivity.class);
 								showToast((CharSequence)("welcome "+username));
 								userHome.putExtra("session_id", session_id);
-								UserHomeActivity.Wishes wishes_to_list = Wishes.MYWISHES;
+								UserHomeActivity.Wishes wishes_to_list = Wishes.FRIENDWISHES;
 								userHome.putExtra("wishes_to_list", wishes_to_list.ordinal());
 
 								startActivity(userHome);
