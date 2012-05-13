@@ -190,7 +190,7 @@ def add(request):
                 photo.save()
               elif photoform.cleaned_data['url'] != '':
                 photo.wish = wish
-                photo_name = urlparse(photoform.cleaned_data['url']).path.split('/')[-1][0:20]
+                photo_name = urlparse(photoform.cleaned_data['url']).path.split('/')[-1]
                 photo_content = ContentFile(urllib2.urlopen(photoform.cleaned_data['url']).read())
                 photo.photo.save(photo_name, photo_content, save=False)
                 photo.save()
@@ -278,7 +278,7 @@ def edit(request, wish_id):
 
 
 						photo.wish = wish
-						photo_name = urlparse(photoform.cleaned_data['url']).path.split('/')[-1][0:20]
+						photo_name = urlparse(photoform.cleaned_data['url']).path.split('/')[-1]
 						photo_content = ContentFile(urllib2.urlopen(photoform.cleaned_data['url']).read())
 						try:
 							wp = wpl[lc]
