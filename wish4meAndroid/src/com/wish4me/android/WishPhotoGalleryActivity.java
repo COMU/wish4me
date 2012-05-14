@@ -343,7 +343,7 @@ public class WishPhotoGalleryActivity extends Activity {
 	        if(keyCode == KeyEvent.KEYCODE_BACK) {
 	    	    Bundle extras = getIntent().getExtras();
 	    	    if(extras !=null) {
-	    	    	if(extras.getString("add_new_wish") != null) {
+	    	    	if(extras.getString("add_new_wish") != null && pics.size() != 0) {
 	    	            //Ask the user if they want to quit
 	    	            new AlertDialog.Builder(this)
 	    	            .setIcon(android.R.drawable.ic_dialog_alert)
