@@ -57,7 +57,27 @@ public class WishPhotoGalleryActivity extends Activity {
 	    try {
 	        InputStream is = (InputStream) new URL(url).getContent();
 	        //Drawable d = new BitmapDrawable(decodeInputStream(is));
-	        Drawable d = Drawable.createFromStream(is, "src name");
+
+	        
+            //Decode image size
+            BitmapFactory.Options o = new BitmapFactory.Options();
+            o.inJustDecodeBounds = true;
+            BitmapFactory.decodeStream(is, null, o);
+            
+            is.close();
+
+            int scale = 1;
+            if (o.outHeight > LoginActivity.IMAGE_MAX_SIZE || o.outWidth > LoginActivity.IMAGE_MAX_SIZE) {
+                scale = (int)Math.pow(2, (int) Math.round(Math.log(LoginActivity.IMAGE_MAX_SIZE / (double) Math.max(o.outHeight, o.outWidth)) / Math.log(0.5)));
+            }
+
+            //Decode with inSampleSize
+            BitmapFactory.Options o2 = new BitmapFactory.Options();
+            o2.inSampleSize = scale;
+	        is = (InputStream) new URL(url).getContent();
+            Drawable d = new BitmapDrawable(BitmapFactory.decodeStream(is, null, o2));
+            is.close();
+	        
 	        return d;
 	    } catch (Exception e) {
 	        return null;
