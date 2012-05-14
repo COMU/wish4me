@@ -7,7 +7,17 @@
       <div class="span7">
         <div class="row">
           <div class="span3">
-            <img src="{{ MEDIA_URL }}{{ profile.photo }}" alt="" width="180" height="180" border="0" />
+              <ul class="thumbnails">
+                  <li class="span2">
+                      <a class="thumbnail" href="#">
+                          {% if profile.photo  %}
+                          <img alt="{{ user.username }}" src="{{ MEDIA_URL }}{{ profile.photo }}">
+                          {% else %}
+                          <img alt="{{ user.username }}" src="{{ MEDIA_URL }}{{ DEFAULT_PROFILE_PICTURE }}">
+                          {% endif %}
+                      </a>
+                  </li>
+              </ul>
             {{ userForm.photo }}<br \>
             Get photo from Gravatar: <input type="text" name="gravatar_email">
           </div>
