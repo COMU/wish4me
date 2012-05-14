@@ -9,6 +9,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:padding="0dp"
+		android:contentDescription="@string/app_name"
         android:src="@drawable/launchcamera_button" />
     
 
@@ -21,6 +22,7 @@
         android:id="@+id/wishImageSelected"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+		android:contentDescription="@string/app_name"
         android:src="@drawable/wish_icon" />
 
 </LinearLayout>

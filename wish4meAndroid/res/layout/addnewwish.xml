@@ -69,14 +69,14 @@
 		        android:layout_width="wrap_content"
 		        android:layout_height="wrap_content"
 		        android:layout_gravity="center_horizontal"
+                android:contentDescription="@string/app_name"
 		        android:padding="0px"
 		        android:src="@drawable/addphoto_button" />
 
-		    <ImageView
-		        android:id="@+id/captured_image"
-        		android:layout_width="match_parent"
-        		android:layout_height="wrap_content"
-		        android:src="@drawable/wish_icon" />
+		    <Gallery
+		        android:id="@+id/temprory_gallery"
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content" />
 
 		    <ImageButton
 		        android:id="@+id/addwish_button"
@@ -84,6 +84,7 @@
 		        android:layout_height="wrap_content"
 		        android:layout_gravity="center_horizontal"
 		        android:padding="0px"
+				android:contentDescription="@string/app_name"
 		        android:src="@drawable/add_wish_button" />
             
         </LinearLayout>
