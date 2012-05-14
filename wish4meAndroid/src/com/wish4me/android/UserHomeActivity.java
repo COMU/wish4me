@@ -79,7 +79,7 @@ public class UserHomeActivity extends Activity {
 						UserHomeActivity.this,
 						AddWishActivity.class);
 				addNewWishActivity.putExtra("session_id", session_id);
-				startActivity(addNewWishActivity);
+				startActivityForResult(addNewWishActivity, RESULT_OK);
 			}
 		});
 	    

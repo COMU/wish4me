@@ -23,6 +23,8 @@ import com.wish4me.android.UserHomeActivity.Wishes;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnDismissListener;
 import android.content.Intent;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
@@ -199,22 +201,43 @@ public class AddWishActivity extends Activity{
 			NodeList nl = doc.getElementsByTagName(KEY_WISH);
 			String result_status;
 			if (nl.getLength() == 1){
-				Element e = (Element) nl.item(1);
+				Element e = (Element) nl.item(0);
 				result_status = ParseXML.getValue(e, KEY_RESULT);
-				if(result_status == "success"){
-				    AlertDialog.Builder builder = new AlertDialog.Builder(this);
-				    builder.setMessage("Wish Added successfully!").create().show();
-				    
-				    Intent userHome = new Intent(
-							AddWishActivity.this,
-							UserHomeActivity.class);
-					userHome.putExtra("session_id", session_id);
-					UserHomeActivity.Wishes wishes_to_list = Wishes.FRIENDWISHES;
-					userHome.putExtra("wishes_to_list", wishes_to_list.ordinal());
-					startActivity(userHome);
-					finish();
-				    
+				if(result_status.equals("success")){
+					AlertDialog alertDialog = new AlertDialog.Builder(this).create();
+					alertDialog.setTitle("Add Wish");
+					alertDialog.setMessage("Your wish has been added.");
+					alertDialog.setButton("OK", new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog, int which) {
+
+					   }
+					});
+					//alertDialog.setIcon(R.drawable.icon);
+					alertDialog.setOnDismissListener(new OnDismissListener() {
+						
+						public void onDismiss(DialogInterface dialog) {
+							Intent intent = new Intent();
+							setResult(RESULT_OK, intent);
+							finish();
+						}
+					});
+					alertDialog.show();
+					
+				} else if(result_status.equals("fail")){
+					Context context = getApplicationContext();
+					CharSequence text = "Your wish has not been added, please control your inputs";
+					int duration = Toast.LENGTH_LONG;
+					Toast toast = Toast.makeText(context, text, duration);
+					toast.show();
+				} else {
+					Context context = getApplicationContext();
+					CharSequence text = "There appears to be a server problem, please try again later.";
+					int duration = Toast.LENGTH_LONG;
+					Toast toast = Toast.makeText(context, text, duration);
+					toast.show();					
 				}
+				
+
 			}
 		} catch (ClientProtocolException e) {
 			Log.e("wish4me-postFacebookID", e.toString());

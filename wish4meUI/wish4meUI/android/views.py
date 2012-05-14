@@ -59,7 +59,7 @@ def listFollowingWishes(request):
 def add_new_wish(request):
   print "session key is ", request.session.session_key
   if request.POST:
-#      try:
+      try:
         wish_brand = request.POST['brand']
         print "1 : ",wish_brand
         wish_name = request.POST['name']
@@ -77,9 +77,9 @@ def add_new_wish(request):
                     request_date = datetime.now())
         wish.save()
 
-        response = "<wish><result>success</result><session_id>"+request.session.session_key+"</session_id></login>"
+        response = "<wish><result>success</result><session_id>"+request.session.session_key+"</session_id></wish>"
         print response
         return HttpResponse(response, content_type="text/plain")
-#      except:
-#        print "Unexpected error:", sys.exc_info()[0]
-  return HttpResponse("This url is for android app only.")
+      except:
+        print "Unexpected error:", sys.exc_info()[0]
+  return HttpResponse("<wish><result>fail</result><session_id>"+request.session.session_key+"</session_id></wish>", content_type="text/plain")
