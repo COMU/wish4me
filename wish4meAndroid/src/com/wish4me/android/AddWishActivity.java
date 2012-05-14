@@ -14,8 +14,14 @@ import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
+
+import com.wish4me.android.UserHomeActivity.Wishes;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.TypedArray;
@@ -185,7 +191,31 @@ public class AddWishActivity extends Activity{
 
 			responseText = LoginActivity.responseToString(response);
 			Log.i("wish4me-engin", responseText);
-
+	    	String KEY_WISH = "wish"; // parent node
+	    	String KEY_RESULT = "result";
+	    	
+			Document doc = ParseXML.getDomElement(responseText);
+			
+			NodeList nl = doc.getElementsByTagName(KEY_WISH);
+			String result_status;
+			if (nl.getLength() == 1){
+				Element e = (Element) nl.item(1);
+				result_status = ParseXML.getValue(e, KEY_RESULT);
+				if(result_status == "success"){
+				    AlertDialog.Builder builder = new AlertDialog.Builder(this);
+				    builder.setMessage("Wish Added successfully!").create().show();
+				    
+				    Intent userHome = new Intent(
+							AddWishActivity.this,
+							UserHomeActivity.class);
+					userHome.putExtra("session_id", session_id);
+					UserHomeActivity.Wishes wishes_to_list = Wishes.FRIENDWISHES;
+					userHome.putExtra("wishes_to_list", wishes_to_list.ordinal());
+					startActivity(userHome);
+					finish();
+				    
+				}
+			}
 		} catch (ClientProtocolException e) {
 			Log.e("wish4me-postFacebookID", e.toString());
 			Context context = getApplicationContext();
