@@ -190,7 +190,7 @@ public class AddWishActivity extends Activity{
 			response = httpclient.execute(httppost);
 
 			responseText = LoginActivity.responseToString(response);
-			Log.i("wish4me-engin", responseText);
+			Log.i("wish4me-AddWish-responseText", responseText);
 	    	String KEY_WISH = "wish"; // parent node
 	    	String KEY_RESULT = "result";
 	    	
