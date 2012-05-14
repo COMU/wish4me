@@ -1,5 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
+from django.contrib.auth.models import User
 
 from django.shortcuts import render_to_response
 from django.template.context import RequestContext
@@ -12,6 +13,7 @@ from wish4meUI.friend.models import Following
 from django.db import connection
 from django.conf import settings
 
+import datetime
 
 def list_friends_wishes(request):
   following_list = Following.objects.filter(from_user = request.user).values('to_user_id')
@@ -39,7 +41,9 @@ def welcome(request):
     return render_to_response("home/welcome.html",
                             context_instance=RequestContext(request, context))
   else:
-    return HttpResponseRedirect(reverse('friend-activity'))
+		if datetime.datetime.now() - request.user.date_joined < datetime.timedelta(minutes=1):
+			return HttpResponseRedirect(reverse('helpPage'))
+		return HttpResponseRedirect(reverse('friend-activity'))
 
 def help(request):
 	context = {
