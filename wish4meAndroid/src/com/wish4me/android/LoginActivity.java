@@ -229,7 +229,7 @@ public class LoginActivity extends Activity {
 			response = httpclient.execute(httppost);
 
 			responseText = responseToString(response);
-			Log.i("wish4me-engin", responseText);
+			Log.i("wish4me-Login-ResponseText", responseText);
 
 		} catch (ClientProtocolException e) {
 			Log.e("wish4me-postFacebookID", e.toString());

@@ -79,7 +79,7 @@ public class UserHomeActivity extends Activity {
 						UserHomeActivity.this,
 						AddWishActivity.class);
 				addNewWishActivity.putExtra("session_id", session_id);
-				startActivity(addNewWishActivity);
+				startActivityForResult(addNewWishActivity, RESULT_OK);
 			}
 		});
 	    
@@ -106,7 +106,7 @@ public class UserHomeActivity extends Activity {
     	    response = httpclient.execute(httppost);
         	
         	responseText = LoginActivity.responseToString(response);
-		    Log.i("wish4me-engin", responseText);
+		    Log.i("wish4me-UserHome-ResponseText", responseText);
 
     	} catch (ClientProtocolException e) {
         	Context context = getApplicationContext();

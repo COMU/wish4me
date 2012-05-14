@@ -1,26 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/RelativeLayout1"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
+
     <ImageButton
         android:id="@+id/launch_camera_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
         android:layout_gravity="center_horizontal"
+        android:layout_margin="5dp"
+        android:contentDescription="@string/app_name"
         android:padding="0dp"
         android:src="@drawable/launchcamera_button" />
-    
 
     <Gallery
         android:id="@+id/wishPhotoGallery"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/launch_camera_button" />
+
 
     <ImageView
         android:id="@+id/wishImageSelected"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_above="@+id/addtowish_button"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/wishPhotoGallery"
+        android:contentDescription="@string/app_name"
         android:src="@drawable/wish_icon" />
 
-</LinearLayout>
+
+    <ImageButton
+        android:id="@+id/addtowish_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="3dp"
+        android:padding="0dp"
+        android:src="@drawable/addphoto_addtowish_button" />
+
+</RelativeLayout>

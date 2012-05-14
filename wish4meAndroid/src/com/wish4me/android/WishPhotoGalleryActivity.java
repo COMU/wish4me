@@ -15,11 +15,10 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
-import com.koushikdutta.urlimageviewhelper.UrlImageViewHelper;
-import com.wish4me.android.R.drawable;
-
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.TypedArray;
@@ -32,6 +31,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -57,13 +57,42 @@ public class WishPhotoGalleryActivity extends Activity {
 	    try {
 	        InputStream is = (InputStream) new URL(url).getContent();
 	        //Drawable d = new BitmapDrawable(decodeInputStream(is));
-	        Drawable d = Drawable.createFromStream(is, "src name");
+
+	        
+            //Decode image size
+            BitmapFactory.Options o = new BitmapFactory.Options();
+            o.inJustDecodeBounds = true;
+            BitmapFactory.decodeStream(is, null, o);
+            
+            is.close();
+
+            int scale = 1;
+            if (o.outHeight > LoginActivity.IMAGE_MAX_SIZE || o.outWidth > LoginActivity.IMAGE_MAX_SIZE) {
+                scale = (int)Math.pow(2, (int) Math.round(Math.log(LoginActivity.IMAGE_MAX_SIZE / (double) Math.max(o.outHeight, o.outWidth)) / Math.log(0.5)));
+            }
+
+            //Decode with inSampleSize
+            BitmapFactory.Options o2 = new BitmapFactory.Options();
+            o2.inSampleSize = scale;
+	        is = (InputStream) new URL(url).getContent();
+            Drawable d = new BitmapDrawable(BitmapFactory.decodeStream(is, null, o2));
+            is.close();
+	        
 	        return d;
 	    } catch (Exception e) {
 	        return null;
 	    }
 	}
 
+	private void returnPictures(){
+		Intent intent = new Intent();
+		ArrayList<String> resultList = new ArrayList<String>();
+		for(int i = 0; i < picUris.size(); i++)
+			resultList.add(picUris.get(i).toString());
+		intent.putStringArrayListExtra("image_uris", resultList);
+		setResult(RESULT_OK, intent);
+		finish();
+	}
 	private void fillPicsFromXML(){
 		// XML node keys
     	String KEY_WISH = "wish"; // parent node
@@ -116,7 +145,6 @@ public class WishPhotoGalleryActivity extends Activity {
 		  try {
 			file.createNewFile();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		  return file;
@@ -128,14 +156,34 @@ public class WishPhotoGalleryActivity extends Activity {
 	    mPrefs = getPreferences(MODE_PRIVATE);
 	    //pics = new ArrayList<Drawable>();
 	    Bundle extras = getIntent().getExtras();
+	    imageView = (ImageView)findViewById(R.id.wishImageSelected);
 	    ImageButton launchCameraButton = (ImageButton) findViewById(R.id.launch_camera_button);
+	    ImageButton addToWishButton= (ImageButton) findViewById(R.id.addtowish_button);
 	    if(extras !=null) {
 	    	if(extras.getString("add_new_wish") == null) {
 	    		launchCameraButton.setVisibility(View.GONE);
+	    		addToWishButton.setVisibility(View.GONE);
 		    	wish_xml = extras.getString("wish_xml");
 		    	wish_index = extras.getInt("wish_index");
 		    	fillPicsFromXML();
 	    	} else {
+	    		pics.clear();
+	    		picUris.clear();
+				List<String> result = extras.getStringArrayList("image_uris");
+				extras.remove("image_uris");
+				for(String s:result){
+					picUris.add(Uri.parse(s));
+					Log.e("wish4me-wishadd-gallery", "added from caller : "+s);
+				}
+				
+				for(int i=0; i < picUris.size();i++){
+					imageView.setImageBitmap(WishPhotoGalleryActivity.decodeFile( 
+							new File(URI.create(picUris.get(i).toString()))));
+					pics.add(imageView.getDrawable());
+
+				}
+				
+				
 	    		launchCameraButton.setOnClickListener(new OnClickListener() {
 					
 					public void onClick(View v) {
@@ -164,10 +212,18 @@ public class WishPhotoGalleryActivity extends Activity {
 
 					}
 				});
+	    		
+	    		addToWishButton.setOnClickListener(new OnClickListener() {
+					
+					public void onClick(View v) {
+						returnPictures();
+						
+					}
+				});
 	    	}
 	    }
 	    
-	    imageView = (ImageView)findViewById(R.id.wishImageSelected);
+	    
 	    Gallery gallery = (Gallery) findViewById(R.id.wishPhotoGallery);
 	    gallery.setAdapter(new ImageAdapter(this));
 	    gallery.setOnItemSelectedListener(new OnItemSelectedListener() {
@@ -267,6 +323,7 @@ public class WishPhotoGalleryActivity extends Activity {
         }
         return b;
     }
+    
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (resultCode == RESULT_OK) {  
 		    switch(requestCode){
@@ -308,29 +365,50 @@ public class WishPhotoGalleryActivity extends Activity {
 			        break;  
 			    }  
 		  }
-		/*
-		if (resultCode == Activity.RESULT_OK && requestCode == 0) {
-			String result = data.toURI();
-			Log.e("wish4me-capture", "result is "+result);
-			
-			pics.add(Drawable.createFromPath(Uri.parse(result).getPath()));
-			Gallery gallery = (Gallery) findViewById(R.id.wishPhotoGallery);
-			((BaseAdapter)gallery.getAdapter()).notifyDataSetChanged();
-			
-
-			//imageView.setImageURI(Uri.parse(result));
-			
-			imageView.setImageURI(capturedImage);
-			pics.add(imageView.getDrawable());
-			
-			Gallery gallery = (Gallery) findViewById(R.id.wishPhotoGallery);
-			
-			((BaseAdapter)gallery.getAdapter()).notifyDataSetChanged();
-			
-			capturedImageView.setImageURI(Uri.parse(result));
-			capturedImageView.setScaleType(ScaleType.CENTER_INSIDE);
-			
-		}
-		*/
 	}
+	
+	 @Override
+	    public boolean onKeyDown(int keyCode, KeyEvent event) {
+	        //Handle the back button
+	        if(keyCode == KeyEvent.KEYCODE_BACK) {
+	    	    Bundle extras = getIntent().getExtras();
+	    	    if(extras !=null) {
+	    	    	if(extras.getString("add_new_wish") != null && pics.size() != 0) {
+	    	            //Ask the user if they want to quit
+	    	            new AlertDialog.Builder(this)
+	    	            .setIcon(android.R.drawable.ic_dialog_alert)
+	    	            .setTitle(R.string.title_add_photo)
+	    	            .setMessage(R.string.confirm_add_photo)
+	    	            .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+
+	    	                
+	    	                public void onClick(DialogInterface dialog, int which) {
+	    	                	returnPictures();
+	    	                }
+
+	    	            })
+	    	            .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+
+							public void onClick(DialogInterface dialog,
+									int which) {
+								//return witout sending picUris
+								Intent intent = new Intent();
+								ArrayList<String> resultList = new ArrayList<String>();
+								intent.putStringArrayListExtra("image_uris", resultList);
+								setResult(RESULT_OK, intent);
+								finish();
+							}
+	    	            	
+	    	            })
+	    	            .show();
+
+	    	            return true;
+	    	        } else {
+	    	            return super.onKeyDown(keyCode, event);
+	    	        }
+    	    	}
+	        }
+			return false;
+
+	    }
 }
