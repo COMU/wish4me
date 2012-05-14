@@ -43,11 +43,12 @@
     <div class="span6"><p>{{ wish.location.name }}</p>
                         <p>{{ wish.location.address }} / {{ wish.location.country }}</p></div>
   </div>
-  <div class="span4 offset7">
+  <div class="span4 offset6">
   {% if wish.wish_for != user %}
     <a href="{% url wish_add_to_my_wishes wish.id %}" class="btn btn-primary" type="button"><i class="icon-ok"></i>Add to My Wishes</a>
   {% else %}
         <a href="{% url wish_edit_wish wish.id %}" class="btn btn-warning" type="button"><i class="icon-ok"></i>Edit</a>
+      <a href="{% url wish_remove_wish wish.id %}" class="btn btn-danger" type="button"><i class="icon-ok"></i>Remove</a>
   {% endif %}
     {% if not wish.is_accomplished %}
       <a href="{% url wish_accomplish_wish wish.id %}" class="btn btn-success" type="button"><i class="icon-ok"></i>Accomplish</a>
