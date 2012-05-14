@@ -1,4 +1,4 @@
-<div class="row well">
+    <div class="row well">
   <div class="row" style="">
     <div class="pull-right label span1 offset9"><a href="#">{{wish.related_list.title }}</a></div>
   </div>
@@ -33,7 +33,15 @@
       </ul>
     </div>
     <div class="span6"><p>{{ wish.description }}</p></div>
-    <div class="span6"><p>Display the location with a map here</p></div>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <hr>
+    <div class="span6"><p>{{ wish.location.name }}</p>
+                        <p>{{ wish.location.address }} / {{ wish.location.country }}</p></div>
   </div>
   <div class="span4 offset7">
   {% if wish.wish_for != user %}
