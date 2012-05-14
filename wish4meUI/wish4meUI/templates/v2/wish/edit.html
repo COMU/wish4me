@@ -5,27 +5,45 @@
 {% block right %}
 <div class="row" style='height:50px'><i>* fields are required. </i></div>
 <form class="form-vertical" action="{% url wish_edit_wish wish_id %}" enctype="multipart/form-data" method="POST">
-    <div class="container">
+    <!-- <div class="container"> -->
+    <!-- map&textfield part starts -->
+    {% csrf_token %}
+    <div class="row">
         <div class="span4">
-            {% csrf_token %}
+            <label class="control-label" for="searchTextField">City name:</label>
+            <input id="searchTextField" type="text" class="span3" onkeypress="return checkEnter(event)" name="city">
+
+            <div id="loading"><img src="{{ MEDIA_URL }}images/ajax-loader.gif" /></div>
+
+            <label class="control-label" for="location">Location:</label><!-- <input class="btn btn-primary" type="button" value="Add New" name="new-location" onclick="openwindow('{% url new-location %}');" />-->
+            <select name="location" id="location">
+            </select>
+        </div>
+    </div>
+    <!-- map&textfield part ends -->
+    <div class="row">
+        <!-- form and image area starts -->
+        <div class="span5">
             {% include "_form.html" %}
             {{ wish_photo_set_form.management_form.as_table }}
         </div>
         <div class="span4 well">
             <h3><i class="icon-picture"></i> Photos of wish </h3>
             {% for form in wish_photo_set_form.forms %}
-                {% for phot in photos %}
-                {% if forloop.counter0 == forloop.parentloop.counter0 %}
-                     <img src="{{ phot.photo.url }}"/>
-                     <br>
-                     <input type="checkbox" name="remove_photo_{{ forloop.counter0 }}">Remove Photo
-                {% endif %}
-                {% endfor %}
-                {% include "_form.html" %}
-                <hr>
+            {% for phot in photos %}
+            {% if forloop.counter0 == forloop.parentloop.counter0 %}
+            <img src="{{ phot.photo.url }}"/>
+            <br>
+            <input type="checkbox" name="remove_photo_{{ forloop.counter0 }}">Remove Photo
+            {% endif %}
+            {% endfor %}
+            {% include "_form.html" %}
+            <hr>
             {% endfor %}
         </div>
+        <!-- form and image area ends -->
     </div>
+    <!-- </div> -->
     <hr>
     <input class="btn btn-primary" type="submit" value="Submit" />
 </form>
