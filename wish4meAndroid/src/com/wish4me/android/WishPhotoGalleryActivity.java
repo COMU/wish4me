@@ -212,6 +212,14 @@ public class WishPhotoGalleryActivity extends Activity {
 
 					}
 				});
+	    		
+	    		addToWishButton.setOnClickListener(new OnClickListener() {
+					
+					public void onClick(View v) {
+						returnPictures();
+						
+					}
+				});
 	    	}
 	    }
 	    
