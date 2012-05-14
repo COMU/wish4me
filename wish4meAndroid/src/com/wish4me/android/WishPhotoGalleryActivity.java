@@ -136,6 +136,7 @@ public class WishPhotoGalleryActivity extends Activity {
 	    mPrefs = getPreferences(MODE_PRIVATE);
 	    //pics = new ArrayList<Drawable>();
 	    Bundle extras = getIntent().getExtras();
+	    imageView = (ImageView)findViewById(R.id.wishImageSelected);
 	    ImageButton launchCameraButton = (ImageButton) findViewById(R.id.launch_camera_button);
 	    if(extras !=null) {
 	    	if(extras.getString("add_new_wish") == null) {
@@ -144,6 +145,19 @@ public class WishPhotoGalleryActivity extends Activity {
 		    	wish_index = extras.getInt("wish_index");
 		    	fillPicsFromXML();
 	    	} else {
+				List<String> result = extras.getStringArrayList("image_uris");
+				for(String s:result){
+					picUris.add(Uri.parse(s));
+					Log.e("wish4me-imageReturn", s);
+				}
+				
+				for(int i=0; i < picUris.size();i++){
+					imageView.setImageBitmap(WishPhotoGalleryActivity.decodeFile( 
+							new File(URI.create(picUris.get(i).toString()))));
+					pics.add(imageView.getDrawable());
+
+				}
+				
 	    		launchCameraButton.setOnClickListener(new OnClickListener() {
 					
 					public void onClick(View v) {
@@ -175,7 +189,7 @@ public class WishPhotoGalleryActivity extends Activity {
 	    	}
 	    }
 	    
-	    imageView = (ImageView)findViewById(R.id.wishImageSelected);
+	    
 	    Gallery gallery = (Gallery) findViewById(R.id.wishPhotoGallery);
 	    gallery.setAdapter(new ImageAdapter(this));
 	    gallery.setOnItemSelectedListener(new OnItemSelectedListener() {
@@ -275,6 +289,7 @@ public class WishPhotoGalleryActivity extends Activity {
         }
         return b;
     }
+    
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (resultCode == RESULT_OK) {  
 		    switch(requestCode){

@@ -1,6 +1,8 @@
 package com.wish4me.android;
 
+import java.io.File;
 import java.io.IOException;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,22 +15,33 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 
+import com.wish4me.android.WishPhotoGalleryActivity.ImageAdapter;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.TypedArray;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.widget.BaseAdapter;
 import android.widget.EditText;
+import android.widget.Gallery;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 public class AddWishActivity extends Activity{
 	private String session_id;
-
+    private List<Drawable> pics = new ArrayList<Drawable>();
+    private List<Uri> picUris = new ArrayList<Uri>();
 	
 	public void onCreate(Bundle savedInstanceState) {
+
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.addnewwish);
 
@@ -48,11 +61,17 @@ public class AddWishActivity extends Activity{
     					context,
     					WishPhotoGalleryActivity.class);
     			wishGallery.putExtra("add_new_wish", "true");
+    			ArrayList<String> resultList = new ArrayList<String>();
+    			for(int i = 0; i < picUris.size(); i++)
+    				resultList.add(picUris.get(i).toString());
+    			wishGallery.putStringArrayListExtra("image_uris", resultList);
+    			
     			startActivityForResult(wishGallery,0);
     			//startActivity(wishGallery);
     			
 				
 			}
+
 		});
 
 
@@ -67,17 +86,70 @@ public class AddWishActivity extends Activity{
 			}
 		});
 
-		
+		Gallery gallery = (Gallery) findViewById(R.id.addwish_temprory_gallery);
+	    gallery.setAdapter(new ImageAdapter(this));
 
 	}
+	
+	public class ImageAdapter extends BaseAdapter {
+
+    	private Context ctx;
+    	int imageBackground;
+    	
+    	public ImageAdapter(Context c) {
+			ctx = c;
+			TypedArray ta = obtainStyledAttributes(R.styleable.wishPhotoGallery);
+			imageBackground = ta.getResourceId(R.styleable.wishPhotoGallery_android_galleryItemBackground, 1);
+			ta.recycle();
+		}
+
+		public int getCount() {
+    		
+    		return pics.size();
+    	}
+
+    	public Object getItem(int arg0) {
+    		
+    		return arg0;
+    	}
+
+    	public long getItemId(int arg0) {
+    		
+    		return arg0;
+    	}
+
+    	public View getView(int arg0, View arg1, ViewGroup arg2) {
+    		ImageView iv = new ImageView(ctx);
+			iv.setImageDrawable(pics.get(arg0));
+    		iv.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+    		iv.setLayoutParams(new Gallery.LayoutParams(150,120));
+    		iv.setBackgroundResource(imageBackground);
+    		return iv;
+    	}
+
+    }
 	
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
 		if (requestCode == 0){
 			if (resultCode == RESULT_OK) {
 				List<String> result = data.getStringArrayListExtra("image_uris");
-				for(String s:result)
+				for(String s:result){
+					picUris.add(Uri.parse(s));
 					Log.e("wish4me-imageReturn", s);
+				}
+				
+				ImageView tempImageView = new ImageView(getApplicationContext());
+				for(int i=0; i < picUris.size();i++){
+					
+					tempImageView.setImageBitmap(WishPhotoGalleryActivity.decodeFile( 
+							new File(URI.create(picUris.get(i).toString()))));
+					pics.add(tempImageView.getDrawable());
+					Log.e("wish4me-imageReturn-add", "added image "+i);
+				}
+				
+				Gallery gallery = (Gallery) findViewById(R.id.addwish_temprory_gallery);
+			    ((BaseAdapter)gallery.getAdapter()).notifyDataSetChanged();
 				}
 			else{
 				
@@ -85,6 +157,7 @@ public class AddWishActivity extends Activity{
 		}
 	}
 
+	
 
 	private String postNewWish() {
 		// Create a new HttpClient and Post Header

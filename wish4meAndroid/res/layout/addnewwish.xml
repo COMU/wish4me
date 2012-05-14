@@ -63,28 +63,30 @@
 		        android:gravity="top"
 		        android:inputType="textMultiLine"
 		        android:lines="5" />
-		
+		
 		    <ImageButton
 		        android:id="@+id/add_photo_button"
 		        android:layout_width="wrap_content"
 		        android:layout_height="wrap_content"
 		        android:layout_gravity="center_horizontal"
-                android:contentDescription="@string/app_name"
+		        android:layout_margin="5dp"
+		        android:contentDescription="@string/app_name"
 		        android:padding="0px"
 		        android:src="@drawable/addphoto_button" />
 
 		    <Gallery
-		        android:id="@+id/temprory_gallery"
+		        android:id="@+id/addwish_temprory_gallery"
 		        android:layout_width="match_parent"
 		        android:layout_height="wrap_content" />
-
+
 		    <ImageButton
 		        android:id="@+id/addwish_button"
 		        android:layout_width="wrap_content"
 		        android:layout_height="wrap_content"
 		        android:layout_gravity="center_horizontal"
+		        android:layout_margin="5dp"
+		        android:contentDescription="@string/app_name"
 		        android:padding="0px"
-				android:contentDescription="@string/app_name"
 		        android:src="@drawable/add_wish_button" />
             
         </LinearLayout>
