@@ -15,8 +15,6 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 
-import com.wish4me.android.WishPhotoGalleryActivity.ImageAdapter;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -134,6 +132,9 @@ public class AddWishActivity extends Activity{
 		if (requestCode == 0){
 			if (resultCode == RESULT_OK) {
 				List<String> result = data.getStringArrayListExtra("image_uris");
+				data.removeExtra("image_uris");
+				pics.clear();
+				picUris.clear();
 				for(String s:result){
 					picUris.add(Uri.parse(s));
 					Log.e("wish4me-imageReturn", s);

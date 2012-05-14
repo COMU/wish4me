@@ -145,10 +145,13 @@ public class WishPhotoGalleryActivity extends Activity {
 		    	wish_index = extras.getInt("wish_index");
 		    	fillPicsFromXML();
 	    	} else {
+	    		pics.clear();
+	    		picUris.clear();
 				List<String> result = extras.getStringArrayList("image_uris");
+				extras.remove("image_uris");
 				for(String s:result){
 					picUris.add(Uri.parse(s));
-					Log.e("wish4me-imageReturn", s);
+					Log.e("wish4me-wishadd-gallery", "added from caller : "+s);
 				}
 				
 				for(int i=0; i < picUris.size();i++){
@@ -157,6 +160,7 @@ public class WishPhotoGalleryActivity extends Activity {
 					pics.add(imageView.getDrawable());
 
 				}
+				
 				
 	    		launchCameraButton.setOnClickListener(new OnClickListener() {
 					
