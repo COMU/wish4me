@@ -185,4 +185,6 @@ SESSION_ENGINE = "django.contrib.sessions.backends.db"
 SESSION_COOKIE_NAME = "sessionid"
 
 #location search oauth token
+#username: wish4meinfo@gmail.com
+#password: wish4me1nfo
 LOCATION_SEARCH_OAUTH_TOKEN = "15L2WG3D34CCX3FZNJZRQMZUAXHFFL2HCP1LT3LJSOQR0BDB"
