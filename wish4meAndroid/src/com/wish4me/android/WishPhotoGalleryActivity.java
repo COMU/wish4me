@@ -15,9 +15,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
-import com.koushikdutta.urlimageviewhelper.UrlImageViewHelper;
-import com.wish4me.android.R.drawable;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -331,8 +328,8 @@ public class WishPhotoGalleryActivity extends Activity {
 	    	            //Ask the user if they want to quit
 	    	            new AlertDialog.Builder(this)
 	    	            .setIcon(android.R.drawable.ic_dialog_alert)
-	    	            .setTitle(R.string.title_quit)
-	    	            .setMessage(R.string.confirm_quit)
+	    	            .setTitle(R.string.title_add_photo)
+	    	            .setMessage(R.string.confirm_add_photo)
 	    	            .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
 
 	    	                
@@ -341,7 +338,19 @@ public class WishPhotoGalleryActivity extends Activity {
 	    	                }
 
 	    	            })
-	    	            .setNegativeButton(R.string.no, null)
+	    	            .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+
+							public void onClick(DialogInterface dialog,
+									int which) {
+								//return witout sending picUris
+								Intent intent = new Intent();
+								ArrayList<String> resultList = new ArrayList<String>();
+								intent.putStringArrayListExtra("image_uris", resultList);
+								setResult(RESULT_OK, intent);
+								finish();
+							}
+	    	            	
+	    	            })
 	    	            .show();
 
 	    	            return true;
