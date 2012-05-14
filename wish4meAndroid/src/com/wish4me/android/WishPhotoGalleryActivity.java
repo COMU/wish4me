@@ -158,9 +158,11 @@ public class WishPhotoGalleryActivity extends Activity {
 	    Bundle extras = getIntent().getExtras();
 	    imageView = (ImageView)findViewById(R.id.wishImageSelected);
 	    ImageButton launchCameraButton = (ImageButton) findViewById(R.id.launch_camera_button);
+	    ImageButton addToWishButton= (ImageButton) findViewById(R.id.addtowish_button);
 	    if(extras !=null) {
 	    	if(extras.getString("add_new_wish") == null) {
 	    		launchCameraButton.setVisibility(View.GONE);
+	    		addToWishButton.setVisibility(View.GONE);
 		    	wish_xml = extras.getString("wish_xml");
 		    	wish_index = extras.getInt("wish_index");
 		    	fillPicsFromXML();

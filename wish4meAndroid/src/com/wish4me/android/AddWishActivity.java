@@ -18,8 +18,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
-import com.wish4me.android.UserHomeActivity.Wishes;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -32,8 +30,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.Gallery;
