@@ -175,4 +175,6 @@ AJAX_SELECT_BOOTSTRAP = True
 AJAX_SELECT_INLINES = 'inline'
 
 #location search oauth token
+# username: wish4meinfo@gmail.com
+# password: wish1me1nfo
 LOCATION_SEARCH_OAUTH_TOKEN = "15L2WG3D34CCX3FZNJZRQMZUAXHFFL2HCP1LT3LJSOQR0BDB"
