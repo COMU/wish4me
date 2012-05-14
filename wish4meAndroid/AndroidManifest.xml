@@ -18,7 +18,7 @@
         </activity>
         <activity android:name="UserHomeActivity" android:screenOrientation="portrait"></activity>
         <activity android:name="WishPhotoGalleryActivity" android:screenOrientation="portrait"></activity>
-        <activity android:name="AddWishActivity" android:screenOrientation="portrait"></activity>
+        <activity android:name="AddWishActivity" android:screenOrientation="unspecified"></activity>
     </application>
 
 </manifest>
