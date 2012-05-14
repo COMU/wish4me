@@ -7,13 +7,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.mime.MultipartEntity;
+import org.apache.http.entity.mime.content.ContentBody;
+import org.apache.http.entity.mime.content.FileBody;
+import org.apache.http.entity.mime.content.StringBody;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicNameValuePair;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -43,7 +44,7 @@ public class AddWishActivity extends Activity{
 	private String session_id;
     private List<Drawable> pics = new ArrayList<Drawable>();
     private List<Uri> picUris = new ArrayList<Uri>();
-	
+
 	public void onCreate(Bundle savedInstanceState) {
 
 		super.onCreate(savedInstanceState);
@@ -174,19 +175,45 @@ public class AddWishActivity extends Activity{
 		String responseText = null;
 		try {
 			// Add your data
-			
+						
 			EditText newWishBrand = (EditText) findViewById(R.id.addwish_edit_brand);
 			EditText newWishName = (EditText) findViewById(R.id.addwish_edit_name);
 			EditText newWishDescription = (EditText) findViewById(R.id.addwish_edit_description);
-			
+			/*
 			List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
 			nameValuePairs.add(new BasicNameValuePair("sessionid", session_id));
 			nameValuePairs.add(new BasicNameValuePair("brand", newWishBrand.getText().toString()));
 			nameValuePairs.add(new BasicNameValuePair("name", newWishName.getText().toString()));
 			nameValuePairs.add(new BasicNameValuePair("description", newWishDescription.getText().toString()));
 			httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+			*/
+			MultipartEntity mpEntity = new MultipartEntity();
+			
+		    ContentBody sessionid 	= new StringBody(session_id);
+		    ContentBody brand 		= new StringBody(newWishBrand.getText().toString());
+		    ContentBody name 		= new StringBody(newWishName.getText().toString());
+		    ContentBody description = new StringBody(newWishDescription.getText().toString());
+
+		    mpEntity.addPart( "sessionid", 		sessionid );
+		    mpEntity.addPart( "brand", 			brand);
+		    mpEntity.addPart( "name", 			name);
+		    mpEntity.addPart( "description", 	description);
+			
+			
+			
+			for(int i = 0; i < picUris.size(); i++){
+				File file = new File(new URI(picUris.get(0).toString()));
+	
+			    
+			    ContentBody cbFile = new FileBody(file, "image/jpeg");
+		    mpEntity.addPart("wishphoto_"+i, cbFile);
+		    
+			}
+			httppost.setEntity(mpEntity);
+
 
 			// Execute HTTP Post Request
+			Log.e("wish4me-AddWish-requestLine", "executing request " + httppost.getRequestLine());
 			response = httpclient.execute(httppost);
 
 			responseText = LoginActivity.responseToString(response);

@@ -76,6 +76,9 @@ def add_new_wish(request):
                     related_list=Wishlist.objects.filter(owner=request.user, is_hidden=False)[0], 
                     request_date = datetime.now())
         wish.save()
+        if request.FILES:
+            if request.FILES['wishphoto_0']:
+                print "there is a file"
 
         response = "<wish><result>success</result><session_id>"+request.session.session_key+"</session_id></wish>"
         print response

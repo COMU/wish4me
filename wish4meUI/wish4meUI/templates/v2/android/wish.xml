@@ -1,8 +1,8 @@
 <wish>
 	<name>{{ wish.name }}</name>
-	<brand>{{wish.brand }}</brand>
+	<brand>{{ wish.brand }}</brand>
 	<description>{{ wish.description }}</description>
-	<wishowner>{{wish.related_list.owner}}</wishowner>
+	<wishowner>{{ wish.related_list.owner }}</wishowner>
 	<wishfor>{{ wish.wish_for }}</wishfor>
 	<accomplished>{% if not wish.is_accomplished %}false{% else %}true{% endif %}</accomplished>
 	<photos>
