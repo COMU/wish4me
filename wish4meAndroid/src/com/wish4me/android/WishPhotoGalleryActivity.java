@@ -22,6 +22,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.TypedArray;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
@@ -150,6 +151,22 @@ public class WishPhotoGalleryActivity extends Activity {
 		  return file;
 	}  
 	
+	public File recordImages() {
+		SharedPreferences.Editor editor = mPrefs.edit();
+		editor.putInt("addImage_imageCount", picUris.size());
+		Log.e("wish4me-sharedPreferences","addImage-write imageCount"+ " is "+ picUris.size());
+		for(int i=0; i < picUris.size(); i++){
+			Log.e("wish4me-sharedPreferences","addImage-write image"+i+" is "+ picUris.get(i));
+			editor.putString("addImage_image"+i, picUris.get(i).toString());	
+		}
+		//add file name too.
+		File file = getTempFile(getApplication());
+		editor.putString("addImage-fileURI", Uri.fromFile(file).toString());
+		Log.e("wish4me-sharedPreferences", "addImage-write file is "+Uri.fromFile(file).toString());
+		editor.commit();
+		return file;
+	}
+	
 	public void onCreate(Bundle savedInstanceState) {
 	    super.onCreate(savedInstanceState);
 	    setContentView(R.layout.wishphotos);
@@ -158,10 +175,11 @@ public class WishPhotoGalleryActivity extends Activity {
 	    Bundle extras = getIntent().getExtras();
 	    imageView = (ImageView)findViewById(R.id.wishImageSelected);
 	    ImageButton launchCameraButton = (ImageButton) findViewById(R.id.launch_camera_button);
-	    ImageButton addToWishButton= (ImageButton) findViewById(R.id.addtowish_button);
+	    ImageButton launchGalleryButton = (ImageButton) findViewById(R.id.launch_gallery_button);
+	    ImageButton addToWishButton = (ImageButton) findViewById(R.id.addtowish_button);
 	    if(extras !=null) {
 	    	if(extras.getString("add_new_wish") == null) {
-	    		launchCameraButton.setVisibility(View.GONE);
+	    		findViewById(R.id.launch_buttons_layout).setVisibility(View.GONE);
 	    		addToWishButton.setVisibility(View.GONE);
 		    	wish_xml = extras.getString("wish_xml");
 		    	wish_index = extras.getInt("wish_index");
@@ -182,23 +200,11 @@ public class WishPhotoGalleryActivity extends Activity {
 					pics.add(imageView.getDrawable());
 
 				}
-				
-				
+
 	    		launchCameraButton.setOnClickListener(new OnClickListener() {
 					
 					public void onClick(View v) {
-						SharedPreferences.Editor editor = mPrefs.edit();
-						editor.putInt("addImage_imageCount", picUris.size());
-						Log.e("wish4me-sharedPreferences","addImage-write imageCount"+ " is "+ picUris.size());
-						for(int i=0; i < picUris.size(); i++){
-							Log.e("wish4me-sharedPreferences","addImage-write image"+i+" is "+ picUris.get(i));
-							editor.putString("addImage_image"+i, picUris.get(i).toString());	
-						}
-						//add file name too.
-						File file = getTempFile(getApplication());
-						editor.putString("addImage-fileURI", Uri.fromFile(file).toString());
-						Log.e("wish4me-sharedPreferences", "addImage-write file is "+Uri.fromFile(file).toString());
-						editor.commit();
+						File file = recordImages();
 						
 						pics = new ArrayList<Drawable>();
 						imageView = (ImageView)findViewById(R.id.wishImageSelected);
@@ -209,6 +215,22 @@ public class WishPhotoGalleryActivity extends Activity {
 					    
 					    startActivityForResult(intent, 0);
 
+					}
+				});
+	    		
+	    		launchGalleryButton.setOnClickListener(new OnClickListener() {
+					
+					public void onClick(View v) {
+						File file = recordImages();
+						
+						pics = new ArrayList<Drawable>();
+						imageView = (ImageView)findViewById(R.id.wishImageSelected);
+						picUris = new ArrayList<Uri>();
+						
+						Intent intent = new Intent(Intent.ACTION_GET_CONTENT);  
+						intent.setType("image/*");
+
+					    startActivityForResult(intent, 1);
 
 					}
 				});
@@ -325,46 +347,69 @@ public class WishPhotoGalleryActivity extends Activity {
     }
     
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
-		if (resultCode == RESULT_OK) {  
+		if (resultCode == RESULT_OK) {
+			//get old images first:
+			File file = getRecordedPics();
+			for(int i=0; i < picUris.size();i++){
+				
+				imageView.setImageBitmap(decodeFile( 
+						new File(URI.create(picUris.get(i).toString()))));
+				pics.add(imageView.getDrawable());
+			}
 		    switch(requestCode){
 		      case 0:
-		    	  //get old images first:
-					int imageCount = mPrefs.getInt("addImage_imageCount", 0);
-					Log.e("wish4me-sharedPreferences", "addImage-read image count is : "+imageCount);
-					SharedPreferences.Editor editor = mPrefs.edit();
-					editor.remove("addImage_imageCount");
-					
-					
-					for(int i=0; i < imageCount; i++){
-						picUris.add(Uri.parse(mPrefs.getString("addImage_image"+i, "")));
-						Log.e("wish4me-sharedPreferences","addImage-read image"+i+" is "+ picUris.get(i).toString());
-						editor.remove("addImage_image"+i);
-					}
-					String fileURI = mPrefs.getString("addImage-fileURI", "");
-					
-					File file = new File(URI.create(fileURI));
-					editor.remove("addImage-fileURI");
+		    	  
 
-					Log.e("wish4me-sharedPreferences", "addImage-read image file as "+ Uri.fromFile(file));
-					editor.commit();
-					for(int i=0; i < picUris.size();i++){
-						
-						imageView.setImageBitmap(decodeFile( 
-								new File(URI.create(picUris.get(i).toString()))));
-						pics.add(imageView.getDrawable());
-					}
 					pics.add(new BitmapDrawable(decodeFile(file)));
-					
-					//Bitmap captureBmp = Media.getBitmap(getContentResolver(), Uri.fromFile(file) );  
-					//pics.add(new BitmapDrawable(captureBmp));
-					
 					picUris.add(Uri.fromFile(file));
-					Log.e("wish4me-sharedPreferences","addImage to picUris as "+ Uri.fromFile(file));
-					Gallery gallery = (Gallery) findViewById(R.id.wishPhotoGallery);
-					((BaseAdapter)gallery.getAdapter()).notifyDataSetChanged();  
-			        break;  
-			    }  
-		  }
+  
+			        break;
+		      case 1:
+		    	    picUris.add(Uri.fromFile(new File(getRealPathFromURI(data.getData()))));
+					pics.add(new BitmapDrawable(decodeFile(new File(getRealPathFromURI(data.getData())))));
+					
+			        break;
+			    }
+			Log.e("wish4me-sharedPreferences","addImage to picUris as "+ Uri.fromFile(file));
+			Gallery gallery = (Gallery) findViewById(R.id.wishPhotoGallery);
+			((BaseAdapter)gallery.getAdapter()).notifyDataSetChanged();  
+		}
+	}
+	public String getRealPathFromURI(Uri contentUri) {
+
+        // can post image
+        String [] proj={MediaStore.Images.Media.DATA};
+        Cursor cursor = managedQuery( contentUri,
+                        proj, // Which columns to return
+                        null,       // WHERE clause; which rows to return (all rows)
+                        null,       // WHERE clause selection arguments (none)
+                        null); // Order-by clause (ascending by name)
+        int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+        cursor.moveToFirst();
+
+        return cursor.getString(column_index);
+}
+	
+	private File getRecordedPics() {
+		int imageCount = mPrefs.getInt("addImage_imageCount", 0);
+		Log.e("wish4me-sharedPreferences", "addImage-read image count is : "+imageCount);
+		SharedPreferences.Editor editor = mPrefs.edit();
+		editor.remove("addImage_imageCount");
+		
+		
+		for(int i=0; i < imageCount; i++){
+			picUris.add(Uri.parse(mPrefs.getString("addImage_image"+i, "")));
+			Log.e("wish4me-sharedPreferences","addImage-read image"+i+" is "+ picUris.get(i).toString());
+			editor.remove("addImage_image"+i);
+		}
+		String fileURI = mPrefs.getString("addImage-fileURI", "");
+		
+		File file = new File(URI.create(fileURI));
+		editor.remove("addImage-fileURI");
+
+		Log.e("wish4me-sharedPreferences", "addImage-read image file as "+ Uri.fromFile(file));
+		editor.commit();
+		return file;
 	}
 	
 	 @Override

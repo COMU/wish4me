@@ -51,7 +51,7 @@ import com.facebook.android.Facebook.DialogListener;
 import com.facebook.android.FacebookError;
 
 public class LoginActivity extends Activity {
-	public static String SERVERIP = "192.168.1.40";
+	public static String SERVERIP = "192.168.1.45";
 	public static int IMAGE_MAX_SIZE = 640;
 	public static int SCALE = 2;
 	EditText name;

@@ -5,25 +5,45 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-    <ImageButton
-        android:id="@+id/launch_camera_button"
+    <LinearLayout
+        android:id="@+id/launch_buttons_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_gravity="center_horizontal"
-        android:layout_margin="5dp"
-        android:contentDescription="@string/app_name"
-        android:padding="0dp"
-        android:src="@drawable/launchcamera_button" />
+        android:layout_toLeftOf="@+id/launch_camera_button"
+        android:baselineAligned="false" >
+    
+	    <ImageButton
+	        android:id="@+id/launch_camera_button"
+	        android:layout_width="155dp"
+	        android:layout_height="wrap_content"
+	        android:layout_gravity="center"
+	        android:layout_margin="2dp"
+	        android:contentDescription="@string/app_name"
+	        android:padding="0dp"
+	        android:scaleType="centerInside"
+	        android:adjustViewBounds="true"
+	        android:src="@drawable/launchcamera_button" />
+	    
+	    <ImageButton
+	        android:id="@+id/launch_gallery_button"
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_margin="2dp"
+	        android:adjustViewBounds="true"
+	        android:contentDescription="@string/app_name"
+	        android:padding="0dp"
+	        android:scaleType="centerInside"
+	        android:src="@drawable/launchgallery_button" />
 
+	</LinearLayout>
+	
     <Gallery
         android:id="@+id/wishPhotoGallery"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_below="@+id/launch_camera_button" />
-
+        android:layout_below="@+id/launch_buttons_layout" />
 
     <ImageView
         android:id="@+id/wishImageSelected"
