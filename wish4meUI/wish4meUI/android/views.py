@@ -10,11 +10,13 @@ from django.contrib.auth.models import User
 from wish4meUI.facebook.views import androidLogin
 from wish4meUI.decorators.cookieless_decorator  import session_from_http_params
 from wish4meUI import settings
-from wish4meUI.wish.models import Wish, WishCategory
+from wish4meUI.wish.models import Wish, WishCategory, WishPhoto
 from wish4meUI.wishlist.models import Wishlist
 from wish4meUI.friend.utils import getFollowingWishes
 from datetime import datetime
 import sys
+import urllib2
+from urlparse import urlparse
 
 @csrf_exempt
 def facebook_login(request):
@@ -59,7 +61,9 @@ def listFollowingWishes(request):
 def add_new_wish(request):
   print "session key is ", request.session.session_key
   if request.POST:
-      try:
+      #try:
+
+
         wish_brand = request.POST['brand']
         print "1 : ",wish_brand
         wish_name = request.POST['name']
@@ -77,12 +81,26 @@ def add_new_wish(request):
                     request_date = datetime.now())
         wish.save()
         if request.FILES:
-            if request.FILES['wishphoto_0']:
-                print "there is a file"
+            for i in range(10):
+                if request.FILES['wishphoto_'+i]:
+                    """
+                    photo = WishPhoto(commit = False)
+                    photo.wish = wish
+                    photo_name = urlparse(request.FILES['wishphoto_0'].name).path.split('/')[-1]
+                    photo_content = ContentFile(urllib2.urlopen(request.FILES['wishphoto_0']['content']).read())
+                    photo.photo.save(photo_name, photo_content, save=False)
+                    photo.save()
+                    """
+                        
+                    print "there is a file"
+                    photo = WishPhoto(wish= wish, photo = request.FILES['wishphoto_'+i])
+                    photo.save()
+                else:
+                    break
 
         response = "<wish><result>success</result><session_id>"+request.session.session_key+"</session_id></wish>"
         print response
         return HttpResponse(response, content_type="text/plain")
-      except:
-        print "Unexpected error:", sys.exc_info()[0]
+      #except:
+      #  print "Unexpected error:", sys.exc_info()[0]
   return HttpResponse("<wish><result>fail</result><session_id>"+request.session.session_key+"</session_id></wish>", content_type="text/plain")
