@@ -1,95 +1,88 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical" >
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+	android:id="@+id/scrollView1"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent" >
 
-    <ScrollView
-        android:id="@+id/scrollView1"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" >
+	<LinearLayout
+		android:id="@+id/adsesdads"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content" 
+		android:orientation="vertical" >
 
-        <LinearLayout
-            android:id="@+id/adsesdads"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" 
-            android:orientation="vertical" >
+		<TextView
+			android:id="@+id/addwish_text_brand"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="@string/addWish_brand"
+			android:textAppearance="?android:attr/textAppearanceMedium" />
+          
+		<EditText
+			android:id="@+id/addwish_edit_brand"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:contentDescription="@string/app_name"
+			android:ems="10"
+			android:inputType="text" >
+			
+			<requestFocus />
+          </EditText>
 
-            <TextView
-                android:id="@+id/addwish_text_brand"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/addWish_brand"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
-            
-            <EditText
-                android:id="@+id/addwish_edit_brand"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:contentDescription="@string/app_name"
-                android:ems="10"
-                android:inputType="text" >
+		<TextView
+			android:id="@+id/addwish_text_name"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="@string/addWish_name"
+			android:textAppearance="?android:attr/textAppearanceMedium" />
 
-                <requestFocus />
-            </EditText>
+		<EditText
+			android:id="@+id/addwish_edit_name"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:contentDescription="@string/app_name"
+			android:ems="10"
+			android:inputType="text" />
 
-		    <TextView
-		        android:id="@+id/addwish_text_name"
-		        android:layout_width="wrap_content"
-		        android:layout_height="wrap_content"
-		        android:text="@string/addWish_name"
-		        android:textAppearance="?android:attr/textAppearanceMedium" />
-				
-		    <EditText
-		        android:id="@+id/addwish_edit_name"
-		        android:layout_width="match_parent"
-		        android:layout_height="wrap_content"
-		        android:contentDescription="@string/app_name"
-		        android:ems="10"
-		        android:inputType="text" />
-		
-		    <TextView
-		        android:id="@+id/addwish_text_description"
-		        android:layout_width="wrap_content"
-		        android:layout_height="wrap_content"
-		        android:text="@string/addWish_description"
-		        android:textAppearance="?android:attr/textAppearanceMedium" />
-				
-		    <EditText
-		        android:id="@+id/addwish_edit_description"
-		        android:layout_width="match_parent"
-		        android:layout_height="wrap_content"
-		        android:ems="10"
-		        android:gravity="top"
-		        android:inputType="textMultiLine"
-		        android:lines="5" />
-		
-		    <ImageButton
-		        android:id="@+id/add_photo_button"
-		        android:layout_width="wrap_content"
-		        android:layout_height="wrap_content"
-		        android:layout_gravity="center_horizontal"
-		        android:layout_margin="5dp"
-		        android:contentDescription="@string/app_name"
-		        android:padding="0px"
-		        android:src="@drawable/addphoto_button" />
+		<TextView
+			android:id="@+id/addwish_text_description"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="@string/addWish_description"
+			android:textAppearance="?android:attr/textAppearanceMedium" />
 
-		    <Gallery
-		        android:id="@+id/addwish_temprory_gallery"
-		        android:layout_width="match_parent"
-		        android:layout_height="wrap_content" />
-
-		    <ImageButton
-		        android:id="@+id/addwish_button"
-		        android:layout_width="wrap_content"
-		        android:layout_height="wrap_content"
-		        android:layout_gravity="center_horizontal"
-		        android:layout_margin="5dp"
-		        android:contentDescription="@string/app_name"
-		        android:padding="0px"
-		        android:src="@drawable/add_wish_button" />
-            
-        </LinearLayout>
-    </ScrollView>
-
-</LinearLayout>
+		<EditText
+			android:id="@+id/addwish_edit_description"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:ems="10"
+			android:gravity="top"
+			android:inputType="textMultiLine"
+			android:lines="5" />
+			
+		<ImageButton
+			android:id="@+id/add_photo_button"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_gravity="center_horizontal"
+			android:layout_margin="5dp"
+			android:contentDescription="@string/app_name"
+			android:padding="0px"
+			android:src="@drawable/addphoto_button" />
+			
+		<Gallery
+			android:id="@+id/addwish_temprory_gallery"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content" />
+						
+		<ImageButton
+			android:id="@+id/addwish_button"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_gravity="center_horizontal"
+			android:layout_margin="5dp"
+			android:contentDescription="@string/app_name"
+			android:padding="0px"
+			android:src="@drawable/add_wish_button" />
+          
+	</LinearLayout>
+</ScrollView>

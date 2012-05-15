@@ -221,7 +221,7 @@ public class WishPhotoGalleryActivity extends Activity {
 	    		launchGalleryButton.setOnClickListener(new OnClickListener() {
 					
 					public void onClick(View v) {
-						File file = recordImages();
+						recordImages();
 						
 						pics = new ArrayList<Drawable>();
 						imageView = (ImageView)findViewById(R.id.wishImageSelected);
