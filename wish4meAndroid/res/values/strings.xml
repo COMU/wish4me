@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Wish4meAndroid</string>
+    <string name="app_name">Wish4me</string>
+    <string name="app_description">This is the official Android app for www.wish4me.org.</string>
+    
+    
     <string name="welcome">Welcome to Wish4me!</string>
     <string name="username">Username</string>
     <string name="facebookLogin">Login via Facebook</string>
@@ -22,6 +25,7 @@
     <string name="addWish_description">description</string>
     <string name="already_on_my_wishes">You are viewing your wishes already.</string>
     <string name="already_on_friend_wishes">You are viewing your friends wishes already.</string>
+    
 
     
 </resources>
