@@ -44,7 +44,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/launch_buttons_layout" />
-
+
     <ImageView
         android:id="@+id/wishImageSelected"
         android:layout_width="match_parent"
@@ -53,8 +53,8 @@
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/wishPhotoGallery"
         android:contentDescription="@string/app_name"
+        android:scaleType="centerInside"
         android:src="@drawable/wish_icon" />
-
 
     <ImageButton
         android:id="@+id/addtowish_button"
