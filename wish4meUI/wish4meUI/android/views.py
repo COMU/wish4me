@@ -82,7 +82,7 @@ def add_new_wish(request):
         wish.save()
         if request.FILES:
             for i in range(10):
-                if request.FILES['wishphoto_'+i]:
+                if 'wishphoto_'+str(i) in request.FILES:
                     """
                     photo = WishPhoto(commit = False)
                     photo.wish = wish
@@ -92,8 +92,8 @@ def add_new_wish(request):
                     photo.save()
                     """
                         
-                    print "there is a file"
-                    photo = WishPhoto(wish= wish, photo = request.FILES['wishphoto_'+i])
+                    print "there is a file named ", request.FILES['wishphoto_'+str(i)]
+                    photo = WishPhoto(wish= wish, photo = request.FILES['wishphoto_'+str(i)])
                     photo.save()
                 else:
                     break

@@ -202,7 +202,7 @@ public class AddWishActivity extends Activity{
 			
 			
 			for(int i = 0; i < picUris.size(); i++){
-				File file = new File(new URI(picUris.get(0).toString()));
+				File file = new File(new URI(picUris.get(i).toString()));
 	
 			    
 			    ContentBody cbFile = new FileBody(file, "image/jpeg");
