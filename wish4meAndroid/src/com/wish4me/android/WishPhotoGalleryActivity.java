@@ -56,7 +56,7 @@ public class WishPhotoGalleryActivity extends Activity {
 	private Gallery gallery;
 	BitmapFactory.Options downloadOptions;
 	
-	public void LoadImageFromWebOperations(String url) {
+	public void LoadImageFromWebOperations(List<String> urlsList) {
 	    try {
 	    	/*
 	    	ImageView temp = new ImageView(null);
@@ -72,25 +72,6 @@ public class WishPhotoGalleryActivity extends Activity {
             
 	        
 	    	
-	        InputStream is = (InputStream) new URL(url).getContent();
-	        //Drawable d = new BitmapDrawable(decodeInputStream(is));
-
-	        
-            //Decode image size
-            BitmapFactory.Options o = new BitmapFactory.Options();
-            o.inJustDecodeBounds = true;
-            BitmapFactory.decodeStream(is, null, o);
-            
-            is.close();
-
-            int scale = 1;
-            if (o.outHeight > LoginActivity.IMAGE_MAX_SIZE || o.outWidth > LoginActivity.IMAGE_MAX_SIZE) {
-                scale = (int)Math.pow(2, (int) Math.round(Math.log(LoginActivity.IMAGE_MAX_SIZE / (double) Math.max(o.outHeight, o.outWidth)) / Math.log(0.5)));
-            }
-
-            //Decode with inSampleSize
-            downloadOptions = new BitmapFactory.Options();
-            downloadOptions.inSampleSize = scale;
             //is = (InputStream) new URL(url).getContent();
             class BackgroundDownload extends AsyncTask<URL , Gallery, InputStream> {
 
@@ -98,11 +79,35 @@ public class WishPhotoGalleryActivity extends Activity {
 				protected InputStream doInBackground(URL... params) {
 					InputStream is = null;
 					try {
-						Log.i("wish4me-Gallery", "Background download started for "+ params[0].toString());
-						is = (InputStream)params[0].getContent();
-			    	    pics.add(new BitmapDrawable(BitmapFactory.decodeStream(is, null, downloadOptions)));
-
-						publishProgress(gallery);
+						for(URL url:params){
+					        is = (InputStream)url.getContent();
+					        //Drawable d = new BitmapDrawable(decodeInputStream(is));
+	
+					        
+				            //Decode image size
+				            BitmapFactory.Options o = new BitmapFactory.Options();
+				            o.inJustDecodeBounds = true;
+				            BitmapFactory.decodeStream(is, null, o);
+				            
+				            is.close();
+	
+				            int scale = 1;
+				            if (o.outHeight > LoginActivity.IMAGE_MAX_SIZE || o.outWidth > LoginActivity.IMAGE_MAX_SIZE) {
+				                scale = (int)Math.pow(2, (int) Math.round(Math.log(LoginActivity.IMAGE_MAX_SIZE / (double) Math.max(o.outHeight, o.outWidth)) / Math.log(0.5)));
+				            }
+	
+				            //Decode with inSampleSize
+				            downloadOptions = new BitmapFactory.Options();
+				            downloadOptions.inSampleSize = scale;
+							
+							
+							Log.i("wish4me-Gallery", "Background download started for "+ url.toString());
+							is = (InputStream)url.getContent();
+				    	    pics.add(new BitmapDrawable(BitmapFactory.decodeStream(is, null, downloadOptions)));
+	
+							publishProgress(gallery);
+							is.close();
+						}
 					} catch (IOException e) {
 						e.printStackTrace();
 					}
@@ -122,11 +127,13 @@ public class WishPhotoGalleryActivity extends Activity {
 			     }
 
             }
-            
-            new BackgroundDownload().execute(new URL(url));
+            URL urlsArray[] = new URL[urlsList.size()];
+            for(int i = 0; i < urlsList.size(); i++)
+            	urlsArray[i] = new URL(urlsList.get(i));
+            new BackgroundDownload().execute(urlsArray);
 
             //Drawable d = new BitmapDrawable(BitmapFactory.decodeStream(is, null, downloadOptions));
-            is.close();
+            
 	        
 	        //return d;
 	    } catch (Exception e) {
@@ -174,12 +181,13 @@ public class WishPhotoGalleryActivity extends Activity {
     		Element e = (Element) nl.item(wish_index);
     	    NodeList nPhoto = e.getElementsByTagName(KEY_PHOTO);
 
+    	    List<String> stringList = new ArrayList<String>();
     	    for (int i = 0; i < nPhoto.getLength(); i++) {
     	    	e = (Element) nPhoto.item(i);
     	    	//pics.add(LoadImageFromWebOperations(ParseXML.getValue(e, KEY_PHOTO)));
-    	    	LoadImageFromWebOperations(ParseXML.getValue(e, KEY_PHOTO));
-
+    	    	stringList.add(ParseXML.getValue(e, KEY_PHOTO));
     	    }
+	    	LoadImageFromWebOperations(stringList);
     	    
     	}
 	}
