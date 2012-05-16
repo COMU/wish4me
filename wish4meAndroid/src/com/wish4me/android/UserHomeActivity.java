@@ -256,7 +256,7 @@ public class UserHomeActivity extends Activity {
     	    wishDescription.setText((CharSequence)description);
     	    ImageView wishPhoto = (ImageView)view.findViewById(R.id.wish_image);
     	    if(photos.size() > 0){
-    	    	UrlImageViewHelper.setUrlDrawable(wishPhoto, photos.get(0),R.drawable.wish_icon);
+    	    	UrlImageViewHelper.setUrlDrawable(wishPhoto, photos.get(0), R.drawable.wish_icon);
     	    	Log.e("wish4me-wishimage", "for wish named "+name+", photo is "+photos.get(0));
     	    	scaleImage(wishPhoto, 100);
     	    }

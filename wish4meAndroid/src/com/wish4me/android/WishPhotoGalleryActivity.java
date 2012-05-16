@@ -28,6 +28,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -52,10 +53,25 @@ public class WishPhotoGalleryActivity extends Activity {
 	private int wish_index;
 	ImageView imageView;
 	private SharedPreferences mPrefs;
-
+	private Gallery gallery;
+	BitmapFactory.Options downloadOptions;
 	
-	public static Drawable LoadImageFromWebOperations(String url) {
+	public void LoadImageFromWebOperations(String url) {
 	    try {
+	    	/*
+	    	ImageView temp = new ImageView(null);
+	    	UrlImageViewHelper.setUrlDrawable(temp, url, R.drawable.wish_icon);
+	    	Drawable d = temp.getDrawable();
+	        Bitmap bmp = Bitmap.createBitmap(d.getIntrinsicWidth(), d.getIntrinsicHeight(), Config.ARGB_8888); 
+	        Canvas canvas = new Canvas(bmp); 
+	        d.draw(canvas); 
+	        
+	        BitmapFactory.Options o = new BitmapFactory.Options();
+            o.inJustDecodeBounds = true;
+            BitmapFactory.decodeByteArray(bmp, 0, 6);*/
+            
+	        
+	    	
 	        InputStream is = (InputStream) new URL(url).getContent();
 	        //Drawable d = new BitmapDrawable(decodeInputStream(is));
 
@@ -73,15 +89,48 @@ public class WishPhotoGalleryActivity extends Activity {
             }
 
             //Decode with inSampleSize
-            BitmapFactory.Options o2 = new BitmapFactory.Options();
-            o2.inSampleSize = scale;
-	        is = (InputStream) new URL(url).getContent();
-            Drawable d = new BitmapDrawable(BitmapFactory.decodeStream(is, null, o2));
+            downloadOptions = new BitmapFactory.Options();
+            downloadOptions.inSampleSize = scale;
+            //is = (InputStream) new URL(url).getContent();
+            class BackgroundDownload extends AsyncTask<URL , Gallery, InputStream> {
+
+				@Override
+				protected InputStream doInBackground(URL... params) {
+					InputStream is = null;
+					try {
+						Log.i("wish4me-Gallery", "Background download started for "+ params[0].toString());
+						is = (InputStream)params[0].getContent();
+			    	    pics.add(new BitmapDrawable(BitmapFactory.decodeStream(is, null, downloadOptions)));
+
+						publishProgress(gallery);
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+					return is;
+				}
+				
+			     protected void onProgressUpdate(Gallery... progress) {
+			         //setProgressPercent(progress[0]);
+
+			    	 ((BaseAdapter)progress[0].getAdapter()).notifyDataSetChanged();
+			    	 
+			     }
+
+			     protected void onPostExecute(InputStream result) {
+			         //showDialog("Downloaded " + result + " bytes");
+			    	 Log.i("wish4me-Gallery", "Background download finished");
+			     }
+
+            }
+            
+            new BackgroundDownload().execute(new URL(url));
+
+            //Drawable d = new BitmapDrawable(BitmapFactory.decodeStream(is, null, downloadOptions));
             is.close();
 	        
-	        return d;
+	        //return d;
 	    } catch (Exception e) {
-	        return null;
+	        return;
 	    }
 	}
 
@@ -127,7 +176,8 @@ public class WishPhotoGalleryActivity extends Activity {
 
     	    for (int i = 0; i < nPhoto.getLength(); i++) {
     	    	e = (Element) nPhoto.item(i);
-    	    	pics.add(LoadImageFromWebOperations(ParseXML.getValue(e, KEY_PHOTO)));
+    	    	//pics.add(LoadImageFromWebOperations(ParseXML.getValue(e, KEY_PHOTO)));
+    	    	LoadImageFromWebOperations(ParseXML.getValue(e, KEY_PHOTO));
 
     	    }
     	    
@@ -246,7 +296,7 @@ public class WishPhotoGalleryActivity extends Activity {
 	    }
 	    
 	    
-	    Gallery gallery = (Gallery) findViewById(R.id.wishPhotoGallery);
+	    gallery = (Gallery) findViewById(R.id.wishPhotoGallery);
 	    gallery.setAdapter(new ImageAdapter(this));
 	    gallery.setOnItemSelectedListener(new OnItemSelectedListener() {
 			public void onItemSelected(AdapterView<?> arg0, View arg1,
