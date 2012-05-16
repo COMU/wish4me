@@ -52,13 +52,13 @@ import com.facebook.android.FacebookError;
 
 public class LoginActivity extends Activity {
 	//for www.wish4me.org
-	public static String SERVERIP = "www.wish4me.org";
-	public static String FACEBOOKAPPID = "209303645852351";
+	//public static String SERVERIP = "www.wish4me.org";
+	//public static String FACEBOOKAPPID = "209303645852351";
 
 	
 	//for 192.168.1.40
-	//public static String SERVERIP = "192.168.1.45";
-	//public static String FACEBOOKAPPID = "408993659121861";
+	public static String SERVERIP = "192.168.1.45";
+	public static String FACEBOOKAPPID = "408993659121861";
 	
 	public static int IMAGE_MAX_SIZE = 640;
 	public static int SCALE = 2;

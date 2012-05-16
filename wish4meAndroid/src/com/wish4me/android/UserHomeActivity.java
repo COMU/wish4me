@@ -1,8 +1,10 @@
 package com.wish4me.android;
 
 
+import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Method;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,6 +29,7 @@ import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -36,6 +39,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.Gallery;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -79,7 +84,7 @@ public class UserHomeActivity extends Activity {
 						UserHomeActivity.this,
 						AddWishActivity.class);
 				addNewWishActivity.putExtra("session_id", session_id);
-				startActivityForResult(addNewWishActivity, RESULT_OK);
+				startActivityForResult(addNewWishActivity, 0);
 			}
 		});
 	    
@@ -385,5 +390,24 @@ public class UserHomeActivity extends Activity {
         }
 
     }
+    
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+    	Intent userHome;
+    	UserHomeActivity.Wishes wishes_to_list;
+		if (requestCode == 0){
+			if (resultCode == RESULT_OK) {
+				userHome = new Intent(
+						UserHomeActivity.this,
+						UserHomeActivity.class);
+				userHome.putExtra("session_id", session_id);
+				wishes_to_list = Wishes.MYWISHES;
+				userHome.putExtra("wishes_to_list", wishes_to_list.ordinal());
+				startActivity(userHome);
+				finish();
+			}
+
+		}
+	}
 
 }
