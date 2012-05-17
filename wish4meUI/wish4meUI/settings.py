@@ -163,9 +163,9 @@ DEFAULT_PASSWORD = 'b90f83f387b20a704b65d1dbf94736a9b8864507'
 DEFAULT_EMAIL = 'default@wish4me.com'
 
 #Google OpenID login settings
-LOGIN_URL = '/google/login/'
+LOGIN_URL = '/?redirect=true'
 LOGIN_REDIRECT_URL = '/user/loginSuccess'
-LOGOUT_URL = '/google/logout/'
+LOGOUT_URL = '/'
 OPENID_SSO_SERVER_URL = 'https://www.google.com/accounts/o8/id'
 
 FIXTURE_DIRS = (PROJECT_PATH+'/',)

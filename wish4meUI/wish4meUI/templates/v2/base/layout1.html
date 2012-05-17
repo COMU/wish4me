@@ -29,8 +29,45 @@
 
 {% block content %}
 <div class="container">
+
   <div class="row">
     <div class="span8 ">
+      {% block messages %}
+        {% if messages %}
+          {% for message in messages %}
+            <div class="row">
+              {% ifequal message.level 40 %}
+                <div class="span7 alert alert-error">
+                  <a class="close" data-dismiss="alert">×</a>
+                  <h4 class="alert-heading">Opps!</h4>
+                  {{ message }}
+                </div>
+              {% endifequal %}
+              {% ifequal message.level 20 %}
+                <div class="span7 alert alert-info">
+                  <a class="close" data-dismiss="alert">×</a>
+                  <h4 class="alert-heading">Info!</h4>
+                  {{ message }}
+                </div>
+              {% endifequal %}
+              {% ifequal message.level 25 %}
+                <div class="span7 alert alert-success">
+                  <a class="close" data-dismiss="alert">×</a>
+                  <h4 class="alert-heading">Ok!</h4>
+                  {{ message }}
+                </div>
+              {% endifequal %}
+              {% ifequal message.level 30 %}
+                <div class="span7 alert alert-warning">
+                  <a class="close" data-dismiss="alert">×</a>
+                  <h4 class="alert-heading">Warning!</h4>
+                  {{ message }}
+                </div>
+              {% endifequal %}
+            </div>
+          {% endfor %}
+        {% endif %}
+      {% endblock %}
       {% block left %} {% endblock %}
     </div>
     <div class="span4">

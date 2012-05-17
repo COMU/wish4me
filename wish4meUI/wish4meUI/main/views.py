@@ -6,6 +6,7 @@ from django.shortcuts import render_to_response
 from django.template.context import RequestContext
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
+from django.contrib import messages
 
 from wish4meUI.wish.models import WishCategory, Wish
 from wish4meUI.friend.models import Following
@@ -28,6 +29,8 @@ def list_friends_wishes(request):
   return render_to_response("home/list_friend_wishes.html", {'wish_list' : wishes, }, context_instance=RequestContext(request, {}))
 
 def welcome(request):
+  if 'redirect' in request.GET:
+    messages.add_message(request, messages.WARNING, "You need to login first!"),
   if WishCategory.objects.all().count() < 1:
     wc = WishCategory(name="Default")
     wc.save()
