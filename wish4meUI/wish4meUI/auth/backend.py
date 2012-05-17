@@ -5,6 +5,7 @@ from django.contrib import messages
 from django.contrib.auth.models import User
 from django.contrib.auth import login as djangoLogin
 from django.db import models
+from django.db import IntegrityError
 
 from wish4meUI.userprofile.models import UserProfile
 from wish4meUI.wishlist.views import addDefaultWishlist
@@ -117,7 +118,29 @@ class LoginBackend(object):
             messages.add_message(self._request, messages.SUCCESS,
                                  "Activated new external account!")
           else:
-            user = User(**user_kwargs)
+            messages.add_message(self._request, messages.INFO,
+                                 "Same username existed. Your username is modified automatically. "
+                                 "You can change your username from profile edit page.")
+            try:
+              user = User(**user_kwargs)
+              user.save()
+            except IntegrityError:
+              username = user_kwargs['username']
+              counter = 1
+              while True:
+                new_username = "%s_%s" % (str(counter), username)
+                try:
+                  User.objects.get(username=new_username)
+                  counter += 1
+
+                except User.DoesNotExist:
+                  user_kwargs.update({'username': new_username})
+                  user = User(**user_kwargs)
+                  break
+
+                  
+                
+                  
             user.password = settings.DEFAULT_PASSWORD
             user.save()
 
