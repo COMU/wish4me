@@ -7,6 +7,7 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.forms.formsets import formset_factory
 from django.contrib import messages
 from django.views.decorators.csrf import csrf_exempt
+from django.core.paginator import Paginator, EmptyPage, InvalidPage
 
 from wish4meUI.wishlist.forms import Wishlist, WishlistForm
 from wish4meUI.wish.models import Wish
@@ -40,7 +41,19 @@ def myWishlists(request):
   if Wishlist.objects.filter(owner = request.user, is_hidden = False).count() < 2:
     is_last_wishes = True
 
-  return render_to_response('wishlist/list_wishlist.html', {'page_title': 'My wishlists', 'wishlists':wishlists, 'is_last_wishes':is_last_wishes},
+  paginator = Paginator(wishlists, 5)
+  try:
+    page = int(request.GET.get('page', '1'))
+  except ValueError:
+    page = 1
+
+  try:
+    wishlists = paginator.page(page)
+  except (EmptyPage, InvalidPage):
+    wishlists = paginator.page(paginator.num_pages)
+    
+  return render_to_response('wishlist/list_wishlist.html', {'page_title': 'My wishlists', 'wishlists':wishlists.object_list, 
+                                                            'paginator_objects': wishlists, 'is_last_wishes':is_last_wishes},
                                                          context_instance=RequestContext(request))
 
 def show(request, wishlist_id=0):
