@@ -34,7 +34,18 @@ def myActivity(request):
   if not len(wishes):
     activity_state = 'images/noWish_%s.jpg' % randint(1,1)
 
-  context = {'wishes': wishes,
+  paginator = Paginator(wishes, 25)
+  try:
+    page = int(request.GET.get('page', '1'))
+  except ValueError:
+    page = 1
+
+  try:
+    wishes = paginator.page(page)
+  except (EmptyPage, InvalidPage):
+    wishes = paginator.page(paginator.num_pages)
+
+  context = {'wishes': wishes.object_list, 'paginator_objects': wishes,
              'page_title': "My wish activity", 'activity_state': activity_state}
   return render_to_response('wish/activity.html', context, context_instance=RequestContext(request))
 
