@@ -371,7 +371,18 @@ def list(request, wishlist_id=0):
   addAccomplishesToWishes(wishes)
   wishlist = Wishlist.objects.get(pk = wishlist_id)
   title = "Wishes in \"" + wishlist.title + "\" list"
-  return render_to_response('wish/activity.html', {'wishes': wishes, 'page_title': title}, context_instance=RequestContext(request))
+  
+  paginator = Paginator(wishes, 25)
+  try:
+    page = int(request.GET.get('page', '1'))
+  except ValueError:
+    page = 1
+
+  try:
+    wishes = paginator.page(page)
+  except (EmptyPage, InvalidPage):
+    wishes = paginator.page(paginator.num_pages)
+  return render_to_response('wish/activity.html', {'wishes': wishes.object_list, 'paginator_objects': wishes, 'page_title': title}, context_instance=RequestContext(request))
 
 def addWishCategory(request):
   wishcategory = WishCategory(name="Default", is_approved=True, is_hidden=False)
