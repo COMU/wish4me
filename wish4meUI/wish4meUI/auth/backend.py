@@ -4,11 +4,58 @@
 from django.contrib import messages
 from django.contrib.auth.models import User
 from django.contrib.auth import login as djangoLogin
+from django.db import models
 
 from wish4meUI.userprofile.models import UserProfile
 from wish4meUI.wishlist.views import addDefaultWishlist
+from wish4meUI.wish.models import Wish
 from django.conf import settings
 
+
+def mergeAccounts(merge_into_user, merge_from_user):
+  """
+  """
+  
+  #All models and fields related to merge_from_user
+  for Model in models.get_models():
+    
+    if Model == UserProfile:
+      continue
+    
+    for field in Model._meta.fields:
+      if type(field) == models.ForeignKey:
+        if field.related.parent_model == User:
+          search = {field.name: merge_from_user}
+          objects = Model.objects.filter(**search)
+          for obj in objects:
+            setattr(obj, field.name, merge_into_user)
+            obj.save()
+  
+  # Delete old profile
+  merge_from_profile = merge_from_user.get_profile()
+  merge_into_profile = merge_into_user.get_profile()
+  
+  if merge_from_profile.google_profile:
+    merge_into_profile.google_profile = merge_from_profile.google_profile
+    
+  if merge_from_profile.facebook_profile:
+    merge_into_profile.facebook_profile = merge_from_profile.facebook_profile
+    
+  if merge_from_profile.twitter_profile:
+    merge_into_profile.twitter_profile = merge_from_profile.twitter_profile
+
+  if merge_from_profile.foursq_profile:
+    merge_into_profile.foursq_profile = merge_from_profile.foursq_profile
+  
+  merge_into_profile.save()
+  
+  merge_from_profile.delete()
+  merge_from_user.delete()
+  
+          
+
+  
+  
 class LoginBackend(object):
     """Provides a base class for all authentication
     backends for generic methods.
@@ -49,13 +96,18 @@ class LoginBackend(object):
           #    profile = UserProfile.objects.get(foursq_profile=profile)
           #    print profile
           userprofile = profile.getUserProfile()
-          user = userprofile.user
+          user = userprofile.user #
           if already_logged_user:
-            messages.add_message(self._request, messages.ERROR,
-                                 "This external account has already "
-                                 "been used before. Merging profiles "
-                                 "is not yet possible! Switched to "
-                                 "this account now!")
+            merge_from_user = user
+            merge_into_user = already_logged_user
+          
+            mergeAccounts(merge_into_user, merge_from_user)
+            user = already_logged_user
+            
+            messages.add_message(self._request, messages.SUCCESS,
+                                 "Account you were trying to activate "
+                                 "already existed. Merged it into this "
+                                 "account. ")
       except UserProfile.DoesNotExist:
           if already_logged_user:
             user = already_logged_user
