@@ -20,6 +20,21 @@ def follow(request, following_user_id):
   return HttpResponseRedirect(reverse("homePage"))
 
 @login_required
+def follow_multiple_users(request):
+  my_follow_list = request.POST.getlist('my_follow_list')
+  for following_user_id in my_follow_list:
+    user_to_follow = User.objects.get(pk = following_user_id)
+    user_following = request.user;
+    if user_to_follow == user_following:
+      print "you cannot follow yourself"
+    elif Following.objects.filter(from_user=user_following, to_user=user_to_follow, is_hidden = False).count() > 0:
+      print "You are following that user already"
+    else:
+      following = Following(from_user=user_following, to_user=user_to_follow)
+      following.save()
+  return HttpResponseRedirect(reverse("homePage"))
+
+@login_required
 def listFollowers(request):
   following_user = request.user
   followers = Following.objects.filter(to_user=following_user, is_hidden = False)

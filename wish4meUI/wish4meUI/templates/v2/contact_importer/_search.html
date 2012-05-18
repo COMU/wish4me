@@ -19,7 +19,7 @@
   </td>
   <td class="span2">
     <blockquote>
-      {{ resulting_user.common_count }} common friends
+      {{ resulting_user.user.common_count }} common friends
     </blockquote>
   </td>
   <td class="span2">
@@ -29,9 +29,11 @@
         <!-- you are following this user -->
         {% else %}
           {% if resulting_user.is_followed %}
-            <a href="{% url friend_accept resulting_user.invite %}">follow back</a>
+            <input type="checkbox" name="my_follow_list" value="{{ resulting_user.user.id }}">
+            check to follow back
           {% else %}
-            <a onclick="return popitup('{% url friend_follow resulting_user.user.id %}')" href="{% url friend_follow resulting_user.user.id %}">follow</a></p>
+            <input type="checkbox" name="my_follow_list" value="{{ resulting_user.user.id }}">
+            check to follow
           {% endif %}
         {% endif %}
       {% else %}

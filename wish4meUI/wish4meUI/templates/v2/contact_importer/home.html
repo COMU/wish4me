@@ -1,16 +1,18 @@
 {% extends "base/layout2.html" %}
-
 	{% block right %}
-<script language="javascript" type="text/javascript">
-<!--
-function popitup(url) {
-	newwindow=window.open(url,'name','height=200,width=150');
-	if (window.focus) {newwindow.focus()}
-	return false;
-}
+        <script language="JavaScript">
+        function checkAll(field)
+        { 
+        for (i = 0; i < field.length; i++)
+	   field[i].checked = true ;
+        } 
 
-// -->
-</script>
+        function uncheckAll(field)
+        {
+        for (i = 0; i < field.length; i++)
+	  field[i].checked = false ;
+        }  
+        </script>
 	<div class="row">
 
 	  <div class="span8">
@@ -18,9 +20,18 @@ function popitup(url) {
 	      <br>
           <table class="table">
             <tbody>
+              <form action="{% url friend_follow_multiple %}" name="FollowForm" method="post">
+              {% csrf_token %}
+              <input type="submit" value="Follow checked friends" />
+
               {% for resulting_user in friends_list %}
                 {% include "contact_importer/_search.html" %}
               {% endfor %}
+              <input type="button" name="CheckAll" value="Check All"
+               onClick="checkAll(document.FollowForm.my_follow_list)">
+              <input type="button" name="UnCheckAll" value="Uncheck All"
+              onClick="uncheckAll(document.FollowForm.my_follow_list)"> 
+             </form>
             </tbody>
           </table>
         
