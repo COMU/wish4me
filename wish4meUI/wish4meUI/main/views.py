@@ -39,7 +39,7 @@ def welcome(request):
       'page_title': 'Welcome to %s' % settings.PROJECT_NAME
   }
   if not request.user.is_authenticated():
-    recent_wishes = Wish.objects.all().order_by('request_date')
+    recent_wishes = Wish.objects.filter(is_private=False, is_hidden=False).order_by('request_date')
     context.update({"recent_wishes": recent_wishes})
     return render_to_response("home/welcome.html",
                             context_instance=RequestContext(request, context))
