@@ -17,6 +17,7 @@ import org.w3c.dom.NodeList;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -55,7 +56,7 @@ public class WishPhotoGalleryActivity extends Activity {
 	private SharedPreferences mPrefs;
 	private Gallery gallery;
 	BitmapFactory.Options downloadOptions;
-	
+	ProgressDialog progressDialog;
 	public void LoadImageFromWebOperations(List<String> urlsList) {
 	    try {
 	    	/*
@@ -79,7 +80,8 @@ public class WishPhotoGalleryActivity extends Activity {
 				protected InputStream doInBackground(URL... params) {
 					InputStream is = null;
 					try {
-						for(URL url:params){
+						for(int i = 0; i < params.length; i++) {
+							URL url = params[i];
 					        is = (InputStream)url.getContent();
 					        //Drawable d = new BitmapDrawable(decodeInputStream(is));
 	
@@ -107,6 +109,23 @@ public class WishPhotoGalleryActivity extends Activity {
 	
 							publishProgress(gallery);
 							is.close();
+							runOnUiThread(new Runnable() {
+								
+								public void run() {
+									progressDialog.dismiss();
+								}
+							});
+							if(i == 0 && params.length > 1){ // for first element only
+								runOnUiThread(new Runnable() {
+									
+									public void run() {
+							    	    Context context = getApplicationContext();
+							    	    int duration = Toast.LENGTH_SHORT;
+							    	    Toast toast = Toast.makeText(context, "rest of the pictures are downloading on background", duration);
+							    	    toast.show();
+									}
+								});
+							}
 						}
 					} catch (IOException e) {
 						e.printStackTrace();
@@ -130,6 +149,9 @@ public class WishPhotoGalleryActivity extends Activity {
             URL urlsArray[] = new URL[urlsList.size()];
             for(int i = 0; i < urlsList.size(); i++)
             	urlsArray[i] = new URL(urlsList.get(i));
+			progressDialog = ProgressDialog.show(
+					WishPhotoGalleryActivity.this, "", "Loading...");
+
             new BackgroundDownload().execute(urlsArray);
 
             //Drawable d = new BitmapDrawable(BitmapFactory.decodeStream(is, null, downloadOptions));

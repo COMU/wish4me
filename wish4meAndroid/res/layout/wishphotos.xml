@@ -24,7 +24,8 @@
 	        android:scaleType="centerInside"
 	        android:adjustViewBounds="true"
 	        android:src="@drawable/launchcamera_button" />
-	    
+	    
+
 	    <ImageButton
 	        android:id="@+id/launch_gallery_button"
 	        android:layout_width="fill_parent"
@@ -44,7 +45,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/launch_buttons_layout" />
-
+
     <ImageView
         android:id="@+id/wishImageSelected"
         android:layout_width="match_parent"
