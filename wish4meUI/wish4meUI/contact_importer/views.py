@@ -76,6 +76,7 @@ def contact_importer_home(request, importing_profile=0):
       'user' : user,
       'profile': user.get_profile(),
       'page_title': 'Import Contacts',
+      'importing_profile': importing_profile,
       'facebook_profile_activated': profile.facebook_profile and True or False,
       'google_profile_activated': profile.google_profile and True or False,
       'twitter_profile_activated': profile.twitter_profile and True or False,

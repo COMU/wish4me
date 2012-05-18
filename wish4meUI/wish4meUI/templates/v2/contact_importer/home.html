@@ -20,6 +20,7 @@
 	      <br>
           <table class="table">
             <tbody>
+              {% if friends_list %}
               <form action="{% url friend_follow_multiple %}" name="FollowForm" method="post">
               {% csrf_token %}
               <input type="submit" value="Follow checked friends" />
@@ -32,6 +33,13 @@
               <input type="button" name="UnCheckAll" value="Uncheck All"
               onClick="uncheckAll(document.FollowForm.my_follow_list)"> 
              </form>
+              {% else %}
+              {% if importing_profile == "home" %}
+               You can import your contacts with clicking "import contacts" button on the right bar. We don't store any information about your friends
+              {% else %}
+              You already followed all {{ importing_profile }} friends or none of your {{ importing_profile }} friends registered for wish4me.
+              {% endif%}
+              {% endif %}
             </tbody>
           </table>
         
