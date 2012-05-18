@@ -432,7 +432,7 @@ def respondAccomplish(request, accomplish_id, response):
   if response == "accept":
     accomplish.status = 2
     accomplish.wish.is_accomplished = True
-    accomplish.wish.accomplish_date = datetime.now()
+    accomplish.wish.accomplish_date = datetime.datetime.now()
     accomplish.wish.save()
   if response == "decline":
     accomplish.status = 3
