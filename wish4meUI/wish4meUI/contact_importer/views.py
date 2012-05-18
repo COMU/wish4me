@@ -4,6 +4,7 @@ from contact_importer.utils import *
 from django.contrib.auth.decorators import login_required
 from facebook.models import FacebookProfile
 from foursq.models import FoursqProfile
+from friend.utils import getCommonFriendCount
 from userprofile.models import UserProfile
 from twitter_app.models import TwitterProfile
 from django.core.exceptions import ObjectDoesNotExist
@@ -32,6 +33,7 @@ def contact_importer_home(request, importing_profile=0):
                  pass
               else:
                  profile = user_data.user.get_profile()
+                 profile.common_count = getCommonFriendCount(request, user_to_follow)
                  found_friends.append(profile)
             except ObjectDoesNotExist:
               pass    
@@ -48,6 +50,7 @@ def contact_importer_home(request, importing_profile=0):
                  pass
               else:
                  profile = user_data.user.get_profile()
+                 profile.common_count = getCommonFriendCount(request, user_to_follow)
                  found_friends.append(profile)
             except ObjectDoesNotExist:
               pass    
@@ -64,6 +67,7 @@ def contact_importer_home(request, importing_profile=0):
                  pass
               else:
                  profile = user_data.user.get_profile()
+                 profile.common_count = getCommonFriendCount(request, user_to_follow)
                  found_friends.append(profile)
             except ObjectDoesNotExist:
               pass    

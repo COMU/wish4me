@@ -4,6 +4,7 @@ from django.template import RequestContext
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response, get_object_or_404
+from friend.utils import getCommonFriendCount
 from wish4meUI.friend.models import *
 
 @login_required
@@ -48,6 +49,7 @@ def listFollowers(request):
         invite = FriendshipInvitation.objects.get(from_user = follower.from_user, to_user=following_user, status = "1")
         profile.invite = invite.id
         profile.is_followed = True
+    profile.common_count = getCommonFriendCount(request, follower.from_user)
     followers_list.append(profile)
 
   return render_to_response('friend/followers.html', {'followers_list': followers_list, 'page_title': 'List followers'}, context_instance=RequestContext(request))
