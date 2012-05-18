@@ -40,8 +40,8 @@
       <br>
       <br>
       <hr>
-    <div class="span6"><p>{{ wish.location.name }}</p>
-                        <p>{{ wish.location.address }} / {{ wish.location.country }}</p></div>
+    <div class="span6">{% if wish.location %}<p>{{ wish.location.name }}</p>
+                        <p>{{ wish.location.address }} / {{ wish.location.country }}</p></div>{% endif %}
   </div>
   <div class="span4 offset6">
   {% if wish.wish_for != user %}
