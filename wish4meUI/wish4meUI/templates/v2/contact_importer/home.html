@@ -1,7 +1,16 @@
 {% extends "base/layout2.html" %}
 
 	{% block right %}
+<script language="javascript" type="text/javascript">
+<!--
+function popitup(url) {
+	newwindow=window.open(url,'name','height=200,width=150');
+	if (window.focus) {newwindow.focus()}
+	return false;
+}
 
+// -->
+</script>
 	<div class="row">
 
 	  <div class="span8">
@@ -10,7 +19,7 @@
           <table class="table">
             <tbody>
               {% for resulting_user in friends_list %}
-                {% include "userprofile/_search.html" %}
+                {% include "contact_importer/_search.html" %}
               {% endfor %}
             </tbody>
           </table>

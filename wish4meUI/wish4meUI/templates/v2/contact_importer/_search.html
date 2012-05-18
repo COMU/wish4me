@@ -1,0 +1,42 @@
+<tr>
+  <td class="span2">
+    <ul class="thumbnails">
+      <li class="span2">
+        <a href="#" class="thumbnail">
+          {% if resulting_user.photo  %}
+            <img alt="{{ resulting_user.user.username }}" src="{{ MEDIA_URL }}{{ resulting_user.photo }}">
+          {% else %}
+            <img alt="{{ resulting_user.user.username }}" src="{{ MEDIA_URL }}{{ DEFAULT_PROFILE_PICTURE }}">
+          {% endif %}
+        </a>
+      </li>
+    </ul>
+  </td>
+  <td class="span2">
+    <blockquote>
+      <a href="{% url specific-friend-activity resulting_user.user.id %}">{{ resulting_user.user.username }}</a>
+    </blockquote>
+  </td>
+  <td class="span2">
+    <blockquote>
+      {{ resulting_user.common_count }} common friends
+    </blockquote>
+  </td>
+  <td class="span2">
+    <blockquote>
+      {% if resulting_user.user.is_authenticated %}
+        {% if resulting_user.is_following %}
+        <!-- you are following this user -->
+        {% else %}
+          {% if resulting_user.is_followed %}
+            <a href="{% url friend_accept resulting_user.invite %}">follow back</a>
+          {% else %}
+            <a onclick="return popitup('{% url friend_follow resulting_user.user.id %}')" href="{% url friend_follow resulting_user.user.id %}">follow</a></p>
+          {% endif %}
+        {% endif %}
+      {% else %}
+        login to follow
+      {% endif %}
+    </blockquote>
+  </td>
+</tr>
