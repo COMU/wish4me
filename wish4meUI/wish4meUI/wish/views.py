@@ -126,8 +126,14 @@ def add_to_my_wishes(request, wish_id):
 	new_wish.pk = None
 	new_wish.related_list = Wishlist.objects.filter(owner=request.user)[0]
 	new_wish.wish_for = request.user
-
 	new_wish.save()
+	for ph in WishPhoto.objects.filter(is_hidden = False, wish__id=wish_id):
+		ph_new = ph
+		ph_new.pk = None
+		ph_new.wish = new_wish
+		ph_new.save()
+
+
 
 	return HttpResponseRedirect(reverse('my-activity'))
 

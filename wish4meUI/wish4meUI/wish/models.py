@@ -10,6 +10,7 @@ from wish4meUI import settings
 import random
 import string
 import os
+import shutil
 
 # Create your models here.
 
@@ -71,7 +72,7 @@ class _WishPhoto(models.Model):
       new_name = "%s%s" % (''.join(random.choice(string.letters + string.digits) for x in range(int(random.random()*25)+8)), extension)
       #z = old_path+os.sep+new_name
       #self.photo.file.name = z
-      os.rename(self.photo.file.name, old_path+"/"+new_name )
+      shutil.copy(self.photo.file.name, old_path+"/"+new_name )
 
       old_url_head = os.path.split(self.photo.url)[0]
 
