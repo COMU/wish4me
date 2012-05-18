@@ -352,7 +352,7 @@ def remove(request, wish_id):
   wish.is_hidden = True
   wish.save()
 
-  return HttpResponseRedirect(reverse('wishlist-home'))
+  return HttpResponseRedirect(reverse("my-activity"))
 
 def changeStatus(request, wish_id):
   pass
