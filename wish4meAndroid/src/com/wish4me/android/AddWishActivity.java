@@ -23,11 +23,13 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.content.DialogInterface.OnDismissListener;
 import android.content.Intent;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -86,6 +88,7 @@ public class AddWishActivity extends Activity{
 		addWishButton.setOnClickListener(new OnClickListener() {
 
 			public void onClick(View v) {
+
 				postNewWish();
 				
 			}
@@ -167,12 +170,9 @@ public class AddWishActivity extends Activity{
 
 	
 
-	private String postNewWish() {
+	private void postNewWish() {
 		// Create a new HttpClient and Post Header
-		HttpClient httpclient = new DefaultHttpClient();
 		HttpPost httppost = new HttpPost("http://" + LoginActivity.SERVERIP + "/android/addnewwish");
-		HttpResponse response = null;
-		String responseText = null;
 		try {
 			// Add your data
 						
@@ -214,63 +214,108 @@ public class AddWishActivity extends Activity{
 
 			// Execute HTTP Post Request
 			Log.e("wish4me-AddWish-requestLine", "executing request " + httppost.getRequestLine());
-			response = httpclient.execute(httppost);
-
-			responseText = LoginActivity.responseToString(response);
-			Log.i("wish4me-AddWish-responseText", responseText);
-	    	String KEY_WISH = "wish"; // parent node
-	    	String KEY_RESULT = "result";
-	    	
-			Document doc = ParseXML.getDomElement(responseText);
 			
-			NodeList nl = doc.getElementsByTagName(KEY_WISH);
-			String result_status;
-			if (nl.getLength() == 1){
-				Element e = (Element) nl.item(0);
-				result_status = ParseXML.getValue(e, KEY_RESULT);
-				if(result_status.equals("success")){
-					AlertDialog alertDialog = new AlertDialog.Builder(this).create();
-					alertDialog.setTitle("Add Wish");
-					alertDialog.setMessage("Your wish has been added.");
-					alertDialog.setButton("OK", new DialogInterface.OnClickListener() {
-						public void onClick(DialogInterface dialog, int which) {
 
-					   }
-					});
-					//alertDialog.setIcon(R.drawable.icon);
-					alertDialog.setOnDismissListener(new OnDismissListener() {
+            class BackgroundUpload extends AsyncTask<HttpPost , Void, String> {
+        		HttpResponse response = null;
+        		String responseText = null;
+				@Override
+				protected String doInBackground(HttpPost... params) {
+				HttpClient httpclient = new DefaultHttpClient();
+	        	SharedPreferences mPrefs;
+	        	mPrefs = getSharedPreferences("backGroundUpload", MODE_WORLD_READABLE);
+				SharedPreferences.Editor editor = mPrefs.edit();
+				editor.putBoolean("onGoingUpload", true);
+
+				editor.commit();
+					try {
+						response = httpclient.execute(params[0]);
+						responseText = LoginActivity.responseToString(response);
+						Log.i("wish4me-AddWish-responseText", responseText);
+				    	String KEY_WISH = "wish"; // parent node
+				    	String KEY_RESULT = "result";
+				    	
+						Document doc = ParseXML.getDomElement(responseText);
 						
-						public void onDismiss(DialogInterface dialog) {
-							Intent intent = new Intent();
-							setResult(RESULT_OK, intent);
-							finish();
+						NodeList nl = doc.getElementsByTagName(KEY_WISH);
+						String result_status;
+						if (nl.getLength() == 1){
+							Element e = (Element) nl.item(0);
+							result_status = ParseXML.getValue(e, KEY_RESULT);
+							if(result_status.equals("success")){
+								runOnUiThread(new Runnable() {
+									public void run() {
+										Context context = getApplicationContext();
+										CharSequence text = "Your wish has been added.";
+										int duration = Toast.LENGTH_LONG;
+										Toast toast = Toast.makeText(context, text, duration);
+										toast.show();
+									}
+								});
+								return responseText;
+							} else if(result_status.equals("fail")){
+								runOnUiThread(new Runnable() {
+									public void run() {
+										Context context = getApplicationContext();
+										CharSequence text = "Your wish has not been added, There was some illegal inputs.";
+										int duration = Toast.LENGTH_LONG;
+										Toast toast = Toast.makeText(context, text, duration);
+										toast.show();
+									}
+								});
+							} else {
+								runOnUiThread(new Runnable() {
+									public void run() {
+										Context context = getApplicationContext();
+										CharSequence text = "There appears to be a server problem, please try again later.";
+										int duration = Toast.LENGTH_LONG;
+										Toast toast = Toast.makeText(context, text, duration);
+										toast.show();
+									}
+								});
+							}
+							return responseText;
 						}
-					});
-					alertDialog.show();
+						
+					} catch (ClientProtocolException e) {
+						e.printStackTrace();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
 					
-				} else if(result_status.equals("fail")){
-					Context context = getApplicationContext();
-					CharSequence text = "Your wish has not been added, please control your inputs";
-					int duration = Toast.LENGTH_LONG;
-					Toast toast = Toast.makeText(context, text, duration);
-					toast.show();
-				} else {
-					Context context = getApplicationContext();
-					CharSequence text = "There appears to be a server problem, please try again later.";
-					int duration = Toast.LENGTH_LONG;
-					Toast toast = Toast.makeText(context, text, duration);
-					toast.show();					
+					return null;
 				}
-				
+				@Override
+				protected void onPostExecute(String result){
+		        	SharedPreferences mPrefs;
+		        	mPrefs = getSharedPreferences("backGroundUpload", MODE_WORLD_READABLE);
+					SharedPreferences.Editor editor = mPrefs.edit();
+					editor.remove("onGoingUpload");
+					//editor.putBoolean("onGoingUpload", true);
+					editor.commit();
+				}
 
-			}
-		} catch (ClientProtocolException e) {
-			Log.e("wish4me-postFacebookID", e.toString());
-			Context context = getApplicationContext();
-			CharSequence text = "Client protocol exception : " + e.toString();
-			int duration = Toast.LENGTH_LONG;
-			Toast toast = Toast.makeText(context, text, duration);
-			toast.show();
+            }
+   
+			AlertDialog alertDialog = new AlertDialog.Builder(this).create();
+			alertDialog.setTitle("Add Wish");
+			alertDialog.setMessage("Your wish will be send in background");
+			alertDialog.setButton("OK", new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog, int which) {
+
+			   }
+			});
+			//alertDialog.setIcon(R.drawable.icon);
+			alertDialog.setOnDismissListener(new OnDismissListener() {
+				
+				public void onDismiss(DialogInterface dialog) {
+					Intent intent = new Intent();
+					setResult(RESULT_OK, intent);
+					finish();
+				}
+			});
+			alertDialog.show();
+            new BackgroundUpload().execute(httppost);
 		} catch (IOException e) {
 			Log.e("wish4me-postFacebookID", e.toString());
 			Context context = getApplicationContext();
@@ -286,7 +331,6 @@ public class AddWishActivity extends Activity{
 			Toast toast = Toast.makeText(context, text, duration);
 			toast.show();
 		}
-		return responseText;
 
 	}
 

@@ -23,6 +23,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
@@ -367,25 +368,37 @@ public class UserHomeActivity extends Activity {
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         //Handle the back button
         if(keyCode == KeyEvent.KEYCODE_BACK) {
-            //Ask the user if they want to quit
-            new AlertDialog.Builder(this)
-            .setIcon(android.R.drawable.ic_dialog_alert)
-            .setTitle(R.string.title_quit)
-            .setMessage(R.string.confirm_quit)
-            .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
-
-                
-                public void onClick(DialogInterface dialog, int which) {
-
-                    //Stop the activity
-                    UserHomeActivity.this.finish();    
-                }
-
-            })
-            .setNegativeButton(R.string.no, null)
-            .show();
-
-            return true;
+        	//check if there is a on going upload
+        	SharedPreferences mPrefs;
+        	mPrefs = getSharedPreferences("backGroundUpload", MODE_WORLD_READABLE);
+			if(mPrefs.getBoolean("onGoingUpload", false)){
+				Context context = getApplicationContext();
+				CharSequence text = "your wish is still uploading...";
+				int duration = Toast.LENGTH_LONG;
+				Toast toast = Toast.makeText(context, text, duration);
+				toast.show();
+				return true;
+			} else {
+	            //Ask the user if they want to quit
+	            new AlertDialog.Builder(this)
+	            .setIcon(android.R.drawable.ic_dialog_alert)
+	            .setTitle(R.string.title_quit)
+	            .setMessage(R.string.confirm_quit)
+	            .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+	
+	                
+	                public void onClick(DialogInterface dialog, int which) {
+	
+	                    //Stop the activity
+	                    UserHomeActivity.this.finish();    
+	                }
+	
+	            })
+	            .setNegativeButton(R.string.no, null)
+	            .show();
+	
+	            return true;
+	        }
         }
         else {
             return super.onKeyDown(keyCode, event);

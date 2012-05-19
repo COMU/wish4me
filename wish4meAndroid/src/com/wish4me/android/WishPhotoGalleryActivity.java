@@ -438,8 +438,6 @@ public class WishPhotoGalleryActivity extends Activity {
 			}
 		    switch(requestCode){
 		      case 0:
-		    	  
-
 					pics.add(new BitmapDrawable(decodeFile(file)));
 					picUris.add(Uri.fromFile(file));
   
