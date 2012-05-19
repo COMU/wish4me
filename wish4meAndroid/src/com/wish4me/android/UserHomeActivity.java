@@ -89,12 +89,21 @@ public class UserHomeActivity extends Activity {
 
 	}
 	
+	@Override
+	public boolean onPrepareOptionsMenu(Menu menu) {
+	    super.onPrepareOptionsMenu(menu);
+    	menu.findItem(R.id.menu_listmywishes).setChecked(true);
+    	if (currentWishes == Wishes.FRIENDWISHES)
+    		menu.findItem(R.id.menu_listfriendswishes).setChecked(true);
+	    return true;
+	}
+
+	
     private String getMywishes() {
     	// Create a new HttpClient and Post Header
     	HttpClient httpclient = new DefaultHttpClient();
     	HttpPost httppost = new HttpPost("http://"+LoginActivity.SERVERIP+"/android/listmywishes");	// list my wishes by default.
-    	if (currentWishes == Wishes.FRIENDWISHES)
-    		httppost = new HttpPost("http://"+LoginActivity.SERVERIP+"/android/listfollowingwishes");
+
     	HttpResponse response = null;
     	String responseText = null;
     	try {
