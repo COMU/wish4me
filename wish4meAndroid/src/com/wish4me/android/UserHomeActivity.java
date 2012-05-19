@@ -101,7 +101,7 @@ public class UserHomeActivity extends Activity {
     	    // Add your data
     	    List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
     	    nameValuePairs.add(new BasicNameValuePair("sessionid", session_id));
-    	    Log.e("getNewIdeaForm", "session id = "+ session_id);
+    	    Log.e("wish4me-UserHome", "List my wishes:session id = "+ session_id);
     	    httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 
     	    // Execute HTTP Post Request

@@ -62,6 +62,9 @@ public class LoginActivity extends Activity {
 	
 	public static int IMAGE_MAX_SIZE = 640;
 	public static int SCALE = 2;
+
+
+	public static boolean RESIZE = true;
 	EditText name;
 
 

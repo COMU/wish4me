@@ -1,5 +1,6 @@
 package com.wish4me.android;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
@@ -11,6 +12,7 @@ import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.mime.MultipartEntity;
+import org.apache.http.entity.mime.content.ByteArrayBody;
 import org.apache.http.entity.mime.content.ContentBody;
 import org.apache.http.entity.mime.content.FileBody;
 import org.apache.http.entity.mime.content.StringBody;
@@ -23,10 +25,12 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.SharedPreferences;
 import android.content.DialogInterface.OnDismissListener;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.TypedArray;
+import android.graphics.Bitmap;
+import android.graphics.Bitmap.CompressFormat;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -168,8 +172,6 @@ public class AddWishActivity extends Activity{
 		}
 	}
 
-	
-
 	private void postNewWish() {
 		// Create a new HttpClient and Post Header
 		HttpPost httppost = new HttpPost("http://" + LoginActivity.SERVERIP + "/android/addnewwish");
@@ -202,12 +204,21 @@ public class AddWishActivity extends Activity{
 			
 			
 			for(int i = 0; i < picUris.size(); i++){
+				ContentBody cbFile;
 				File file = new File(new URI(picUris.get(i).toString()));
-	
-			    
-			    ContentBody cbFile = new FileBody(file, "image/jpeg");
-		    mpEntity.addPart("wishphoto_"+i, cbFile);
-		    
+				if(LoginActivity.RESIZE){
+					Bitmap b = WishPhotoGalleryActivity.decodeFile(file);
+					ByteArrayOutputStream tempOutputstream = new ByteArrayOutputStream();
+					b.compress(CompressFormat.JPEG, 100, tempOutputstream);
+					//InputStream inputFromBitmap = new ByteArrayInputStream(tempOutputstream.toByteArray());
+					Log.e("wish4me-addwish-background", "resizing file : " + file.getName());
+					cbFile = new ByteArrayBody(tempOutputstream.toByteArray(), "image/jpeg", file.getName());
+					//there is a bug that makes InputStreamBody crash : https://issues.apache.org/jira/browse/HTTPCLIENT-1014
+					//cbFile = new InputStreamBody(inputFromBitmap, "image/jpeg", file.getName());
+				} else {
+					cbFile = new FileBody(file, "image/jpeg");
+				}
+			    mpEntity.addPart("wishphoto_"+i, cbFile);
 			}
 			httppost.setEntity(mpEntity);
 
