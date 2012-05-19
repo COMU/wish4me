@@ -330,7 +330,7 @@ public class UserHomeActivity extends Activity {
 				} else {
 					Context context = getApplicationContext();
 					int duration = Toast.LENGTH_LONG;
-					Toast toast = Toast.makeText(context, R.string.already_on_friend_wishes, duration);
+					Toast toast = Toast.makeText(context, R.string.already_on_my_wishes, duration);
 					toast.show();
 				}
                 return true;

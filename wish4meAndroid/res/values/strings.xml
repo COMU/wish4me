@@ -5,8 +5,6 @@
     
     
     <string name="welcome">Welcome to Wish4me!</string>
-    <string name="username">Username</string>
-    <string name="facebookLogin">Login via Facebook</string>
     <string name="wish_brand">brand</string>
     <string name="wish_name">name</string>
     <string name="wish_description">description</string>
