@@ -9,16 +9,16 @@
     android:hapticFeedbackEnabled="true"
     android:background="@drawable/wish_background" >
 
-
     <ImageView
         android:id="@+id/wish_image"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
+        android:layout_margin="3dp"
+        android:contentDescription="@string/app_name"
         android:maxHeight="40dp"
         android:maxWidth="40dp"
-		android:contentDescription="@string/app_name"
         android:src="@drawable/wish_icon" />
 
     <TextView
@@ -27,6 +27,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_below="@+id/wish_name"
+        android:layout_margin="5dp"
         android:layout_toRightOf="@+id/wish_image"
         android:text="@string/wish_description"
         android:textAppearance="?android:attr/textAppearanceSmall" />
@@ -37,6 +38,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
+        android:layout_margin="2dp"
         android:layout_marginRight="28dp"
         android:layout_toRightOf="@+id/wish_brand"
         android:text="@string/wish_name"
@@ -46,8 +48,9 @@
         android:id="@+id/wish_brand"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/wish_description"
         android:layout_alignParentTop="true"
+        android:layout_margin="2dp"
+        android:layout_toRightOf="@+id/wish_image"
         android:text="@string/wish_brand"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
