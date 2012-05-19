@@ -35,9 +35,9 @@
              </form>
               {% else %}
               {% if importing_profile == "home" %}
-               You can import your contacts with clicking "import contacts" button on the right bar. We don't store any information about your friends
+               You can import your contacts by clicking "import contacts" button on the right bar. We don't store any information about your friends.
               {% else %}
-              You already followed all {{ importing_profile }} friends or none of your {{ importing_profile }} friends registered for wish4me.
+             You already followed all {{ importing_profile|escape }} friends or none of your {{ importing_profile|escape }} friends registered for wish4me.
               {% endif%}
               {% endif %}
             </tbody>
