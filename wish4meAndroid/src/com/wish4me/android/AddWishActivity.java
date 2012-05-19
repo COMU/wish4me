@@ -4,6 +4,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,6 +18,7 @@ import org.apache.http.entity.mime.content.ContentBody;
 import org.apache.http.entity.mime.content.FileBody;
 import org.apache.http.entity.mime.content.StringBody;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.protocol.HTTP;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -192,9 +194,9 @@ public class AddWishActivity extends Activity{
 			MultipartEntity mpEntity = new MultipartEntity();
 			
 		    ContentBody sessionid 	= new StringBody(session_id);
-		    ContentBody brand 		= new StringBody(newWishBrand.getText().toString());
-		    ContentBody name 		= new StringBody(newWishName.getText().toString());
-		    ContentBody description = new StringBody(newWishDescription.getText().toString());
+		    ContentBody brand 		= new StringBody(newWishBrand.getText().toString(), Charset.defaultCharset());
+		    ContentBody name 		= new StringBody(newWishName.getText().toString(), Charset.defaultCharset());
+		    ContentBody description = new StringBody(newWishDescription.getText().toString(), Charset.defaultCharset());
 
 		    mpEntity.addPart( "sessionid", 		sessionid );
 		    mpEntity.addPart( "brand", 			brand);
@@ -207,7 +209,7 @@ public class AddWishActivity extends Activity{
 				ContentBody cbFile;
 				File file = new File(new URI(picUris.get(i).toString()));
 				if(LoginActivity.RESIZE){
-					Bitmap b = WishPhotoGalleryActivity.decodeFile(file);
+					Bitmap b = WishPhotoGalleryActivity.decodeFile(file);//this function automaticly resizes the image.
 					ByteArrayOutputStream tempOutputstream = new ByteArrayOutputStream();
 					b.compress(CompressFormat.JPEG, 100, tempOutputstream);
 					//InputStream inputFromBitmap = new ByteArrayInputStream(tempOutputstream.toByteArray());
