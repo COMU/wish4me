@@ -18,7 +18,6 @@ import org.apache.http.entity.mime.content.ContentBody;
 import org.apache.http.entity.mime.content.FileBody;
 import org.apache.http.entity.mime.content.StringBody;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.protocol.HTTP;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -33,6 +32,7 @@ import android.content.SharedPreferences;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -52,7 +52,30 @@ public class AddWishActivity extends Activity{
 	private String session_id;
     private List<Drawable> pics = new ArrayList<Drawable>();
     private List<Uri> picUris = new ArrayList<Uri>();
-
+	private SharedPreferences addWishPreferences;
+	
+	public void fillPicsFromPrefs(){
+		addWishPreferences = getPreferences(MODE_PRIVATE);
+		int picture_count = addWishPreferences.getInt("picture_count", 0);
+		for(int i = 0; i < picture_count; i++){
+			picUris.add(Uri.parse(addWishPreferences.getString("added_image_"+i, "")));
+		}
+		for(int i=0; i < picUris.size();i++){
+			pics.add(new BitmapDrawable(WishPhotoGalleryActivity.decodeFile( 
+					new File(URI.create(picUris.get(i).toString())))));
+		}
+	}
+	
+	public void RecordPicsToPrefs(){
+		SharedPreferences.Editor editor = addWishPreferences.edit();
+		editor.clear();
+		editor.putInt("picture_count", picUris.size());
+		for(int i=0; i < picUris.size(); i++){
+			editor.putString("added_image_"+i, picUris.get(i).toString());	
+		}
+		editor.commit();
+	}
+	
 	public void onCreate(Bundle savedInstanceState) {
 
 		super.onCreate(savedInstanceState);
@@ -99,7 +122,7 @@ public class AddWishActivity extends Activity{
 				
 			}
 		});
-
+		fillPicsFromPrefs();
 		Gallery gallery = (Gallery) findViewById(R.id.addwish_temprory_gallery);
 	    gallery.setAdapter(new ImageAdapter(this));
 
@@ -143,6 +166,19 @@ public class AddWishActivity extends Activity{
 
     }
 	
+	@Override
+	protected void onDestroy() {
+		if(isFinishing()){
+			//this means the activity is removed intentionally
+			addWishPreferences = getPreferences(MODE_PRIVATE);
+			SharedPreferences.Editor editor = addWishPreferences.edit();
+			editor.clear();
+			editor.commit();
+		}
+		
+		super.onDestroy();
+	}
+	
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
 		if (requestCode == 0){
@@ -155,13 +191,12 @@ public class AddWishActivity extends Activity{
 					picUris.add(Uri.parse(s));
 					Log.e("wish4me-imageReturn", s);
 				}
+				RecordPicsToPrefs();
 				
-				ImageView tempImageView = new ImageView(getApplicationContext());
 				for(int i=0; i < picUris.size();i++){
 					
-					tempImageView.setImageBitmap(WishPhotoGalleryActivity.decodeFile( 
-							new File(URI.create(picUris.get(i).toString()))));
-					pics.add(tempImageView.getDrawable());
+					pics.add(new BitmapDrawable(WishPhotoGalleryActivity.decodeFile( 
+							new File(URI.create(picUris.get(i).toString())))));
 					Log.e("wish4me-imageReturn-add", "added image "+i);
 				}
 				
