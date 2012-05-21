@@ -319,6 +319,8 @@ public class UserHomeActivity extends Activity {
         inflater.inflate(R.menu.wishestoshow, menu);
         return true;
     }
+
+    private int selectedResolutionItem;
     
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -360,6 +362,45 @@ public class UserHomeActivity extends Activity {
 					toast.show();
             	}
                 return true;
+            case R.id.menu_select_upload_res:
+            	//show a dialogbox with possible resolutions.
+            	final CharSequence[] digitList = { "640 x 640", "1024 x 1024", "Full Size" };
+            	AlertDialog.Builder alt_bld = new AlertDialog.Builder(this);
+            	alt_bld.setIcon(R.drawable.icon);
+            	alt_bld.setTitle("Select The Maximum Resolution For Upload");
+            	
+            	alt_bld.setSingleChoiceItems(digitList , -1,
+            	new DialogInterface.OnClickListener() {
+            		public void onClick(DialogInterface dialog, int item) {
+            			selectedResolutionItem = item;
+        			}
+        		});
+            	alt_bld.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            		public void onClick(DialogInterface dialog, int which) {
+            			Toast.makeText(getApplicationContext(),
+            					"Selected digit: " + digitList [selectedResolutionItem],
+            					Toast.LENGTH_SHORT).show();
+            			}
+            		});
+            	alt_bld.setNegativeButton("Cancel",
+            	new DialogInterface.OnClickListener() {
+            	public void onClick(DialogInterface dialog, int which) {
+            	}
+            	});
+
+            	AlertDialog alert = alt_bld.create();
+            	alert.show();
+            	
+            	
+            	
+            	
+            	
+            	
+            	
+            	
+            	
+            	
+            	return true;
             case R.id.menu_logout:
 				Intent loginActivity = new Intent(
 						UserHomeActivity.this,
