@@ -25,6 +25,11 @@ function checkEnter(e){
              //  source:list
              //});
             $('#location')
+                .find('option')
+                .remove()
+                .end()
+ 
+            $('#location')
                 .append($("<option></option>")
                            .attr("value","")
                                     .text("")); 
