@@ -57,9 +57,10 @@ def listFriends(request):
   for following in followings:
     profile = following.to_user.get_profile()
     profile.common_count = getCommonFriendCount(request, following.from_user)
+    profile.is_following=True
     followings_list.append(profile)
 
-  return render_to_response('friend/followers.html', {'followers_list': followers_list, 'followings_list' : followings_list,  'page_title': 'List followers'}, context_instance=RequestContext(request))
+  return render_to_response('friend/friends.html', {'followers_list': followers_list, 'followings_list' : followings_list,  'page_title': 'List followers'}, context_instance=RequestContext(request))
 
 @login_required
 def acceptInvite(request, invite_id):
