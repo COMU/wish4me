@@ -424,7 +424,7 @@ def accomplish(request, wish_id):
       print accomplish
       accomplish.save()
       print "saved"
-      return HttpResponseRedirect(reverse('show-wish', args=[wish_id]))
+      return HttpResponseRedirect(reverse('my-activity'))
     else:
       return HttpResponse('Accomplish Form is not valid')
   else:
