@@ -423,6 +423,8 @@ def accomplish(request, wish_id):
       accomplish.wish = wish
       print accomplish
       accomplish.save()
+      if accomplish.accomplisher == wish.wish_for:
+        respondAccomplish(request, accomplish.id, 'accept')
       print "saved"
       return HttpResponseRedirect(reverse('my-activity'))
     else:
