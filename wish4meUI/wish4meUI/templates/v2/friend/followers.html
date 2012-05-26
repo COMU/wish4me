@@ -10,4 +10,13 @@
       </tbody>
     </table>
   </div>
+<h2> Following List </h2>
+  <div class="row">
+    <table class="table table-striped">
+      <tbody>
+        {% for resulting_user in followings_list %}
+          {% include "userprofile/_search.html" %}
+        {% endfor %}
+      </tbody>
+    </table>
 {% endblock %}

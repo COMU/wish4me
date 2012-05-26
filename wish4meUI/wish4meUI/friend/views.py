@@ -36,7 +36,7 @@ def follow_multiple_users(request):
   return HttpResponseRedirect(reverse("homePage"))
 
 @login_required
-def listFollowers(request):
+def listFriends(request):
   following_user = request.user
   followers = Following.objects.filter(to_user=following_user, is_hidden = False)
   followers_list = []
@@ -52,6 +52,20 @@ def listFollowers(request):
     profile.common_count = getCommonFriendCount(request, follower.from_user)
     followers_list.append(profile)
 
+  followings = Following.objects.filter(from_user=following_user, is_hidden = False)
+  followings_list = []
+  for following in followings:
+    profile = following.to_user.get_profile()
+    profile.common_count = getCommonFriendCount(request, following.from_user)
+    followings_list.append(profile)
+
+  return render_to_response('friend/followers.html', {'followers_list': followers_list, 'followings_list' : followings_list,  'page_title': 'List followers'}, context_instance=RequestContext(request))
+
+@login_required
+def acceptInvite(request, invite_id):
+  invite = get_object_or_404(FriendshipInvitation, pk = invite_id)
+  invite.accept()
+  return   HttpResponseRedirect(reverse("friend_followers"))
   return render_to_response('friend/followers.html', {'followers_list': followers_list, 'page_title': 'List followers'}, context_instance=RequestContext(request))
 
 @login_required
