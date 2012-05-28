@@ -102,7 +102,9 @@ public class UserHomeActivity extends Activity {
     private String getMywishes() {
     	// Create a new HttpClient and Post Header
     	HttpClient httpclient = new DefaultHttpClient();
-    	HttpPost httppost = new HttpPost("http://"+LoginActivity.SERVERIP+"/android/listmywishes");	// list my wishes by default.
+    	HttpPost httppost = new HttpPost("http://"+LoginActivity.SERVERIP+"/android/listfollowingwishes");	// list my wishes by default.
+    	if (currentWishes == Wishes.MYWISHES)
+    		httppost = new HttpPost("http://"+LoginActivity.SERVERIP+"/android/listmywishes");
 
     	HttpResponse response = null;
     	String responseText = null;
@@ -364,12 +366,13 @@ public class UserHomeActivity extends Activity {
                 return true;
             case R.id.menu_select_upload_res:
             	//show a dialogbox with possible resolutions.
+            	selectedResolutionItem = getSharedPreferences("Upload_resolution", MODE_WORLD_READABLE).getInt("selected_item", -1);
             	final CharSequence[] digitList = { "640 x 640", "1024 x 1024", "Full Size" };
             	AlertDialog.Builder alt_bld = new AlertDialog.Builder(this);
             	alt_bld.setIcon(R.drawable.icon);
             	alt_bld.setTitle("Select The Maximum Resolution For Upload");
             	
-            	alt_bld.setSingleChoiceItems(digitList , -1,
+            	alt_bld.setSingleChoiceItems(digitList , selectedResolutionItem,
             	new DialogInterface.OnClickListener() {
             		public void onClick(DialogInterface dialog, int item) {
             			selectedResolutionItem = item;
@@ -378,8 +381,28 @@ public class UserHomeActivity extends Activity {
             	alt_bld.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             		public void onClick(DialogInterface dialog, int which) {
             			Toast.makeText(getApplicationContext(),
-            					"Selected digit: " + digitList [selectedResolutionItem],
+            					"Selected resolution: " + digitList [selectedResolutionItem],
             					Toast.LENGTH_SHORT).show();
+        	        	SharedPreferences mPrefs = getSharedPreferences("Upload_resolution", MODE_WORLD_READABLE);
+        				SharedPreferences.Editor editor = mPrefs.edit();
+        				switch (selectedResolutionItem) {
+        				case 0:
+        					editor.putInt("resolution", 640);
+        					editor.putInt("selected_item", 0);
+        					break;
+        				case 1:
+        					editor.putInt("resolution", 1024);
+        					editor.putInt("selected_item", 1);
+        					break;
+        				case 2:
+        					editor.putInt("resolution", 0);
+        					editor.putInt("selected_item", 1);
+        					break;
+        				default:
+        					break;
+        				}
+        				editor.commit();
+            			
             			}
             		});
             	alt_bld.setNegativeButton("Cancel",
@@ -390,16 +413,7 @@ public class UserHomeActivity extends Activity {
 
             	AlertDialog alert = alt_bld.create();
             	alert.show();
-            	
-            	
-            	
-            	
-            	
-            	
-            	
-            	
-            	
-            	
+
             	return true;
             case R.id.menu_logout:
 				Intent loginActivity = new Intent(

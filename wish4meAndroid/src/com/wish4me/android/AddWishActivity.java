@@ -239,14 +239,16 @@ public class AddWishActivity extends Activity{
 		    mpEntity.addPart( "description", 	description);
 			
 			
-			
+		    int resizeTo = getSharedPreferences("Upload_resolution", MODE_WORLD_READABLE).getInt("resolution", 640);	//this makes 640x640 default.
 			for(int i = 0; i < picUris.size(); i++){
 				ContentBody cbFile;
 				File file = new File(new URI(picUris.get(i).toString()));
-				if(LoginActivity.RESIZE){
-					Bitmap b = WishPhotoGalleryActivity.decodeFile(file);//this function automaticly resizes the image.
+	        	
+				if(resizeTo != 0){
+					Bitmap b = WishPhotoGalleryActivity.decodeFile(file, resizeTo);//this function automaticly resizes the image.
 					ByteArrayOutputStream tempOutputstream = new ByteArrayOutputStream();
-					b.compress(CompressFormat.JPEG, 100, tempOutputstream);
+					b.compress(CompressFormat.JPEG, 90, tempOutputstream);
+					
 					//InputStream inputFromBitmap = new ByteArrayInputStream(tempOutputstream.toByteArray());
 					Log.e("wish4me-addwish-background", "resizing file : " + file.getName());
 					cbFile = new ByteArrayBody(tempOutputstream.toByteArray(), "image/jpeg", file.getName());

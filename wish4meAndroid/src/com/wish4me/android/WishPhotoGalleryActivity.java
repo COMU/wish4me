@@ -397,8 +397,11 @@ public class WishPhotoGalleryActivity extends Activity {
 
     }
 
-    
     public static Bitmap decodeFile(File f){
+    	return decodeFile(f, LoginActivity.IMAGE_MAX_SIZE);
+    }
+    
+    public static Bitmap decodeFile(File f, int resizeTo){
         Bitmap b = null;
         try {
             //Decode image size
@@ -411,8 +414,8 @@ public class WishPhotoGalleryActivity extends Activity {
             fis.close();
 
             int scale = 1;
-            if (o.outHeight > LoginActivity.IMAGE_MAX_SIZE || o.outWidth > LoginActivity.IMAGE_MAX_SIZE) {
-                scale = (int)Math.pow(2, (int) Math.round(Math.log(LoginActivity.IMAGE_MAX_SIZE / (double) Math.max(o.outHeight, o.outWidth)) / Math.log(0.5)));
+            if (o.outHeight > resizeTo || o.outWidth > resizeTo) {
+                scale = (int)Math.pow(2, (int) Math.round(Math.log(resizeTo / (double) Math.max(o.outHeight, o.outWidth)) / Math.log(0.5)));
             }
 
             //Decode with inSampleSize
