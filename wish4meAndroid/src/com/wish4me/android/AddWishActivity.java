@@ -273,7 +273,7 @@ public class AddWishActivity extends Activity{
 				protected String doInBackground(HttpPost... params) {
 				HttpClient httpclient = new DefaultHttpClient();
 	        	SharedPreferences mPrefs;
-	        	mPrefs = getSharedPreferences("backGroundUpload", MODE_WORLD_READABLE);
+	        	mPrefs = getSharedPreferences("backGroundUpload", MODE_WORLD_WRITEABLE);
 				SharedPreferences.Editor editor = mPrefs.edit();
 				editor.putBoolean("onGoingUpload", true);
 

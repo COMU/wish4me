@@ -78,6 +78,10 @@ public class LoginActivity extends Activity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		mPrefs = getSharedPreferences("backGroundUpload", MODE_WORLD_WRITEABLE);
+		SharedPreferences.Editor editor = mPrefs.edit();
+		editor.remove("onGoingUpload");
+		editor.commit();
 		setContentView(R.layout.login);
 		mPrefs = getPreferences(MODE_PRIVATE);
 	    Bundle extras = getIntent().getExtras();

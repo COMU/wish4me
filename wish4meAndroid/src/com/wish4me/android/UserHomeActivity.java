@@ -369,7 +369,7 @@ public class UserHomeActivity extends Activity {
             	selectedResolutionItem = getSharedPreferences("Upload_resolution", MODE_WORLD_READABLE).getInt("selected_item", -1);
             	final CharSequence[] digitList = { "640 x 640", "1024 x 1024", "Full Size" };
             	AlertDialog.Builder alt_bld = new AlertDialog.Builder(this);
-            	alt_bld.setIcon(R.drawable.icon);
+            	alt_bld.setIcon(R.drawable.resize_icon);
             	alt_bld.setTitle("Select The Maximum Resolution For Upload");
             	
             	alt_bld.setSingleChoiceItems(digitList , selectedResolutionItem,
@@ -434,7 +434,7 @@ public class UserHomeActivity extends Activity {
         if(keyCode == KeyEvent.KEYCODE_BACK) {
         	//check if there is a on going upload
         	SharedPreferences mPrefs;
-        	mPrefs = getSharedPreferences("backGroundUpload", MODE_WORLD_READABLE);
+        	mPrefs = getSharedPreferences("backGroundUpload", MODE_WORLD_WRITEABLE);
 			if(mPrefs.getBoolean("onGoingUpload", false)){
 				Context context = getApplicationContext();
 				CharSequence text = "your wish is still uploading...";
