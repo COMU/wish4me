@@ -396,7 +396,7 @@ public class UserHomeActivity extends Activity {
         					break;
         				case 2:
         					editor.putInt("resolution", 0);
-        					editor.putInt("selected_item", 1);
+        					editor.putInt("selected_item", 2);
         					break;
         				default:
         					break;
