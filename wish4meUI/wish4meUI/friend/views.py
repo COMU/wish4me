@@ -60,17 +60,12 @@ def listFriends(request):
     profile.is_following=True
     followings_list.append(profile)
 
-  return render_to_response('friend/friends.html', {'followers_list': followers_list, 'followings_list' : followings_list,  'page_title': 'List followers'}, context_instance=RequestContext(request))
+  return render_to_response('friend/friends.html', {'followers_list': followers_list, 'followings_list' : followings_list,  'page_title': 'List friends'}, context_instance=RequestContext(request))
 
 @login_required
 def acceptInvite(request, invite_id):
   invite = get_object_or_404(FriendshipInvitation, pk = invite_id)
   invite.accept()
   return   HttpResponseRedirect(reverse("list_friends"))
-  return render_to_response('friend/followers.html', {'followers_list': followers_list, 'page_title': 'List Friends'}, context_instance=RequestContext(request))
+  return render_to_response('friend/followers.html', {'followers_list': followers_list, 'page_title': 'List friends'}, context_instance=RequestContext(request))
 
-@login_required
-def acceptInvite(request, invite_id):
-  invite = get_object_or_404(FriendshipInvitation, pk = invite_id)
-  invite.accept()
-  return   HttpResponseRedirect(reverse("list_friends"))
