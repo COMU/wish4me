@@ -56,7 +56,7 @@ def listFriends(request):
   followings_list = []
   for following in followings:
     profile = following.to_user.get_profile()
-    profile.common_count = getCommonFriendCount(request, following.from_user)
+    profile.common_count = getCommonFriendCount(request, following.to_user)
     profile.is_following=True
     followings_list.append(profile)
 
